@@ -1,0 +1,30 @@
+/*
+    Claire Lodermeier
+*/
+
+body {
+    background-color: rgb(218, 230, 253);
+}
+
+h3 {
+    margin: 50px;
+}
+
+ul {
+    list-style: none;
+    margin-bottom: 100px;
+}
+
+li {
+    margin: 50px;
+}
+
+button {
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: rgb(88, 88, 138);
+    color: white;
+    font-family: Times;
+    font-size: 15px;
+}
