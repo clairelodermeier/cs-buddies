@@ -1,40 +1,44 @@
 <!--
     Claire Lodermeier
+    The purpose of this file is to build a login page for a social media application. It contains 
+    text input fields for username and password, and buttons for logging in and creating account. 
+    The elements are organized in a list.
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>login</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Sign in</title>
+    <link rel="stylesheet" type="text/css" href="css/loginStyle.css">
     <meta charset="UTF-8">
 </head>
 
 <body>
 
-    <h3>Sign in</h3>
-    <ul>
+    <div id='mainHeader'>Application Title (tbd)</div>
+
+    <ul id="inputList">
         <li>
-            <label for='username'>Username</label>
-            <input type='text' id='username'>
+            <h3>Sign in</h3>
         </li>
         <li>
-            <label for='password'>Password</label>
-            <input type='password' id='password'>
+            <input type='text' id='username' placeholder = 'Username'>
         </li>
         <li>
-            <button id='loginButton'>Log in</button>
+            <input type='password' id='password' placeholder = 'Password'>
+        </li>
+        <li>
+            <button class = 'buttonA' id='loginButton'>Log in</button>
         </li>
 
     </ul>
 
-    <h3>Don't have an account? Create one now!</h3>
-    <ul>
-        <li>
-            <button id='createAccountButton'>Create Account</button>
-        </li>
-    </ul>
+    <div id='loginNav'>
+        <p>Don't have an account?</p>
+        <button class = 'buttonB' id='createAccountButton'>Create Account</button>
+    </div>
+
 
 
 </body>
