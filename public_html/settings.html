@@ -13,6 +13,8 @@
     <meta charset="UTF-8">
 </head>
 
+<script src="./functions.js">
+</script>
 <body>
 
     <div id='mainHeader'>Application Title (tbd)</div>
@@ -21,16 +23,36 @@
         <h3>Settings</h3>
         <ul id ='settings'>
             <li>
-                <button class="leftListItem" id="profileButton">Edit profile</button>
+                <button class="leftListItem" id="profileButton" onclick="showContent('editProfile')">Edit profile</button>
             </li>
             <li>
-                <button class="leftListItem" id="displayButton">Display</button>
+                <button class="leftListItem" id="displayButton" onclick="showContent('display')">Display</button>
+            </li>
+
+            <li>
+                <button class="leftListItem" id="privacyButton" onclick="showContent('privacy')">Privacy and Accessibility</button>
+            </li>
+            <li>
+                <button class="leftListItem" id="notificationButton" onclick="showContent('notification')">Notifications</button>
+            </li>
+
+            <!-- Keep log out button on the bottom -->
+            <li>
+                <a href="./login.html">
+                <button class="leftListItem" id="logOutButton">Log Out</button>
+                </a>
             </li>
             <!--Add more settings options-->
 
         </ul>
 
     </div>
+    <div class="rightBar">
+        <div id="content">
+
+        </div>
+    </div>
+
 
 </body>
 
