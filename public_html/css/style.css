@@ -59,6 +59,10 @@ button:hover {
 
 }
 
+.settings{
+    text-align:center;
+}
+
 .bottomButton {
     border-radius: 50px;
     font-size: 30px;
