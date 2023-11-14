@@ -19,7 +19,7 @@ function showContent(type)
             content = "Privacy and Accessibility content";
             break;
         case 'notification':
-            content = "Notifications";
+            content = getNotificationContent();
             break;
         // Add more cases for other buttons
 
@@ -72,6 +72,24 @@ function getDisplayContent() {
             
         </div>
     </div>
+    `;
+}
+
+function getNotificationContent()
+{
+    return `
+    <div class="settings>
+    <div id="notificationContent">
+        <h2>Notification Settings</h2>  
+        <label>
+            <input type="checkbox" id="notifications"> Notifications Enabled
+        </label><br>
+        
+        <!-- Add more display settings as needed -->
+        
+    </div>
+</div>
+    
     `;
 }
 
