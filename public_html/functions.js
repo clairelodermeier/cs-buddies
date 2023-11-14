@@ -13,7 +13,7 @@ function showContent(type)
             content = getDisplayContent();
             break;
         case 'logOut':
-            content = "Log Out content";
+            content = getLogOutContent();
             break;
         case 'privacy':
             content = "Privacy and Accessibility content";
@@ -30,10 +30,17 @@ function showContent(type)
     document.getElementById('content').innerHTML = content;
 }
 
+function popUp()
+{
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
+
 
 
 function getEditProfileContent() {
     return `
+    <div class="settings>
         <div id="profileContent">
             <h2>Edit Profile</h2>
             <form>
@@ -48,11 +55,13 @@ function getEditProfileContent() {
                 <button type="submit">Save Changes</button>
             </form>
         </div>
+    </div>
     `;
 }
 
 function getDisplayContent() {
     return `
+    <div class="settings>
         <div id="displayContent">
             <h2>Display Settings</h2>  
             <label>
@@ -62,6 +71,26 @@ function getDisplayContent() {
             <!-- Add more display settings as needed -->
             
         </div>
+    </div>
+    `;
+}
+
+function getLogOutContent()
+{
+    return `
+    <div class="settings>
+        <div id="logOutContent">
+            <h2> Are you sure?</h2>
+            <li>
+                <a href="./login.html">
+                <button class="decisions" id="yes">Yes</button>
+                </a>
+                <a href="./main.html">
+                    <button class="decisions" id="yes">No</button>
+                </a>
+            </li>
+        </div>
+    </div>
     `;
 }
 
