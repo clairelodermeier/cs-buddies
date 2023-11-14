@@ -70,6 +70,7 @@ button:hover {
     padding-left: 10px;
 }
 
+
 #bottomButtons {
     position: fixed;
     left: 0px;
@@ -77,6 +78,8 @@ button:hover {
     width: 200px;
     text-align: center;
 }
+
+
 
 #settingsButton {
     left: 100px;
@@ -97,4 +100,13 @@ button:hover {
     width: 100%;
     padding: 20px;
     font-size: 35px;
+}
+
+#icon{
+    position: fixed;
+    width: 85px;
+    height:85px;
+    top:0;
+    left:92%;
+
 }
