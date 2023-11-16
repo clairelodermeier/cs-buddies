@@ -1,8 +1,12 @@
 
 // add style to display
 function addStyleSheet(sheetName) {
-        document.getElementById('cssFile').href = sheetName;
-}
+      if (document.getElementById("darkMode").checked) {
+        document.getElementById("cssFile").href = "css/darkStyle.css";
+    } else {
+        document.getElementById("cssFile").href = "css/style.css";
+        }
+    }
 
 //To display different settings depending on the button
 function showContent(type)
@@ -110,7 +114,7 @@ function getDisplayContent() {
         <div id="displayContent">
             <h2>Display Settings</h2>  
             <label>
-                <input type="checkbox" id="darkMode"> Dark Mode
+                <input type="checkbox" id="darkMode" onclick= "addStyleSheet()"> Dark Mode
             </label><br>
 
             <label for="color">Color Scheme: </label>
