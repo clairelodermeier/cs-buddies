@@ -6,6 +6,8 @@ function addStyleSheet(sheetName) {
 
 
 //To display different settings depending on the button
+
+//This is not functioning yet....Moved all HTML from here to the settings HTML
 function showContent(type)
 {
     fetch("./settings.html")
