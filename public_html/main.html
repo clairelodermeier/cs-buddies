@@ -13,8 +13,7 @@
     <meta charset="UTF-8">
 </head>
 
-<script src="./functions.js">
-</script>
+
 
 <body>
 
@@ -22,13 +21,13 @@
     <img src="./img/pug.png" id="icon">
 
     <div class='leftBar'>
+        <h3>Top Posts</h3>
         <h3>Channels</h3>
         <ul id ='channels'>
+
             <li>
-                <button class="leftListItem" id="channel1" onclick="showChannel('channel1')">Channel holder 1</button>
-            </li>
-            <li>
-                <button class="leftListItem" id="channel2" onclick="showChannel('channel2')"ick>Channel holder 2</button>
+                <button class="leftListItem" id="channelList" onclick="showChannel('channel1')">Channel holder 1</button>
+
             </li>
 
         </ul>
@@ -46,7 +45,26 @@
             <button class='bottomButton' id='settingsButton'>&#x2699</button>
             </a>
         </div>
+
+        <div id="channelModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h4>Add Channel</h4>
+                <li>
+                    <label for='channelName'>Channel Name</label>
+                    <input type='text' id='channelName'>
+                </li>
+                <li></li>
+                <li>
+                    <button id="confirm">Confirm</button>
+                </li>
+            </div>
+
+        </div>
     </div>
+
+    <script src="./functions.js">
+    </script>
 </body>
 
 </html>
