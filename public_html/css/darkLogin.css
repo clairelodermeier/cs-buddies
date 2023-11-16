@@ -1,0 +1,113 @@
+/*
+    Claire Lodermeier
+    The purpose of this file is to provide styling for login and account creation pages for a
+    social media web application. It formats lists for user input, as well as buttons and headers.
+*/
+
+body {
+    background-color: rgb(40, 40, 40);
+    font-family: monospace;
+    font-size: 18px;
+}
+
+input {
+    border: none;
+    font-size: 15px;
+    height: 25px;
+    width: 250px;
+    font-family: monospace;
+}
+
+h3 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 50px;
+
+}
+
+ul {
+    list-style: none;
+    margin-bottom: 100px;
+}
+
+li {
+    margin: 25px;
+    margin-left: 0px;
+    margin-right: 0px;
+
+}
+
+label {
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+button {
+    font-family: monospace;
+
+}
+
+.buttonA {
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: rgb(193, 19, 62);
+    color: white;
+    font-size: 18px;
+    width: 250px;
+    border: 0px;
+    margin-top: 20px;
+}
+
+.buttonB {
+    background-color: rgb(100, 100, 100);
+    padding: 10px;
+    color: white;
+    font-size: 18px;
+    border-color: rgb(193, 19, 62);
+    border-style: solid;
+    width: 200px;
+
+}
+
+#mainHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(193, 19, 62);
+    color: white;
+    width: 100%;
+    padding: 20px;
+    font-size: 35px;
+}
+
+#inputList {
+    background-color: rgb(100, 100, 100);
+    color: white;
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+    padding: 50px;
+    text-align: center;
+
+}
+
+#loginNav {
+    color: white;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    text-align: right;
+    font-size: 15px;
+}
+
+#icon{
+    position: fixed;
+    width: 85px;
+    height:85px;
+    top:0;
+    left:92%;
+
+}

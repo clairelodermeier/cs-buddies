@@ -1,4 +1,8 @@
 
+// add style to display
+function addStyleSheet(sheetName) {
+        document.getElementById('cssFile').href = sheetName;
+}
 
 //To display different settings depending on the button
 function showContent(type)
