@@ -8,7 +8,7 @@ function addStyleSheet(sheetName) {
         }
     }
 
-    User
+
     function showContent(type)
     {
         var content = "";
