@@ -8,125 +8,110 @@ function addStyleSheet(sheetName) {
         }
     }
 
-//To display different settings depending on the button
-function showContent(type)
-{
-    var content = "";
-
-    switch (type) {
-        case 'editProfile':
-            content = getEditProfileContent();
-            break;
-        case 'display':
-            content = getDisplayContent();
-            break;
-        case 'logOut':
-            content = getLogOutContent();
-            break;
-        case 'privacy':
-            content = getPrivacyContent();
-            break;
-        case 'notification':
-            content = getNotificationContent();
-            break;
-        // Add more cases for other buttons
-
-        default:
-            content = "Default content";
+    User
+    function showContent(type)
+    {
+        var content = "";
+    
+        switch (type) {
+            case 'editProfile':
+                content = getEditProfileContent();
+                break;
+            case 'display':
+                content = getDisplayContent();
+                break;
+            case 'logOut':
+                content = getLogOutContent();
+                break;
+            case 'privacy':
+                content = getPrivacyContent();
+                break;
+            case 'notification':
+                content = getNotificationContent();
+                break;
+            // Add more cases for other buttons
+    
+            default:
+                content = "Default content";
+        }
+    
+        document.getElementById('content').innerHTML = content;
     }
-
-    document.getElementById('content').innerHTML = content;
-}
-
-function showChannel(type)
-{
-    var channel = "";
-
-    switch (type) {
-        case 'channel1':
-            channel = "Channel 1";
-            break;
-
-        default:
-            channel = "Default Channel";
+    
+    function getPrivacyContent()
+    {
+        return `
+        <div class="settings>
+            <div id="privacyContent">
+                <h2>Privacy and Accessibility</h2>
+                <span class="dot"></span>
+    
+                <form>
+                    <label for="changePassword">Change Password:</label>
+                    <input type="text" id="changePassword" name="changePassword"><br>
+    
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"><br>
+                
+                
+                    <button type="deleteAccount">Delete Account?</button>
+                </form>
+            </div>
+        </div>
+        `;
     }
-
-    document.getElementById('channel').innerHTML = channel;
-}
-
-function getPrivacyContent()
-{
-    return `
-    <div class="settings>
-        <div id="privacyContent">
-            <h2>Privacy and Accessibility</h2>
-            <span class="dot"></span>
-
-            <form>
-                <label for="changePassword">Change Password:</label>
-                <input type="text" id="changePassword" name="changePassword"><br>
-
-                <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword"><br>
-            
-            
-                <button type="deleteAccount">Delete Account?</button>
-            </form>
+    
+    
+    
+    function getEditProfileContent() {
+    
+        return `
+        <div class="settings>
+            <div id="profileContent">
+                <h2>Edit Profile</h2>
+                <span class="dot"></span>
+    
+                <form>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username"><br>
+    
+                    <label for="displayName">Display Name:</label>
+                    <input type="text" id="displayName" name="displayName"><br>
+                
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email"><br>
+    
+                    <label for="birthday">Birthday:</label>
+                    <input type="date" id="birthday" name="birthday"><br>
+                
+                    <!-- Add more form fields as needed -->
+                
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
         </div>
-    </div>
-    `;
-}
-
-
-
-function getEditProfileContent() {
-    return `
-    <div class="settings>
-        <div id="profileContent">
-            <h2>Edit Profile</h2>
-            <span class="dot"></span>
-
-            <form>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username"><br>
-
-                <label for="displayName">Display Name:</label>
-                <input type="text" id="displayName" name="displayName"><br>
-            
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email"><br>
-
-                <label for="birthday">Birthday:</label>
-                <input type="date" id="birthday" name="birthday"><br>
-            
-                <!-- Add more form fields as needed -->
-            
-                <button type="submit">Save Changes</button>
-            </form>
+        `;
+    }
+    
+    function getDisplayContent() {
+        return `
+        <div class="settings>
+            <div id="displayContent">
+                <h2>Display Settings</h2>  
+                <label>
+                    <input type="checkbox" id="darkMode"> Dark Mode
+                </label><br>
+    
+                <label for="color">Color Scheme: </label>
+                <input type="color" id="color" name="color"><br>
+    
+                
+                <!-- Add more display settings as needed -->
+                
+            </div>
         </div>
-    </div>
-    `;
-}
-
-function getDisplayContent() {
-    return `
-    <div class="settings>
-        <div id="displayContent">
-            <h2>Display Settings</h2>  
-            <label>
-                <input type="checkbox" id="darkMode" onclick= "addStyleSheet()"> Dark Mode
-            </label><br>
-
-            <label for="color">Color Scheme: </label>
-            <input type="color" id="color" name="color"><br>
-
-            
-            <!-- Add more display settings as needed -->
-            
-        </div>
-    </div>
-    `;
-}
+        `;
+    }
 
 function getNotificationContent()
 {
@@ -167,6 +152,7 @@ function getLogOutContent()
     </div>
     `;
 }
+
 
 var modal = document.getElementById("channelModal");
 var button = document.getElementById("addButton");
