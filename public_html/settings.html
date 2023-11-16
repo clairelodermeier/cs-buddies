@@ -16,6 +16,7 @@
 <script src="./functions.js">
 </script>
 <body>
+
     <div id='mainHeader'>Application Title (tbd)</div>
     <img src="./img/pug.png" id="icon">
 
@@ -39,20 +40,93 @@
             <!-- Keep log out button on the bottom -->
             <li>
       
-                <button class="leftListItem" id="logOutButton"
-                onclick="showContent('logOut')">Log Out</button>
-                </a>
+                <button class="leftListItem" id="logOutButton" onclick="showContent('logOut')">Log Out</button>
             </li>
             <!--Add more settings options-->
+
         </ul>
 
     </div>
     <div class="rightBar">
-        <div id="content">
+        <div id="profileContent" class="content-container">
+            <span class="dot"></span>
+            <h2>Edit Profile</h2>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"><br>
+        
+                <label for="displayName">Display Name:</label>
+                <input type="text" id="displayName" name="displayName"><br>
+                    
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br>
+        
+                <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" name="birthday"><br>
+                    
+                <!-- Add more form fields as needed -->
+                    
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
 
+        <div id="privacyContent" class="content-container">
+            <span class="dot"></span>
+            <h2>Privacy and Accessibility</h2>
+            <form>
+                <label for="changePassword">Change Password:</label>
+                <input type="text" id="changePassword" name="changePassword"><br>
+        
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword"><br>
+            
+            
+                <button type="deleteAccount">Delete Account?</button>
+            </form>
+        </div>
+
+        <div id="displayContent" class="content-container">
+            <h2>Display Settings</h2>  
+            <label>
+                <input type="checkbox" id="darkMode"> Dark Mode
+            </label><br>
+
+            <label for="color">Color Scheme: </label>
+            <input type="color" id="color" name="color"><br>
+
+            
+            <!-- Add more display settings as needed -->
+        </div>
+        
+        <div id="notificationContent" class="content-container">
+            <h2>Notification Settings</h2>  
+            <label>
+                <input type="checkbox" id="notifications"> Notifications Enabled
+            </label><br>
+        
+            <label for="timeout"> Notification Time Out: </label>
+            <input type="time" id="timeout" name="timeout"><br>
+                
+                <!-- Add more display settings as needed -->
+                
+        </div>
+
+        <div id="logOutContent" class="content-container">
+            <h2> Are you sure?</h2>
+            <li>
+                <a href="./login.html">
+                <button class="decisions" id="yes">Yes</button>
+                </a>
+                <a href="./main.html">
+                    <button class="decisions" id="yes">No</button>
+                </a>
+            </li>
         </div>
     </div>
 
+
+
+    
 
     <div id="bottomButtons">
         <a href="./main.html">
@@ -62,4 +136,6 @@
     </div>
 
 </body>
+
+    
 </html>
