@@ -16,7 +16,7 @@ function showContent(type)
             content = getLogOutContent();
             break;
         case 'privacy':
-            content = "Privacy and Accessibility content";
+            content = getPrivacyContent();
             break;
         case 'notification':
             content = getNotificationContent();
@@ -38,9 +38,6 @@ function showChannel(type)
         case 'channel1':
             channel = "Channel 1";
             break;
-        case 'channel2':
-            channel = "Channel 2";
-            break;
 
         default:
             channel = "Default Channel";
@@ -49,6 +46,28 @@ function showChannel(type)
     document.getElementById('channel').innerHTML = channel;
 }
 
+function getPrivacyContent()
+{
+    return `
+    <div class="settings>
+        <div id="privacyContent">
+            <h2>Privacy and Accessibility</h2>
+            <span class="dot"></span>
+
+            <form>
+                <label for="changePassword">Change Password:</label>
+                <input type="text" id="changePassword" name="changePassword"><br>
+
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword"><br>
+            
+            
+                <button type="deleteAccount">Delete Account?</button>
+            </form>
+        </div>
+    </div>
+    `;
+}
 
 
 
@@ -57,7 +76,7 @@ function getEditProfileContent() {
     <div class="settings>
         <div id="profileContent">
             <h2>Edit Profile</h2>
-            <span class="dot></span>
+            <span class="dot"></span>
 
             <form>
                 <label for="username">Username:</label>
@@ -141,3 +160,123 @@ function getLogOutContent()
     `;
 }
 
+var modal = document.getElementById("channelModal");
+var button = document.getElementById("addButton");
+var span = document.getElementsByClassName("close")[0];
+var confirm = document.getElementById("confirm"); // Allows confirm button to work
+var channelList = document.getElementById("channelList");
+ 
+
+button.onclick = function()
+{
+    modal.style.display = "block";
+}
+
+span.onclick = function()
+{
+    var text = document.getElementById("channelName");
+    if(text && text.value)
+    {
+        text.value = "";
+    }
+    modal.style.display = "none";
+}
+
+confirm.onclick = function()
+{
+    var text = document.getElementById("channelName");
+    if(text && text.value)
+    {
+        var newText = text.value;
+        text.value = ""
+        modal.style.display = "none";
+        createChannelButton(newText);
+        
+    }
+    else
+    {   
+        alert("Please enter a channel name")
+        modal.style.display = "block";
+    }
+
+}
+
+window.onclick = function(event)
+{
+    if(event.target == modal)
+    {
+        modal.style.display = "none";
+    }
+}
+
+function createChannelButton(channelName)
+{
+    var newChannelButton = document.createElement("button");
+    newChannelButton.textContent = channelName;
+    newChannelButton.className = "leftListItem";
+    newChannelButton.id = "channelList";
+
+    var listItem = document.createElement("li");
+    listItem.appendChild(newChannelButton);
+
+
+    newChannelButton.onclick = function()
+    {
+        alert("Button: " + channelName + " got clicked!");
+    }
+
+    
+    channelList.appendChild(listItem);
+
+}
+
+document.getElementById("channelList").onmousedown = function(event)
+{
+    if(event.target == 3)
+    {
+        window.alert("right clicked!");
+    }
+}
+
+//To potentially delete Channels
+channelList.addEventListener('contextmenu', function(event)
+{
+    event.preventDefault();
+    window.alert("Right clicked on channel" + channelList.id);
+});
+
+
+
+
+
+//Dark Mode
+if (window.localStorage.getItem('mode') == null) {
+    window.localStorage.setItem('mode', 'L');
+  }
+  
+  function setTheme() {
+    let currentMode = window.localStorage.getItem('mode');
+    if (currentMode == 'L') {
+      document.body.style.backgroundColor = 'white';
+      document.body.style.color = 'black';
+    } else {
+      document.body.style.backgroundColor = 'black';
+      document.body.style.color = 'grey';
+    }
+  }
+  
+  setTheme();
+  
+  function toggle() {
+    let currentMode = window.localStorage.getItem('mode');
+    if (currentMode == 'L') {
+      currentMode = 'D';
+    } else {
+      currentMode = 'L';
+    }
+    window.localStorage.setItem('mode', currentMode);
+    setTheme();
+  }
+  
+  let t = document.getElementById('darkMode');
+  t.onclick = toggle;
