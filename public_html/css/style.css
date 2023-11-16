@@ -170,3 +170,11 @@ button:hover {
     from{opacity:0}
     to{opacity: 1}
 }
+
+.content-container {
+    display: none;
+}
+
+.active {
+    display: block;
+}
