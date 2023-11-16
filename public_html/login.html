@@ -15,7 +15,7 @@
 </head>
 
 <body>
-
+    <form action="./main.html" method="post">
     <div id='mainHeader'>Application Title (tbd)</div>
 
     <img src="./img/pug.png" id="icon">
@@ -25,18 +25,19 @@
             <h3>Sign in</h3>
         </li>
         <li>
-            <input type='text' id='username' placeholder='Username/Email'>
+            <input type='text' id='username' placeholder='Username/Email' required>
         </li>
         <li>
-            <input type='password' id='password' placeholder='Password'>
+            <input type='password' id='password' placeholder='Password' required>
         </li>
         <li>
-            <a href="./main.html">
+
             <button class='buttonA' id='loginButton'>Log in</button>
-            </a>
+
         </li>
 
     </ul>
+    </form>
 
     <div id='loginNav'>
         <p>Don't have an account?</p>
