@@ -99,12 +99,15 @@ function addStyleSheet(sheetName) {
             <div id="displayContent">
                 <h2>Display Settings</h2>  
                 <label>
-                    <input type="checkbox" id="darkMode"> Dark Mode
+                    <input type="checkbox" id="darkMode" onclick="addStyleSheet()"> Dark Mode
                 </label><br>
     
                 <label for="color">Color Scheme: </label>
                 <input type="color" id="color" name="color"><br>
-    
+
+                <script>
+
+                </script>
                 
                 <!-- Add more display settings as needed -->
                 
