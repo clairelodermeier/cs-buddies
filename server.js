@@ -111,6 +111,41 @@ function authenticate(req, res, next) {
 
 }
 
+// POST request for image upload
+app.post('/upload', upload.single('photo'), async (req, res) => {
+
+    if (req.file) {
+        let imageUploadObject = {
+            file: {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            },
+            fileName: req.file.originalname,
+        };
+        const imgObj = new img(imageUploadObject);
+        // saving the object into the database
+        imgObj.save();
+        res.end(JSON.stringify(imgObj._id));
+
+    }
+    else { console.log('upload error') };
+});
+
+//GET request for rendering image
+app.get('/image/:id', async (req, res) => {
+    const imageId = req.params.id;
+
+    // find the image by its ID
+    const imgDoc = await img.findById(imageId).exec();
+
+    // set content type 
+    res.set('Content-Type', imgDoc.contentType);
+
+    // send image data buffer 
+    res.send(imgDoc.file.data);
+
+});
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
