@@ -35,8 +35,10 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
     username: String,
     password: String,
-    listings: [String],
-    purchases: [String]
+    email: String,
+    DoB: String,
+//    listings: [String],
+//    purchases: [String]
 });
 
 // create mongoose schema for images
@@ -50,6 +52,9 @@ const imgSchema = new Schema({
       contentType: String,
     }
 });
+
+// mongoose model
+var User = mongoose.model('User', userSchema );
 
 // create a list of sessions
 let sessions = {};
@@ -113,7 +118,6 @@ function authenticate(req, res, next) {
 
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
-
     if (req.file) {
         let imageUploadObject = {
             file: {
@@ -144,6 +148,30 @@ app.get('/image/:id', async (req, res) => {
     // send image data buffer 
     res.send(imgDoc.file.data);
 
+});
+
+//GET request for creating a user
+app.get('/create/:user/:pass/:DoB/:email', (req, res) => {
+   let p1 = User.find({username: req.params.user}).exec();
+    p1.then((results) => {
+        if (results.length == 0) {
+            let u = new User({
+                username: req.params.user,
+                password: req.params.pass,
+                DoB: req.params.DoB,
+                email: req.params.email
+            });
+            let p = u.save();
+            p.then(() => {
+                res.end('User created!');
+            });
+            p.catch((err) => {
+                console.log(err); res.send('failed');
+            })
+        } else {
+            res.end('Username already taken')
+        }
+    })
 });
 
 app.listen(port, () => {
