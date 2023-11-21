@@ -41,6 +41,21 @@ function addStyleSheet() {
         document.getElementById('content').innerHTML = content;
     }
 
+//create user function
+function CreateUser() {
+    var name = document.getElementById('username').value;
+    var pass = document.getElementById('password').value;
+    var DoB = document.getElementById('birthdate').value;
+    var email = document.getElementById('email').value;
+    let url = '/create/'+name+'/'+encodeURIComponent(pass)+'/'+DoB+'/'+email;
+
+    let p = fetch(url)
+    p.then((response) => {
+      return response.text();
+    }).then((text) => {
+        alert(text);
+    })
+}
     
     function getPrivacyContent()
     {
