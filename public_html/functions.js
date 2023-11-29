@@ -65,7 +65,7 @@ function CreateUser() {
     
     });
 
-    let url = '/create/user/';
+    let url = '/account/create/';
 
     let p = fetch(url, {
         method: 'POST',

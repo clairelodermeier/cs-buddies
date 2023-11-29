@@ -42,6 +42,22 @@ var userSchema = new Schema({
 
 });
 
+// create mongoose schema for channels
+var channelSchema = new Schema({
+    name: String,
+    posts: [String],
+    members: [String],
+    // more fields??
+
+});
+
+// create mongoose schema for posts
+var postSchema = new Schema({
+    content: String,
+    author: String, // User ID
+    // timestamp??
+});
+
 // create mongoose schema for images
 const imgSchema = new Schema({
     fileName: {
@@ -54,8 +70,10 @@ const imgSchema = new Schema({
     }
 });
 
-// mongoose model
+// mongoose models
 var User = mongoose.model('User', userSchema );
+var Channel = mongoose.model('Channel', channelSchema );
+var Post = mongoose.model('Post', postSchema );
 
 // create a list of sessions
 let sessions = {};
@@ -152,7 +170,7 @@ app.get('/image/:id', async (req, res) => {
 });
 
 //POST request for creating a user
-app.post('/create/user/', (req, res) => {
+app.post('/account/create/', (req, res) => {
     let userObj = req.body;
     let p1 = User.find({username: userObj.u}).exec();
     p1.then((results) => {
@@ -166,7 +184,7 @@ app.post('/create/user/', (req, res) => {
                 pic: userObj.i,
                 channels: []
             });
-            
+
             let p = u.save();
             p.then(() => {
                 res.end('User created!');
@@ -179,6 +197,50 @@ app.post('/create/user/', (req, res) => {
         }
     })
 });
+
+// POST request, user login
+//app.post('/account/login/', async (req, res) => {
+    //find user by matching username
+    //concatenate password and saved salt
+    //hash password+salt
+    //check if hash matches saved hash
+
+//});
+
+// GET request, channels for a given user
+app.get('/get/channels/', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // get channel ids for user
+    const channels = userDoc.channels;
+
+    // create an array of channels that correspond to channel ids
+    const userChannels = [];
+    for (let i = 0; i < channels.length; i++) {
+        const currentChannel = await Channel.findById(channels[i]).exec();
+        userChannels.push(currentChannel);
+    }
+    res.end(JSON.stringify(userChannels));
+});
+
+// GET request, posts for a given channel
+app.get('/get/posts/:channel', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+   
+    // TODO: find a channel in user's channels with name given by req.params.channel
+    // get list of that channel's posts
+
+    // create an array of posts that correspond to post ids
+    const channelPosts = [];
+    for (let i = 0; i < posts.length; i++) {
+        const currentPost = await Post.findById(posts[i]).exec();
+        channelPosts.push(currentPost);
+    }
+    res.end(JSON.stringify(channelPosts));
+});
+
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
