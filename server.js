@@ -37,8 +37,9 @@ var userSchema = new Schema({
     password: String,
     email: String,
     DoB: String,
-//    listings: [String],
-//    purchases: [String]
+    pic: String,
+    channels: [String],
+
 });
 
 // create mongoose schema for images
@@ -150,17 +151,22 @@ app.get('/image/:id', async (req, res) => {
 
 });
 
-//GET request for creating a user
-app.get('/create/:user/:pass/:DoB/:email', (req, res) => {
-   let p1 = User.find({username: req.params.user}).exec();
+//POST request for creating a user
+app.post('/create/user/', (req, res) => {
+    let userObj = req.body;
+    let p1 = User.find({username: userObj.u}).exec();
     p1.then((results) => {
         if (results.length == 0) {
             let u = new User({
-                username: req.params.user,
-                password: req.params.pass,
-                DoB: req.params.DoB,
-                email: req.params.email
+                username: userObj.u,
+                // TODO: salt and hash password
+                password: userObj.p,
+                DoB: userObj.d,
+                email: userObj.e,
+                pic: userObj.i,
+                channels: []
             });
+            
             let p = u.save();
             p.then(() => {
                 res.end('User created!');

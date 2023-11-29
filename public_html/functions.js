@@ -47,11 +47,34 @@ function CreateUser() {
     var pass = document.getElementById('password').value;
     var DoB = document.getElementById('birthdate').value;
     var email = document.getElementById('email').value;
-    let url = '/create/'+name+'/'+encodeURIComponent(pass)+'/'+DoB+'/'+email;
 
-    let p = fetch(url)
+    var imgFile = document.getElementById('profilePic').files[0];
+    var formData = new FormData();
+    formData.append('photo', imgFile, imgFile.name);
+
+    // Create the fetch request for the image
+    let imgUrl = '/upload';
+    let imgP = fetch(imgUrl, {
+        method: 'POST',
+        body: formData,
+    });
+    imgP.then((r)=>{
+        return r.json();
+    }).then((idObj)=>{
+        var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj};
+    
+    });
+
+    let url = '/create/user/';
+
+    let p = fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(userObj),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
     p.then((response) => {
-      return response.text();
+        return response.text();
     }).then((text) => {
         alert(text);
     })
