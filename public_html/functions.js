@@ -41,44 +41,7 @@ function addStyleSheet() {
         document.getElementById('content').innerHTML = content;
     }
 
-//create user function
-function CreateUser() {
-    var name = document.getElementById('username').value;
-    var pass = document.getElementById('password').value;
-    var DoB = document.getElementById('birthdate').value;
-    var email = document.getElementById('email').value;
-
-    var imgFile = document.getElementById('profilePic').files[0];
-    var formData = new FormData();
-    formData.append('photo', imgFile, imgFile.name);
-
-    // Create the fetch request for the image
-    let imgUrl = '/upload';
-    let imgP = fetch(imgUrl, {
-        method: 'POST',
-        body: formData,
-    });
-    imgP.then((r)=>{
-        return r.json();
-    }).then((idObj)=>{
-        var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj};
-    
-    });
-
-    let url = '/account/create/';
-
-    let p = fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(userObj),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-    p.then((response) => {
-        return response.text();
-    }).then((text) => {
-        alert(text);
-    })
-}
+//Moved the CreateUser to the login.JS
     
     function getPrivacyContent()
     {
@@ -191,7 +154,7 @@ function getLogOutContent()
         <div id="logOutContent">
             <h2> Are you sure?</h2>
             <li>
-                <a href="./login.html">
+                <a href="../account/login.html">
                 <button class="decisions" id="yes">Yes</button>
                 </a>
                 <a href="./main.html">
