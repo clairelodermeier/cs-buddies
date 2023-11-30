@@ -15,7 +15,7 @@ const multer  = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.use(express.static('/public_html'));
+app.use(express.static('public_html'));
 app.use(express.json({ limit: '10mb' })); 
 app.use(parser.json());
 app.use(cookieParser());
@@ -39,7 +39,7 @@ var userSchema = new Schema({
     DoB: String,
     pic: String,
     channels: [String],
-
+    salt: string
 });
 
 // create mongoose schema for channels
@@ -142,6 +142,23 @@ app.get('/app/*', (req, res, next) => {
   next();
 });
 
+
+app.get('/A', (req, res, next) => {
+    console.log('A');
+    next();
+  });
+  
+  app.get('/A', (req, res, next) => {
+    console.log('B');
+    next();
+  });
+  
+  app.get('/A', (req, res, next) => {
+    console.log('C');
+    res.end('Made it to C!');
+  });
+  
+
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
     if (req.file) {
@@ -178,11 +195,18 @@ app.get('/profilePic/:id', async (req, res) => {
 });
 
 //POST request for creating a user
-app.post('/account/create/', (req, res) => {
+app.post('/account/create/:user/:pass', (req, res) => {
     let userObj = req.body;
     let p1 = User.find({username: userObj.u}).exec();
     p1.then((results) => {
         if (results.length == 0) {
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = req.params.pass + newSalt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+           
+
             let u = new User({
                 username: userObj.u,
                 // TODO: salt and hash password
@@ -190,7 +214,8 @@ app.post('/account/create/', (req, res) => {
                 DoB: userObj.d,
                 email: userObj.e,
                 pic: userObj.i,
-                channels: []
+                channels: [],
+                salt: newSalt
             });
 
             let p = u.save();
@@ -244,7 +269,6 @@ app.post('/account/login',  (req, res) => {
     });
 
 });
-
 
 
 
