@@ -17,7 +17,7 @@ const upload = multer({ storage: storage });
 
 app.use(express.static('public_html'));
 app.use(express.json({ limit: '10mb' })); 
-app.use(parser.json());
+
 app.use(cookieParser());
 
 
@@ -39,7 +39,9 @@ var userSchema = new Schema({
     DoB: String,
     pic: String,
     channels: [String],
-    salt: String
+    salt: String,
+    hash: String
+
 });
 
 // create mongoose schema for channels
@@ -136,13 +138,13 @@ function authenticate(req, res, next) {
 
 }
 
-app.use('/app/*', authenticate);
-app.get('/app/*', (req, res, next) => { 
+app.use('/*', authenticate);
+app.get('/*', (req, res, next) => { 
 
   next();
 });
 
-//Purely for testing 
+//Purely for testing
 app.get('/A', (req, res, next) => {
     console.log('A');
     next();
@@ -215,7 +217,8 @@ app.get('/account/create/:user/:pass', (req, res) => {
                 email: userObj.e,
                 pic: userObj.i,
                 channels: [],
-                salt: newSalt
+                salt: newSalt,
+                hash: result
             });
 
             let p = u.save();
@@ -270,9 +273,6 @@ app.post('/account/login',  (req, res) => {
 
 });
 
-
-
-
 // GET request, channels for a given user
 app.get('/get/channels/', async (req, res) => {
     // find user document
@@ -306,6 +306,8 @@ app.get('/get/posts/:channel', async (req, res) => {
     }
     res.end(JSON.stringify(channelPosts));
 });
+
+
 
 
 app.listen(port, () => {
