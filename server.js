@@ -207,7 +207,7 @@ app.post('/account/create/', (req, res) => {
 });
 
 // POST request, user login
-app.post('/account/login/', async (req, res) => {
+app.post('/account/login',  (req, res) => {
     //find user by matching username
     //concatenate password and saved salt
     //hash password+salt
@@ -223,14 +223,28 @@ app.post('/account/login/', async (req, res) => {
         }
         else
         {
-            let sid = addSession(u.username);
-            res.cookie("login", {username: u.username, sessionID: sid},
-            {maxAge: 60000 * 2 });
-            res.end('SUCCESS');
+            let currentUser = results[0];
+            let toHash = u.password = currentUser.salt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+
+            if(result == currentUser.hash)
+            {
+                let sid = addSession(u.username);
+                res.cookie("login", {username: u.username, sessionID: sid},
+                {maxAge: 60000 * 2 });
+                res.end('SUCCESS');
+            }
+            else
+            {
+                res.end("FAILED TO LOG IN");
+            }
         }
     });
 
 });
+
 
 
 
