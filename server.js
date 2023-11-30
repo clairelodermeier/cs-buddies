@@ -195,7 +195,7 @@ app.get('/profilePic/:id', async (req, res) => {
 });
 
 //POST request for creating a user
-app.post('/account/create/:user/:pass', (req, res) => {
+app.get('/account/create/:user/:pass', (req, res) => {
     let userObj = req.body;
     let p1 = User.find({username: userObj.u}).exec();
     p1.then((results) => {
