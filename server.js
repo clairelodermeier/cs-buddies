@@ -118,7 +118,8 @@ function authenticate(req, res, next) {
 
     let c = req.cookies;
 
-    if (c != undefined) {
+
+    if (c != undefined && c.login != undefined) {
         // if there is an active login cookie for current user
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {
