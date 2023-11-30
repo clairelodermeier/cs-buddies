@@ -39,7 +39,7 @@ var userSchema = new Schema({
     DoB: String,
     pic: String,
     channels: [String],
-    salt: string
+    salt: String
 });
 
 // create mongoose schema for channels
