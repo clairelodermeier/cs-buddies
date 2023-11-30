@@ -142,7 +142,7 @@ app.get('/app/*', (req, res, next) => {
   next();
 });
 
-
+//Purely for testing 
 app.get('/A', (req, res, next) => {
     console.log('A');
     next();
