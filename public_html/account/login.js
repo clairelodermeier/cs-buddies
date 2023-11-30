@@ -13,7 +13,7 @@ function login() {
       console.log(text);
       if (text.startsWith('SUCCESS')) {
         alert(text);
-        window.location.href = '/app/login.html';
+        window.location.href = '../main.html';
       } else {
         alert('failed');
       }
