@@ -15,7 +15,7 @@ const multer  = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.use(express.static('public_html'));
+app.use(express.static('/public_html'));
 app.use(express.json({ limit: '10mb' })); 
 app.use(parser.json());
 app.use(cookieParser());
@@ -77,8 +77,7 @@ var Post = mongoose.model('Post', postSchema );
 
 // create a list of sessions
 let sessions = {};
-// regularly remove expired sessions.
-setInterval(removeSessions, 2000);
+
 
 function addSession(username) {
     /*
@@ -107,6 +106,8 @@ function removeSessions() {
     }
 }
 
+setInterval(removeSessions, 2000); //Log out after 20 min
+
 function authenticate(req, res, next) {
     /*
     The purpose of this function is to authenticate a user's credentials using cookies. 
@@ -126,14 +127,20 @@ function authenticate(req, res, next) {
         }
         else {
             // otherwise, redirect to login screen
-            res.redirect('/login.html');
+            res.redirect('/account/login.html');
         }
     }
     else {
-        res.redirect('/login.html');
+        res.redirect('/account/login.html');
     }
 
 }
+
+app.use('/app/*', authenticate);
+app.get('/app/*', (req, res, next) => { 
+
+  next();
+});
 
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
@@ -154,8 +161,9 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     else { console.log('upload error') };
 });
 
+
 //GET request for rendering image
-app.get('/image/:id', async (req, res) => {
+app.get('/profilePic/:id', async (req, res) => {
     const imageId = req.params.id;
 
     // find the image by its ID
@@ -199,13 +207,33 @@ app.post('/account/create/', (req, res) => {
 });
 
 // POST request, user login
-//app.post('/account/login/', async (req, res) => {
+app.post('/account/login/', async (req, res) => {
     //find user by matching username
     //concatenate password and saved salt
     //hash password+salt
     //check if hash matches saved hash
 
-//});
+    let u = req.body;
+    let p1 = User.find({username: u.username, password: u.password}).exec();
+    p1.then((results) =>
+    {
+        if(results.length == 0)
+        {
+            res.end("Could not find account. Try again.");
+        }
+        else
+        {
+            let sid = addSession(u.username);
+            res.cookie("login", {username: u.username, sessionID: sid},
+            {maxAge: 60000 * 2 });
+            res.end('SUCCESS');
+        }
+    });
+
+});
+
+
+
 
 // GET request, channels for a given user
 app.get('/get/channels/', async (req, res) => {
