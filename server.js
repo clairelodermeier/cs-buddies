@@ -198,28 +198,27 @@ app.get('/profilePic/:id', async (req, res) => {
 });
 
 //POST request for creating a user
-app.get('/account/create/:user/:pass', (req, res) => {
+app.post('/account/create/', (req, res) => {
     let userObj = req.body;
-    let p1 = User.find({username: userObj.u}).exec();
+    let p1 = User.find({username: userObj.n}).exec();
     p1.then((results) => {
         if (results.length == 0) {
             let newSalt = '' + Math.floor(Math.random() * 10000000000);
-            let toHash = req.params.pass + newSalt;
+            let toHash = userObj.p + newSalt;
             let h = crypto.createHash('sha3-256');
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
            
 
             let u = new User({
-                username: userObj.u,
+                username: userObj.n,
                 // TODO: salt and hash password
-                password: userObj.p,
+                password: result,
                 DoB: userObj.d,
                 email: userObj.e,
                 pic: userObj.i,
                 channels: [],
                 salt: newSalt,
-                hash: result
             });
 
             let p = u.save();

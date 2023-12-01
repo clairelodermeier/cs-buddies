@@ -1,25 +1,25 @@
 function login() {
-    let us = document.getElementById('username').value;
-    let pw = document.getElementById('password').value;
-    let data = {username: us, password: pw};
-    let p = fetch( '/account/login', {
-      method: 'POST', 
-      body: JSON.stringify(data),
-      headers: {"Content-Type": "application/json"}
-    });
-    p.then((response) => {
-      return response.text();
-    }).then((text) => {
-      console.log(text);
-      if (text.startsWith('SUCCESS')) {
-        alert(text);
-        window.location.href = '../main.html';
-      } else {
-        alert('failed');
-      }
-    });
-  }
-  
+  let us = document.getElementById('username').value;
+  let pw = document.getElementById('password').value;
+  let data = { username: us, password: pw };
+  let p = fetch('/account/login', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  });
+  p.then((response) => {
+    return response.text();
+  }).then((text) => {
+    console.log(text);
+    if (text.startsWith('SUCCESS')) {
+      alert(text);
+      window.location.href = '../main.html';
+    } else {
+      alert('failed');
+    }
+  });
+}
+
 //create user function
 function CreateUser() {
   var name = document.getElementById('username').value;
@@ -33,52 +33,45 @@ function CreateUser() {
 
   // Create the fetch request for the image
   let imgUrl = '/upload';
+
   let imgP = fetch(imgUrl, {
-      method: 'POST',
-      body: formData,
+    method: 'POST',
+    body: formData,
   });
-  imgP.then((r)=>{
-      return r.json();
-  }).then((idObj)=>{
-      var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj};
-  
-  });
-
-  let url = '/account/create/';
-
-  let p = fetch(url, {
+  imgP.then((r) => {
+    return r.json();
+  }).then(async (idObj) => {
+    var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj };
+    let url = '/account/create/';
+    let response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(userObj),
       headers: { 'Content-Type': 'application/json' }
     });
-    
-  p.then((response) => {
-      return response.text();
-  }).then((text) => {
-      alert(text);
-  })
+    alert(response.text());
+  });
+
+
+
 }
 
 
-document.addEventListener("DOMContentLoaded", function()
-{
+document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById('password');
   const confirmPasswordInput = document.getElementById('confirmPassword');
   const passwordMatchMessage = document.getElementById('passwordMatchMessage');
-  
 
-  function checkPasswordMatch()
-  {
+
+  function checkPasswordMatch() {
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
 
-      if(password === confirmPassword)
-      {
-        passwordMatchMessage.textContent = 'Passwords match!';
-        passwordMatchMessage.style.color = 'green';
-      } else {
-        passwordMatchMessage.textContent = 'Passwords do not match';
-        passwordMatchMessage.style.color = 'red';
+    if (password === confirmPassword) {
+      passwordMatchMessage.textContent = 'Passwords match!';
+      passwordMatchMessage.style.color = 'green';
+    } else {
+      passwordMatchMessage.textContent = 'Passwords do not match';
+      passwordMatchMessage.style.color = 'red';
     }
   }
   function handleFormSubmit(event) {
@@ -86,13 +79,13 @@ document.addEventListener("DOMContentLoaded", function()
     const confirmPassword = confirmPasswordInput.value;
 
     if (password !== confirmPassword) {
-        event.preventDefault(); // Prevent form submission if passwords don't match
-        alert('Passwords do not match. Please check again.');
+      event.preventDefault(); // Prevent form submission if passwords don't match
+      alert('Passwords do not match. Please check again.');
     }
-}
+  }
 
-// Add event listeners
-confirmPasswordInput.addEventListener('input', checkPasswordMatch);
-registrationForm.addEventListener('submit', handleFormSubmit);
+  // Add event listeners
+  confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+  registrationForm.addEventListener('submit', handleFormSubmit);
 
 });
