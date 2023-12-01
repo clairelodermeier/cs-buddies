@@ -204,6 +204,7 @@ app.get('/profilePic/:id', async (req, res) => {
 //POST request for creating a user
 app.post('/account/create/', (req, res) => {
     let userObj = req.body;
+    console.log("creating user " + userObj.n);
     let p1 = User.find({username: userObj.n}).exec();
     p1.then((results) => {
         if (results.length == 0) {

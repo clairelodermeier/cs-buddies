@@ -1,6 +1,6 @@
 
-const createAccountButton = document.getElementById('createAccountButton');
-createAccountButton.onclick = () => {
+const cb = document.getElementById('createAccountButton');
+cb.onclick = () => {
  createUser();
 }
 
