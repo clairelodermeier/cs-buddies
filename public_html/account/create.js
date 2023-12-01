@@ -1,6 +1,7 @@
+
 const createAccountButton = document.getElementById('createAccountButton');
 createAccountButton.onclick = () => {
-  createUser();
+ createUser();
 }
 
 //create user function
