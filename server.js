@@ -76,6 +76,8 @@ const imgSchema = new Schema({
 var User = mongoose.model('User', userSchema );
 var Channel = mongoose.model('Channel', channelSchema );
 var Post = mongoose.model('Post', postSchema );
+var Img = mongoose.model('Img', imgSchema );
+
 
 // create a list of sessions
 let sessions = {};
@@ -139,7 +141,7 @@ function authenticate(req, res, next) {
 
 }
 
-app.use('/*', authenticate);
+//app.use('/*', authenticate);
 app.get('/*', (req, res, next) => { 
 
   next();
@@ -172,7 +174,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
             },
             fileName: req.file.originalname,
         };
-        const imgObj = new img(imageUploadObject);
+        const imgObj = new Img(imageUploadObject);
         // saving the object into the database
         imgObj.save();
         res.end(JSON.stringify(imgObj._id));
