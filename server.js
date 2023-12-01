@@ -10,6 +10,8 @@ const port = 3000;
 const parser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
+const crypto = require('node:crypto');
+
 // for profile pictures
 const multer  = require('multer')
 const storage = multer.memoryStorage();
