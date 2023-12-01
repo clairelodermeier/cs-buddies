@@ -32,7 +32,12 @@ function createUser() {
         body: JSON.stringify(userObj),
         headers: { 'Content-Type': 'application/json' }
       });
-      alert(response.text());
+      if((await response.text()).startsWith("SUCCESS")){
+        window.location.href = '/login.html';
+      }
+      else{
+        alert("failed to create account");
+      }
     });
   }
 
@@ -66,6 +71,6 @@ function createUser() {
   
     // Add event listeners
     confirmPasswordInput.addEventListener('input', checkPasswordMatch);
-    registrationForm.addEventListener('click', handleFormSubmit);
+    //registrationForm.addEventListener('click', handleFormSubmit);
   
   });

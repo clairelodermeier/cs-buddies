@@ -134,20 +134,20 @@ function authenticate(req, res, next) {
         }
         else {
             // otherwise, redirect to login screen
-            res.redirect('/account/login.html');
+            res.redirect('/login.html');
         }
     }
     else {
-        res.redirect('/account/login.html');
+        res.redirect('/login.html');
     }
 
 }
 
 //app.use('/*', authenticate);
-app.get('/*', (req, res, next) => { 
+// app.get('/*', (req, res, next) => { 
 
-  next();
-});
+//   next();
+// });
 
 //Purely for testing
 app.get('/A', (req, res, next) => {
@@ -213,7 +213,6 @@ app.post('/account/create/', (req, res) => {
             let h = crypto.createHash('sha3-256');
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
-           
 
             let u = new User({
                 username: userObj.n,
@@ -226,21 +225,17 @@ app.post('/account/create/', (req, res) => {
                 salt: newSalt,
             });
 
-            let p = u.save();
-            p.then(() => {
-                res.end('User created!');
-            });
-            p.catch((err) => {
-                console.log(err); res.send('failed');
-            })
+            u.save();
+            res.end("SUCCESS");
         } else {
-            res.end('Username already taken')
+            res.end('Username already taken');
         }
-    })
+    });
 });
 
+
 // POST request, user login
-app.post('/account/login',  (req, res) => {
+app.post('/account/login/',  (req, res) => {
     //find user by matching username
     //concatenate password and saved salt
     //hash password+salt
