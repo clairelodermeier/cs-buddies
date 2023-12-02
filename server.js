@@ -190,7 +190,6 @@ app.get('/imageID/', (req,res) => {
     let p = User.findOne({"username": req.cookies.login.username}).exec();
     p.then((userDoc)=>{
         const imageId = userDoc.pic;
-        console.log("image id: " + imageId);
         res.end(imageId);
     });
 

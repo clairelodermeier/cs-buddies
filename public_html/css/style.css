@@ -112,10 +112,10 @@ button:hover {
 
 #icon{
     position: fixed;
-    width: 85px;
-    height:85px;
+    width: 81px;
+    height:81px;
     top:0;
-    left:92%;
+    right:0;
 
 }
 
