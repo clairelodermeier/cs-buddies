@@ -8,7 +8,6 @@ function mode() {
     p.then((r)=>{
         return r.text();
     }).then((text)=>{
-        console.log(text);
         if(text.startsWith("light")){
             document.getElementById("cssLink").href = "css/style.css";
         }

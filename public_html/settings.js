@@ -1,20 +1,21 @@
 
 
-window.onload = mode();
+window.onload = displayMode();
 
 // add style to display
 function changeMode() {
     if (document.getElementById("darkMode").checked==true) {
+        console.log("changing mode to dark");
         document.getElementById("cssLink").href = "css/darkStyle.css";
-        mode();
         setMode("dark");
     } else {
+        console.log("changing mode to light");
         document.getElementById("cssLink").href = "css/style.css";
         setMode("light");
     }
 }
 
-function mode() {
+async function displayMode() {
     let url = '/get/mode/';
     let p = fetch(url);
     p.then((r) => {
@@ -22,16 +23,21 @@ function mode() {
     }).then((text) => {
         if (text.startsWith("light")) {
             document.getElementById("cssLink").href = "css/style.css";
+            return false;
         }
-        if (text.startsWith("dark")) {
+        else{
             document.getElementById("cssLink").href = "css/darkStyle.css";
+            return true;
         }
-    });
+    }).then((dark)=>{
+        if(document.getElementById("darkMode")!=null){
+            document.getElementById("darkMode").setAttribute("checked", "'"+dark+"'");
+        }
+    })
 }
 
 function setMode(mode) {
     let url = '/set/mode/' + mode;
-    console.log("setting mode to " + mode);
     let p = fetch(url);
     p.then((r) => {
         return r.text();
@@ -42,12 +48,16 @@ function setMode(mode) {
         //update checkbox
         else if(document.getElementById("darkMode")!=null){
             if(mode=="dark"){
+                console.log("checking box");
                 document.getElementById('darkMode').setAttribute("checked", "true");
             }
             if(mode=="light"){
+                console.log("unchecking box");
                 document.getElementById('darkMode').setAttribute("checked", "false");
             }
         }
+    }).then(()=>{
+        displayMode();
     });
 }
 
@@ -67,13 +77,14 @@ async function showContent(type) {
             let r = await fetch(url);
             var text = await r.text();
             if (text.startsWith("dark")) {
+                console.log("checking box...");
                 t.setAttribute("checked", "true");
             }
-            else {
+            if (text.startsWith("light")) {
+                console.log("unchecking box...");
                 t.setAttribute("checked", "false");
 
             }
-            t.onclick = changeMode();
             break;
 
         case 'logOut':
@@ -159,7 +170,7 @@ function getDisplayContent() {
             <div id="displayContent">
                 <h2>Display Settings</h2>  
                 <label>
-                    <input type="checkbox" id="darkMode" onclick="changeMode()"> Dark Mode
+                    <input type="checkbox" id="darkMode" onchange="changeMode()"> Dark Mode
                 </label><br>
     
                 <label for="color">Color Scheme: </label>

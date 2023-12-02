@@ -232,7 +232,7 @@ app.post('/create/', (req, res) => {
                 pic: userObj.i,
                 channels: [],
                 salt: newSalt,
-                mode: 'L'
+                mode: 'light'
             });
 
             u.save();
