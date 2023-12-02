@@ -27,20 +27,25 @@ function createUser() {
     });
     imgP.then((r) => {
       return r.json();
-    }).then(async (idObj) => {
+    }).then((idObj) => {
       var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj };
       let url = '/create/';
-      let response = await fetch(url, {
+      let p = fetch(url, {
         method: 'POST',
         body: JSON.stringify(userObj),
         headers: { 'Content-Type': 'application/json' }
       });
-      if((response.text()).startsWith("SUCCESS")){
-        window.location.href = 'login.html';
-      }
-      else{
-        alert("failed to create account");
-      }
+      p.then((r)=>{
+        return r.text();
+      }).then((text)=>{
+        if(text.startsWith("SUCCESS")){
+          window.location.href = 'login.html';
+        }  
+        else{
+          alert("failed to create account");
+        }
+      });
+
     });
   }
 
