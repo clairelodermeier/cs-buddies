@@ -42,7 +42,8 @@ var userSchema = new Schema({
     pic: String,
     channels: [String],
     salt: String,
-    hash: String
+    hash: String,
+    mode: String
 
 });
 
@@ -231,6 +232,7 @@ app.post('/create/', (req, res) => {
                 pic: userObj.i,
                 channels: [],
                 salt: newSalt,
+                mode: 'L'
             });
 
             u.save();
@@ -286,6 +288,33 @@ app.post('/login/',  (req, res) => {
         }
     });
 
+});
+
+// GET request, mode selected for a user
+app.get('/get/mode/', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // get mode selected for user
+    const mode = userDoc.mode;
+    res.end(mode);
+});
+
+// GET request, mode selected for a user
+app.get('/set/mode/:mode', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // set mode selected for user
+    if (req.params.mode == 'light'){
+        userDoc.mode = "L";
+    }
+    else{
+        userDoc.mode = "D";
+    }
+    userDoc.save();
+
+    res.end("SUCCESS");
 });
 
 // GET request, channels for a given user

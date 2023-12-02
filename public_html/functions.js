@@ -1,7 +1,22 @@
 
 
-
-
+window.onload = mode();
+// display dark or light mode
+function mode() {
+    let url = '/get/mode/';
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        console.log(text);
+        if(text.startsWith("L")){
+            document.getElementById("cssLink").href = "css/style.css";
+        }
+        else{
+            document.getElementById("cssLink").href = "css/darkStyle.css";
+        }
+    });
+}
 
 var modal = document.getElementById("channelModal");
 var button = document.getElementById("addButton");

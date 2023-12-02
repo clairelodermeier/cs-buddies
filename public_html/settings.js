@@ -1,30 +1,50 @@
 
-let t = document.getElementById('darkMode');
-t.onclick = toggle;
-console.log(window.localStorage.getItem('mode'));
+
+window.onload = mode();
 
 function toggle() {
-    let currentMode = window.localStorage.getItem('mode');
-    if (currentMode == 'L') {
-        currentMode = 'D';
-
-    } else {
-        currentMode = 'L';
-
-    }
-    window.localStorage.setItem('mode', currentMode);
-    setTheme();
+    let t = document.getElementById("darkMode");
+    t.checked = !t.checked;
+    changeMode();
 }
 
 // add style to display
-function addStyleSheet() {
+function changeMode() {
     if (document.getElementById("darkMode").checked) {
-        document.getElementById("cssFile").href = "css/darkStyle.css";
-        window.localStorage.setItem('darkMode', 'enabled');
+        document.getElementById("cssLink").href = "css/darkStyle.css";
+        setMode("dark");
     } else {
-        document.getElementById("cssFile").href = "css/style.css";
-        window.localStorage.setItem('darkMode', 'disabled');
+        document.getElementById("cssLink").href = "css/style.css";
+        setMode("light");
     }
+}
+
+function mode() {
+    let url = '/get/mode/';
+    let p = fetch(url);
+    p.then((r) => {
+        return r.text();
+    }).then((text) => {
+        if (text.startsWith("L")) {
+            document.getElementById("cssLink").href = "css/style.css";
+        }
+        else {
+            document.getElementById("cssLink").href = "css/style.css";
+        }
+    });
+}
+
+function setMode(mode) {
+    let url = '/set/mode/' + mode;
+    console.log("setting mode to " + mode);
+    let p = fetch(url);
+    p.then((r) => {
+        return r.text();
+    }).then((t) => {
+        if ((!t.startsWith("SUCCESS"))) {
+            alert("Failed to set mode");
+        }
+    });
 }
 
 function showContent(type) {
@@ -36,7 +56,26 @@ function showContent(type) {
             break;
         case 'display':
             content = getDisplayContent();
+            document.getElementById('content').innerHTML = content;
+            let t = document.getElementById('darkMode');
+
+            let url = '/get/mode/';
+            let p = fetch(url);
+            p.then((r)=>{
+                return r.text();
+            }).then((t)=>{
+                if(t.startsWith("D")){
+                    t.checked = true;
+                }
+                else{
+                    t.checked = false;
+                }
+            }).then(()=>{
+                t.onclick = toggle;
+            });
+            
             break;
+
         case 'logOut':
             content = getLogOutContent();
             break;
@@ -53,9 +92,9 @@ function showContent(type) {
     }
 
     document.getElementById('content').innerHTML = content;
+
 }
 
-//Moved the CreateUser to the login.JS
 
 function getPrivacyContent() {
 
@@ -113,28 +152,31 @@ function getEditProfileContent() {
 }
 
 function getDisplayContent() {
-    var darkModeState = window.localStorage.getItem('darkMode');
-    var isChecked = darkModeState === 'enabled';
+
+
     return `
-      <div class="settings>
-          <div id="displayContent">
-              <h2>Display Settings</h2>  
-              <label>
-                  <input type="checkbox" id="darkMode" ${isChecked ? 'checked' : ''} onclick="addStyleSheet()"> Dark Mode
-              </label><br>
+        <div class="settings>
+            <div id="displayContent">
+                <h2>Display Settings</h2>  
+                <label>
+                    <input type="checkbox" id="darkMode" onclick="changeMode()"> Dark Mode
+                </label><br>
+    
+                <label for="color">Color Scheme: </label>
+                <input type="color" id="color" name="color"><br>
   
-              <label for="color">Color Scheme: </label>
-              <input type="color" id="color" name="color"><br>
+                <script>
+  
+                </script>
+                
+                <!-- Add more display settings as needed -->
+                
+            </div>
+        </div>
+        `;
 
-              <script>
 
-              </script>
-              
-              <!-- Add more display settings as needed -->
-              
-          </div>
-      </div>
-      `;
+
 }
 
 function getNotificationContent() {
@@ -175,4 +217,17 @@ function getLogOutContent() {
       </div>
   </div>
   `;
+}
+
+window.onload = displayIcon();
+
+function displayIcon(){
+  let iconHolder = document.getElementById("icon");
+  let p = fetch("/imageID/");
+  p.then((response)=>{
+      return response.text();
+  }).then((text)=>{
+      iconHolder.src = "/profilePic/" + text;
+  });
+
 }
