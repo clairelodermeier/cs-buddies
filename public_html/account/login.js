@@ -18,7 +18,6 @@ function login() {
     return response.text();
   }).then((text) => {
     if (text.startsWith('SUCCESS')) {
-      alert(text);
       window.location.href = '../main.html';
     } else {
       alert(text);

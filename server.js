@@ -205,7 +205,6 @@ app.get('/profilePic/:id', async (req, res) => {
 app.post('/create/', (req, res) => {
 
     let userObj = req.body;
-    console.log("creating user " + userObj.n);
     let p1 = User.find({username: userObj.n}).exec();
     p1.then((results) => {
         if (results.length == 0) {
@@ -226,7 +225,7 @@ app.post('/create/', (req, res) => {
             });
 
             u.save();
-            console.log("user " + u.username + "created!");
+            console.log("user " + u.username + " created!");
             res.end("SUCCESS");
 
         } else {
@@ -246,7 +245,6 @@ app.post('/login/',  (req, res) => {
     {
         if(results.length == 0)
         {
-            console.log("user " + u.username + " does not exist.");
             res.end("Could not find account. Try again.");
         }
         else
@@ -263,13 +261,10 @@ app.post('/login/',  (req, res) => {
             //hash password+salt
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
-            console.log("result: " + result);
-            console.log("expected: " + currentUser.hash);
 
             // check if hash matches saved hash
             if(result == currentUser.hash)
             {
-                console.log("Correct password entered.");
                 let sid = addSession(u.username);
                 res.cookie("login", {username: u.username, sessionID: sid},
                 {maxAge: 60000 * 2 });
@@ -277,7 +272,7 @@ app.post('/login/',  (req, res) => {
             }
             else
             {
-                res.end("FAILED TO LOG IN");
+                res.end("Incorrect password.");
             }
         }
     });
