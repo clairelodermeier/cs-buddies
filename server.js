@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 // database setup
 const mongoose = require('mongoose');
-const { ConnectionClosedEvent } = require('mongodb');
+//const { ConnectionClosedEvent } = require('mongodb');
 const mongoDBURL = 'mongodb+srv://claire:Tqnwquj0JCOxzNr6@cluster0.1nzpiqt.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(mongoDBURL, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
@@ -43,7 +43,8 @@ var userSchema = new Schema({
     channels: [String],
     salt: String,
     hash: String,
-    mode: String
+    mode: String,
+    color: String
 
 });
 
@@ -232,7 +233,8 @@ app.post('/create/', (req, res) => {
                 pic: userObj.i,
                 channels: [],
                 salt: newSalt,
-                mode: 'light'
+                mode: 'light',
+                color: 'C1133E'
             });
 
             u.save();
@@ -300,7 +302,7 @@ app.get('/get/mode/', async (req, res) => {
     res.end(mode);
 });
 
-// GET request, mode selected for a user
+// GET request, set mode for a user
 app.get('/set/mode/:mode', async (req, res) => {
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
@@ -315,6 +317,28 @@ app.get('/set/mode/:mode', async (req, res) => {
     userDoc.save();
 
     res.end("SUCCESS");
+});
+
+// GET request, set color for a user
+app.get('/set/color/:color', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // set color
+    userDoc.color = req.params.color;
+    userDoc.save();
+
+    res.end("SUCCESS");
+});
+
+// GET request, color selected for a user
+app.get('/get/color/', async (req, res) => {
+    // find user document
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // get color selected for user
+    const color = userDoc.color;
+    res.end(color);
 });
 
 // GET request, channels for a given user

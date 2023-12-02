@@ -1,6 +1,8 @@
 
 
-window.onload = mode();
+window.onloadstart = mode();
+window.onloadstart = updateColor();
+
 // display dark or light mode
 function mode() {
     let url = '/get/mode/';
@@ -15,6 +17,19 @@ function mode() {
             document.getElementById("cssLink").href = "css/darkStyle.css";
         }
     });
+}
+
+
+async function updateColor(){
+    let colorStr = await getColor();
+    console.log('setting color to '+colorStr);
+    document.getElementById("mainHeader").style.backgroundColor = colorStr;
+
+}
+async function getColor() {
+    let response = await fetch('/get/color/');
+    let colorStr = await response.text();
+    return "#" + colorStr;
 }
 
 var modal = document.getElementById("channelModal");

@@ -1,6 +1,10 @@
 
+window.onloadstart = displayStyles();
 
-window.onload = displayMode();
+function displayStyles(){
+    displayMode();
+    updateColor();
+}
 
 // add style to display
 function changeMode() {
@@ -49,7 +53,7 @@ function setMode(mode) {
     });
 }
 
-async function showContent(type) {
+function showContent(type) {
     var content = "";
 
     switch (type) {
@@ -59,7 +63,7 @@ async function showContent(type) {
         case 'display':
             content = getDisplayContent();
             document.getElementById('content').innerHTML = content;
-            await displayMode()
+            displayMode()
             break;
 
         case 'logOut':
@@ -149,7 +153,7 @@ function getDisplayContent() {
                 </label><br>
     
                 <label for="color">Color Scheme: </label>
-                <input type="color" id="color" name="color"><br>
+                <input type="color" id="color" value = "${getColorValue()}" onchange = "setColor()" name="color"><br>
   
                 <script>
   
@@ -164,6 +168,37 @@ function getDisplayContent() {
 
 
 }
+
+async function getColorValue(){
+    let val = await getColor();
+    return ""+val;
+}
+async function updateColor(){
+    let colorStr = await getColor();
+    document.getElementById("mainHeader").style.backgroundColor = colorStr;
+
+}
+async function getColor() {
+    let response = await fetch('/get/color/');
+    let colorStr = await response.text();
+    return "#" + colorStr;
+}
+
+function setColor(){
+    let color = document.getElementById("color").value;
+    let url = '/set/color/' + color.substring(1);
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(!(text.startsWith("SUCCESS"))){
+            alert("Couldn't change color");
+        }
+    }).then(()=>{
+        updateColor();
+    })
+}
+
 
 function getNotificationContent() {
 
