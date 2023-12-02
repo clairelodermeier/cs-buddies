@@ -21,7 +21,7 @@ function login() {
       alert(text);
       window.location.href = '../main.html';
     } else {
-      alert('failed');
+      alert(text);
     }
   });
 }

@@ -1,14 +1,11 @@
 
 const cb = document.getElementById('createAccountButton');
 cb.onclick = () => {
-  console.log('button pressed!');
  createUser();
 }
 
 //create user function
 function createUser() {
-  console.log('createUser called!');
-
     var name = document.getElementById('username').value;
     var pass = document.getElementById('password').value;
     var DoB = document.getElementById('birthdate').value;

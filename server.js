@@ -36,7 +36,7 @@ var Schema = mongoose.Schema;
 // create mongoose schema for users
 var userSchema = new Schema({
     username: String,
-    password: String,
+    hash: String,
     email: String,
     DoB: String,
     pic: String,
@@ -203,7 +203,6 @@ app.get('/profilePic/:id', async (req, res) => {
 
 //POST request for creating a user
 app.post('/create/', (req, res) => {
-    console.log('creating user...!');
 
     let userObj = req.body;
     console.log("creating user " + userObj.n);
@@ -218,7 +217,7 @@ app.post('/create/', (req, res) => {
 
             let u = new User({
                 username: userObj.n,
-                password: result,
+                hash: result,
                 DoB: userObj.d,
                 email: userObj.e,
                 pic: userObj.i,
@@ -227,6 +226,7 @@ app.post('/create/', (req, res) => {
             });
 
             u.save();
+            console.log("user " + u.username + "created!");
             res.end("SUCCESS");
 
         } else {
@@ -246,6 +246,7 @@ app.post('/login/',  (req, res) => {
     {
         if(results.length == 0)
         {
+            console.log("user " + u.username + " does not exist.");
             res.end("Could not find account. Try again.");
         }
         else
@@ -262,10 +263,13 @@ app.post('/login/',  (req, res) => {
             //hash password+salt
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
+            console.log("result: " + result);
+            console.log("expected: " + currentUser.hash);
 
             // check if hash matches saved hash
             if(result == currentUser.hash)
             {
+                console.log("Correct password entered.");
                 let sid = addSession(u.username);
                 res.cookie("login", {username: u.username, sessionID: sid},
                 {maxAge: 60000 * 2 });
