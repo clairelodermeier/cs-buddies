@@ -2,16 +2,11 @@
 
 window.onload = mode();
 
-function toggle() {
-    let t = document.getElementById("darkMode");
-    t.checked = !t.checked;
-    changeMode();
-}
-
 // add style to display
 function changeMode() {
-    if (document.getElementById("darkMode").checked) {
+    if (document.getElementById("darkMode").checked==true) {
         document.getElementById("cssLink").href = "css/darkStyle.css";
+        mode();
         setMode("dark");
     } else {
         document.getElementById("cssLink").href = "css/style.css";
@@ -25,11 +20,11 @@ function mode() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if (text.startsWith("L")) {
+        if (text.startsWith("light")) {
             document.getElementById("cssLink").href = "css/style.css";
         }
-        else {
-            document.getElementById("cssLink").href = "css/style.css";
+        if (text.startsWith("dark")) {
+            document.getElementById("cssLink").href = "css/darkStyle.css";
         }
     });
 }
@@ -44,10 +39,19 @@ function setMode(mode) {
         if ((!t.startsWith("SUCCESS"))) {
             alert("Failed to set mode");
         }
+        //update checkbox
+        else if(document.getElementById("darkMode")!=null){
+            if(mode=="dark"){
+                document.getElementById('darkMode').setAttribute("checked", "true");
+            }
+            if(mode=="light"){
+                document.getElementById('darkMode').setAttribute("checked", "false");
+            }
+        }
     });
 }
 
-function showContent(type) {
+async function showContent(type) {
     var content = "";
 
     switch (type) {
@@ -60,20 +64,16 @@ function showContent(type) {
             let t = document.getElementById('darkMode');
 
             let url = '/get/mode/';
-            let p = fetch(url);
-            p.then((r)=>{
-                return r.text();
-            }).then((t)=>{
-                if(t.startsWith("D")){
-                    t.checked = true;
-                }
-                else{
-                    t.checked = false;
-                }
-            }).then(()=>{
-                t.onclick = toggle;
-            });
-            
+            let r = await fetch(url);
+            var text = await r.text();
+            if (text.startsWith("dark")) {
+                t.setAttribute("checked", "true");
+            }
+            else {
+                t.setAttribute("checked", "false");
+
+            }
+            t.onclick = changeMode();
             break;
 
         case 'logOut':
@@ -221,13 +221,13 @@ function getLogOutContent() {
 
 window.onload = displayIcon();
 
-function displayIcon(){
-  let iconHolder = document.getElementById("icon");
-  let p = fetch("/imageID/");
-  p.then((response)=>{
-      return response.text();
-  }).then((text)=>{
-      iconHolder.src = "/profilePic/" + text;
-  });
+function displayIcon() {
+    let iconHolder = document.getElementById("icon");
+    let p = fetch("/imageID/");
+    p.then((response) => {
+        return response.text();
+    }).then((text) => {
+        iconHolder.src = "/profilePic/" + text;
+    });
 
 }

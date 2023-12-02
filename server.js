@@ -307,10 +307,10 @@ app.get('/set/mode/:mode', async (req, res) => {
 
     // set mode selected for user
     if (req.params.mode == 'light'){
-        userDoc.mode = "L";
+        userDoc.mode = "light";
     }
     else{
-        userDoc.mode = "D";
+        userDoc.mode = "dark";
     }
     userDoc.save();
 

@@ -9,7 +9,7 @@ function mode() {
         return r.text();
     }).then((text)=>{
         console.log(text);
-        if(text.startsWith("L")){
+        if(text.startsWith("light")){
             document.getElementById("cssLink").href = "css/style.css";
         }
         else{
@@ -49,7 +49,7 @@ confirmButton.onclick = function()
         text.value = ""
         modal.style.display = "none";
         createChannelButton(newText);
-        
+
     }
     else
     {   
@@ -210,29 +210,7 @@ function deleteChannel(channelName) {
 
 
 
-//Dark Mode --Still not applying to other pages
-if (window.localStorage.getItem('mode') == null) {
-    window.localStorage.setItem('mode', 'L');
-  }
-
   
-
-  
-
-  function setTheme() {
-    let currentMode = window.localStorage.getItem('mode');
-    if (currentMode == 'L') {
-        document.getElementById("cssLink").href = "css/style.css";
-        //document.body.style.cssText("css/style.css");
-    } else {
-        //document.body.style.cssText("css/darkStyle.css");
-        document.getElementById("cssLink").href = "css/darkStyle.css";
-
-    }
-  }
-
-  setTheme();
-
 
 
 
