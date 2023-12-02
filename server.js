@@ -185,27 +185,37 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     else { console.log('upload error') };
 });
 
+app.get('/imageID/', (req,res) => {
+    // find current user
+    let p = User.findOne({"username": req.cookies.login.username}).exec();
+    p.then((userDoc)=>{
+        const imageId = userDoc.pic;
+        console.log("image id: " + imageId);
+        res.end(imageId);
+    });
+
+});
 
 //GET request for rendering image
 app.get('/profilePic/:id', async (req, res) => {
     const imageId = req.params.id;
-
+  
     // find the image by its ID
-    const imgDoc = await img.findById(imageId).exec();
+    const imgDoc = await Img.findById(imageId).exec();
 
     // set content type 
-    res.set('Content-Type', imgDoc.contentType);
+    res.set('Content-Type', imgDoc.contentType); 
 
     // send image data buffer 
     res.send(imgDoc.file.data);
-
-});
+     
+  });
 
 //POST request for creating a user
 app.post('/create/', (req, res) => {
 
     let userObj = req.body;
-    let p1 = User.find({username: userObj.n}).exec();
+    let p1 = User.find({"username": userObj.n}).exec();
     p1.then((results) => {
         if (results.length == 0) {
             let newSalt = '' + Math.floor(Math.random() * 10000000000);

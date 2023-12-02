@@ -368,9 +368,12 @@ if (window.localStorage.getItem('mode') == null) {
   function setTheme() {
     let currentMode = window.localStorage.getItem('mode');
     if (currentMode == 'L') {
-        document.body.style.cssText("css/style.css");
+        document.getElementById("cssLink").href = "css/style.css";
+        //document.body.style.cssText("css/style.css");
     } else {
-        document.body.style.cssText("css/darkStyle.css");
+        //document.body.style.cssText("css/darkStyle.css");
+        document.getElementById("cssLink").href = "css/darkStyle.css";
+
     }
   }
 
@@ -390,8 +393,22 @@ if (window.localStorage.getItem('mode') == null) {
   }
 
 
-  
-  let t = document.getElementById('darkMode');
-  t.onclick = toggle;
+  // NEED TO MOVE TO A SEPARATE FILE
+  //let t = document.getElementById('darkMode');
+  //t.onclick = toggle;
 
   console.log(window.localStorage.getItem('mode'));
+
+  window.onload = displayIcon();
+
+  function displayIcon(){
+    let iconHolder = document.getElementById("icon");
+    let p = fetch("/imageID/");
+    p.then((response)=>{
+        return response.text();
+    }).then((text)=>{
+        iconHolder.src = "/profilePic/" + text;
+    });
+
+  }
+
