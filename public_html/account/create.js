@@ -6,6 +6,7 @@ cb.onclick = () => {
 
 //create user function
 function createUser() {
+
     var name = document.getElementById('username').value;
     var pass = document.getElementById('password').value;
     var DoB = document.getElementById('birthdate').value;
