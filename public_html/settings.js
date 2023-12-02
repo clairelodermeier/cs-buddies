@@ -5,11 +5,9 @@ window.onload = displayMode();
 // add style to display
 function changeMode() {
     if (document.getElementById("darkMode").checked==true) {
-        console.log("changing mode to dark");
         document.getElementById("cssLink").href = "css/darkStyle.css";
         setMode("dark");
     } else {
-        console.log("changing mode to light");
         document.getElementById("cssLink").href = "css/style.css";
         setMode("light");
     }
@@ -147,7 +145,7 @@ function getDisplayContent() {
             <div id="displayContent">
                 <h2>Display Settings</h2>  
                 <label>
-                    <input type="checkbox" id="darkMode" onchange="changeMode()"> Dark Mode
+                    <input type="checkbox" id="darkMode" onclick="changeMode()"> Dark Mode
                 </label><br>
     
                 <label for="color">Color Scheme: </label>
