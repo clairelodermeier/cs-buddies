@@ -202,7 +202,9 @@ app.get('/profilePic/:id', async (req, res) => {
 });
 
 //POST request for creating a user
-app.post('/account/create/', (req, res) => {
+app.post('/create/', (req, res) => {
+    console.log('creating user...!');
+
     let userObj = req.body;
     console.log("creating user " + userObj.n);
     let p1 = User.find({username: userObj.n}).exec();
@@ -216,7 +218,6 @@ app.post('/account/create/', (req, res) => {
 
             let u = new User({
                 username: userObj.n,
-                // TODO: salt and hash password
                 password: result,
                 DoB: userObj.d,
                 email: userObj.e,
@@ -227,6 +228,7 @@ app.post('/account/create/', (req, res) => {
 
             u.save();
             res.end("SUCCESS");
+
         } else {
             res.end('Username already taken');
         }
@@ -235,14 +237,11 @@ app.post('/account/create/', (req, res) => {
 
 
 // POST request, user login
-app.post('/account/login/',  (req, res) => {
-    //find user by matching username
-    //concatenate password and saved salt
-    //hash password+salt
-    //check if hash matches saved hash
+app.post('/login/',  (req, res) => {
 
     let u = req.body;
-    let p1 = User.find({username: u.username, password: u.password}).exec();
+
+    let p1 = User.find({username: u.username}).exec();
     p1.then((results) =>
     {
         if(results.length == 0)
@@ -251,12 +250,20 @@ app.post('/account/login/',  (req, res) => {
         }
         else
         {
+            // find user by matching username
             let currentUser = results[0];
-            let toHash = u.password = currentUser.salt;
+            
+            //concatenate password and saved salt
+            let toHash = u.password + currentUser.salt;
+
+            // generate hash
             let h = crypto.createHash('sha3-256');
+
+            //hash password+salt
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
 
+            // check if hash matches saved hash
             if(result == currentUser.hash)
             {
                 let sid = addSession(u.username);

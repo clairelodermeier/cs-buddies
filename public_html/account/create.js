@@ -1,11 +1,14 @@
 
 const cb = document.getElementById('createAccountButton');
 cb.onclick = () => {
+  console.log('button pressed!');
  createUser();
 }
 
 //create user function
 function createUser() {
+  console.log('createUser called!');
+
     var name = document.getElementById('username').value;
     var pass = document.getElementById('password').value;
     var DoB = document.getElementById('birthdate').value;
@@ -26,14 +29,14 @@ function createUser() {
       return r.json();
     }).then(async (idObj) => {
       var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj };
-      let url = '/account/create/';
+      let url = '/create/';
       let response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(userObj),
         headers: { 'Content-Type': 'application/json' }
       });
-      if((await response.text()).startsWith("SUCCESS")){
-        window.location.href = '/login.html';
+      if((response.text()).startsWith("SUCCESS")){
+        window.location.href = 'login.html';
       }
       else{
         alert("failed to create account");
