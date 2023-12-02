@@ -15,7 +15,7 @@ function changeMode() {
     }
 }
 
-async function displayMode() {
+function displayMode() {
     let url = '/get/mode/';
     let p = fetch(url);
     p.then((r) => {
@@ -31,7 +31,7 @@ async function displayMode() {
         }
     }).then((dark)=>{
         if(document.getElementById("darkMode")!=null){
-            document.getElementById("darkMode").setAttribute("checked", "'"+dark+"'");
+            document.getElementById("darkMode").checked = dark;
         }
     })
 }
@@ -45,17 +45,7 @@ function setMode(mode) {
         if ((!t.startsWith("SUCCESS"))) {
             alert("Failed to set mode");
         }
-        //update checkbox
-        else if(document.getElementById("darkMode")!=null){
-            if(mode=="dark"){
-                console.log("checking box");
-                document.getElementById('darkMode').setAttribute("checked", "true");
-            }
-            if(mode=="light"){
-                console.log("unchecking box");
-                document.getElementById('darkMode').setAttribute("checked", "false");
-            }
-        }
+
     }).then(()=>{
         displayMode();
     });
@@ -71,20 +61,7 @@ async function showContent(type) {
         case 'display':
             content = getDisplayContent();
             document.getElementById('content').innerHTML = content;
-            let t = document.getElementById('darkMode');
-
-            let url = '/get/mode/';
-            let r = await fetch(url);
-            var text = await r.text();
-            if (text.startsWith("dark")) {
-                console.log("checking box...");
-                t.setAttribute("checked", "true");
-            }
-            if (text.startsWith("light")) {
-                console.log("unchecking box...");
-                t.setAttribute("checked", "false");
-
-            }
+            await displayMode()
             break;
 
         case 'logOut':
