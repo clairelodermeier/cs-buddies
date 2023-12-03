@@ -4,9 +4,20 @@ window.onloadstart = displayStyles();
 function displayStyles(){
     displayMode();
     updateColor();
+    displayIcon();
 }
 
-// add style to display
+function displayIcon() {
+    let iconHolder = document.getElementById("icon");
+    let p = fetch("/imageID/");
+    p.then((response) => {
+        return response.text();
+    }).then((text) => {
+        iconHolder.src = "/profilePic/" + text;
+    });
+
+}
+
 function changeMode() {
     if (document.getElementById("darkMode").checked==true) {
         document.getElementById("cssLink").href = "css/darkStyle.css";
@@ -53,6 +64,53 @@ function setMode(mode) {
     });
 }
 
+async function updateColorValue(){
+    let colorStr = await getColor();
+    document.getElementById("color").value = colorStr;
+}
+
+async function updateColor(){
+    let colorStr = await getColor();
+    document.getElementById("mainHeader").style.backgroundColor = colorStr;
+
+}
+async function getColor() {
+    let response = await fetch('/get/color/');
+    let colorStr = await response.text();
+    return "#" + colorStr;
+}
+
+function setColor(){
+    let color = document.getElementById("color").value;
+    let url = '/set/color/' + color.substring(1);
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(!(text.startsWith("SUCCESS"))){
+            alert("Couldn't change color");
+        }
+    }).then(()=>{
+        updateColor();
+    })
+}
+
+function deleteAccount(){
+    window.confirm("Are you sure you want to delete your account?");
+    let p = fetch('/delete/account/');
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith('SUCCESS')){
+            alert("Account deleted.");   
+            window.location.href = '/account/login.html';
+        }
+        else{
+            alert("Unable to delete account.");
+        }
+    });
+}
+
 function showContent(type) {
     var content = "";
 
@@ -96,7 +154,6 @@ function getPrivacyContent() {
               <h2>Privacy and Accessibility</h2>
               <span class="dot"></span>
   
-              <form>
                   <label for="changePassword">Change Password:</label>
                   <input type="text" id="changePassword" name="changePassword"><br>
   
@@ -104,8 +161,7 @@ function getPrivacyContent() {
                   <input type="password" id="confirmPassword" name="confirmPassword"><br>
               
               
-                  <button type="deleteAccount">Delete Account?</button>
-              </form>
+                  <button onclick = "deleteAccount()" >Delete Account?</button>
           </div>
       </div>
       `;
@@ -145,7 +201,6 @@ function getEditProfileContent() {
 
 function getDisplayContent() {
 
-
     return `
         <div class="settings>
             <div id="displayContent">
@@ -167,39 +222,6 @@ function getDisplayContent() {
         </div>
         `;
 
-
-
-}
-
-async function updateColorValue(){
-    let colorStr = await getColor();
-    document.getElementById("color").value = colorStr;
-}
-
-async function updateColor(){
-    let colorStr = await getColor();
-    document.getElementById("mainHeader").style.backgroundColor = colorStr;
-
-}
-async function getColor() {
-    let response = await fetch('/get/color/');
-    let colorStr = await response.text();
-    return "#" + colorStr;
-}
-
-function setColor(){
-    let color = document.getElementById("color").value;
-    let url = '/set/color/' + color.substring(1);
-    let p = fetch(url);
-    p.then((r)=>{
-        return r.text();
-    }).then((text)=>{
-        if(!(text.startsWith("SUCCESS"))){
-            alert("Couldn't change color");
-        }
-    }).then(()=>{
-        updateColor();
-    })
 }
 
 
@@ -243,15 +265,3 @@ function getLogOutContent() {
   `;
 }
 
-window.onload = displayIcon();
-
-function displayIcon() {
-    let iconHolder = document.getElementById("icon");
-    let p = fetch("/imageID/");
-    p.then((response) => {
-        return response.text();
-    }).then((text) => {
-        iconHolder.src = "/profilePic/" + text;
-    });
-
-}

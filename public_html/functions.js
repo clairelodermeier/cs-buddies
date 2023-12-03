@@ -2,9 +2,20 @@
 mode();
 updateColor();
 
-window.
 window.onloadstart = mode();
 window.onloadstart = updateColor();
+window.onloadstart = displayIcon();
+
+function displayIcon(){
+  let iconHolder = document.getElementById("icon");
+  let p = fetch("/imageID/");
+  p.then((response)=>{
+      return response.text();
+  }).then((text)=>{
+      iconHolder.src = "/profilePic/" + text;
+  });
+
+}
 
 // display dark or light mode
 function mode() {
@@ -230,16 +241,4 @@ function deleteChannel(channelName) {
 
 
 
-  window.onload = displayIcon();
-
-  function displayIcon(){
-    let iconHolder = document.getElementById("icon");
-    let p = fetch("/imageID/");
-    p.then((response)=>{
-        return response.text();
-    }).then((text)=>{
-        iconHolder.src = "/profilePic/" + text;
-    });
-
-  }
 

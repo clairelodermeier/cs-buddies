@@ -247,6 +247,33 @@ app.post('/create/', (req, res) => {
     });
 });
 
+async function leaveChannel(channelId){
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channelDoc = await Channel.findById({channelId}).exec();
+    var memberList = channelDoc.members;
+    var index = memberList.indexOf(userDoc._id);
+    memberList.splice(index,1);
+}
+
+async function removeChannel(channelId){
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channelList = userDoc.channels;
+    var index = channels.indexOf(channelId);
+    channelList.splice(index,1);
+}
+
+app.get('/delete/account/', async(req,res)=>{
+
+    var channels = userDoc.channels;
+    for (var i=0;i<channels.length;i++){
+        leaveChannel(channels[i]);
+    }
+
+    let p = User.deleteOne({ "username": req.cookies.login.username }).exec()
+    p.then(()=>{
+        res.end("SUCCESS");
+    })
+});
 
 // POST request, user login
 app.post('/login/',  (req, res) => {
