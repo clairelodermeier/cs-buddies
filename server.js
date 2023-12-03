@@ -124,7 +124,6 @@ function authenticate(req, res, next) {
 
     let c = req.cookies;
 
-
     if (c != undefined && c.login != undefined) {
         // if there is an active login cookie for current user
         if (sessions[c.login.username] != undefined &&
@@ -145,28 +144,10 @@ function authenticate(req, res, next) {
 
 }
 
-//app.use('/*', authenticate);
-// app.get('/*', (req, res, next) => { 
+app.use('/get/*', authenticate);
+app.use('/set/*', authenticate);
+app.use('/delete/*', authenticate);
 
-//   next();
-// });
-
-//Purely for testing
-app.get('/A', (req, res, next) => {
-    console.log('A');
-    next();
-  });
-  
-  app.get('/A', (req, res, next) => {
-    console.log('B');
-    next();
-  });
-  
-  app.get('/A', (req, res, next) => {
-    console.log('C');
-    res.end('Made it to C!');
-  });
-  
 
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
@@ -187,7 +168,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     else { console.log('upload error') };
 });
 
-app.get('/imageID/', (req,res) => {
+app.get('/get/imageID/', (req,res) => {
     // find current user
     let p = User.findOne({"username": req.cookies.login.username}).exec();
     p.then((userDoc)=>{
@@ -198,7 +179,7 @@ app.get('/imageID/', (req,res) => {
 });
 
 //GET request for rendering image
-app.get('/profilePic/:id', async (req, res) => {
+app.get('/get/profilePic/:id', async (req, res) => {
     const imageId = req.params.id;
   
     // find the image by its ID
@@ -247,23 +228,8 @@ app.post('/create/', (req, res) => {
     });
 });
 
-async function leaveChannel(channelId){
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-    var channelDoc = await Channel.findById({channelId}).exec();
-    var memberList = channelDoc.members;
-    var index = memberList.indexOf(userDoc._id);
-    memberList.splice(index,1);
-}
-
-async function removeChannel(channelId){
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-    var channelList = userDoc.channels;
-    var index = channels.indexOf(channelId);
-    channelList.splice(index,1);
-}
-
 app.get('/delete/account/', async(req,res)=>{
-
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
     var channels = userDoc.channels;
     for (var i=0;i<channels.length;i++){
         leaveChannel(channels[i]);
@@ -402,6 +368,20 @@ app.get('/get/posts/:channel', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
+async function leaveChannel(channelId){
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channelDoc = await Channel.findById({channelId}).exec();
+    var memberList = channelDoc.members;
+    var index = memberList.indexOf(userDoc._id);
+    memberList.splice(index,1);
+}
+
+async function removeChannel(channelId){
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channelList = userDoc.channels;
+    var index = channelList.indexOf(channelId);
+    channelList.splice(index,1);
+}
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

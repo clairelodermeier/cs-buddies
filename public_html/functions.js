@@ -8,11 +8,11 @@ window.onloadstart = displayIcon();
 
 function displayIcon(){
   let iconHolder = document.getElementById("icon");
-  let p = fetch("/imageID/");
+  let p = fetch("/get/imageID/");
   p.then((response)=>{
       return response.text();
   }).then((text)=>{
-      iconHolder.src = "/profilePic/" + text;
+      iconHolder.src = "/get/profilePic/" + text;
   });
 
 }
