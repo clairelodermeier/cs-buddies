@@ -1,5 +1,8 @@
 
+mode();
+updateColor();
 
+window.
 window.onloadstart = mode();
 window.onloadstart = updateColor();
 
@@ -22,7 +25,6 @@ function mode() {
 
 async function updateColor(){
     let colorStr = await getColor();
-    console.log('setting color to '+colorStr);
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
 
 }

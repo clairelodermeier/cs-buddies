@@ -1,4 +1,4 @@
-
+displayStyles();
 window.onloadstart = displayStyles();
 
 function displayStyles(){
@@ -63,7 +63,9 @@ function showContent(type) {
         case 'display':
             content = getDisplayContent();
             document.getElementById('content').innerHTML = content;
-            displayMode()
+            displayMode();
+            updateColorValue();
+
             break;
 
         case 'logOut':
@@ -153,7 +155,7 @@ function getDisplayContent() {
                 </label><br>
     
                 <label for="color">Color Scheme: </label>
-                <input type="color" id="color" value = "${getColorValue()}" onchange = "setColor()" name="color"><br>
+                <input type="color" id="color" onchange = "setColor()" name="color"><br>
   
                 <script>
   
@@ -169,10 +171,11 @@ function getDisplayContent() {
 
 }
 
-async function getColorValue(){
-    let val = await getColor();
-    return ""+val;
+async function updateColorValue(){
+    let colorStr = await getColor();
+    document.getElementById("color").value = colorStr;
 }
+
 async function updateColor(){
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
