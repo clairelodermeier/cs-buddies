@@ -148,6 +148,9 @@ app.use('/get/*', authenticate);
 app.use('/set/*', authenticate);
 app.use('/delete/*', authenticate);
 
+app.get('/', (req,res)=>{
+    res.redirect('/account/login.html');
+});
 
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
