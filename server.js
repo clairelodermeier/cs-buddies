@@ -162,7 +162,8 @@ function authenticate(req, res, next) {
     else {
         console.log('Login cookie undefined. Redirecting to login');
         res.redirect('/account/login.html');
-    } return;
+        return;
+    }
 }
 
 app.use('/get/*', authenticate);
@@ -196,7 +197,6 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
 // GET request for the user's profile pic image ID
 app.get('/get/imageID/', (req, res) => {
     // find current user
-    console.log('getting image ID');
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
         const imageId = userDoc.pic;
@@ -233,7 +233,6 @@ app.get('/set/email/:newEmail', (req, res) => {
 
 //GET request for rendering image
 app.get('/get/profilePic/:id', async (req, res) => {
-    console.log('getting profile pic');
     const imageId = req.params.id;
 
     // find the image by its ID
@@ -336,7 +335,6 @@ app.post('/login/', (req, res) => {
 
 // GET request, mode selected for a user
 app.get('/get/mode/', async (req, res) => {
-    console.log('getting mode');
 
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
@@ -348,6 +346,8 @@ app.get('/get/mode/', async (req, res) => {
 
 // GET request, set mode for a user
 app.get('/set/mode/:mode', async (req, res) => {
+    console.log('setting mode');
+
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
 
@@ -365,7 +365,6 @@ app.get('/set/mode/:mode', async (req, res) => {
 
 // GET request, set color for a user
 app.get('/set/color/:color', async (req, res) => {
-    console.log('setting color');
 
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
@@ -379,6 +378,7 @@ app.get('/set/color/:color', async (req, res) => {
 
 // GET request, color selected for a user
 app.get('/get/color/', (req, res) => {
+
     // find user document
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
@@ -390,7 +390,6 @@ app.get('/get/color/', (req, res) => {
 
 // GET request, channels for a given user
 app.get('/get/channels/', async (req, res) => {
-    console.log('getting channels');
 
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
@@ -409,7 +408,6 @@ app.get('/get/channels/', async (req, res) => {
 
 // GET request, posts for a given channel
 app.get('/get/posts/:channelID', async (req, res) => {
-    console.log('getting channel');
 
     // find user document
     var channelDoc = await Channel.findById( req.params.channelID ).exec();
