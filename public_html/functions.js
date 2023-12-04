@@ -1,19 +1,33 @@
-
 mode();
 updateColor();
 
 window.onloadstart = mode();
 window.onloadstart = updateColor();
 window.onloadstart = displayIcon();
+window.onloadstart = setLocalMode();
 
-function displayIcon(){
-  let iconHolder = document.getElementById("icon");
-  let p = fetch("/get/imageID/");
-  p.then((response)=>{
-      return response.text();
-  }).then((text)=>{
-      iconHolder.src = "/get/profilePic/" + text;
-  });
+
+function setLocalMode() {
+    let currentMode = window.localStorage.getItem('mode');
+    if (currentMode == 'light') {
+        window.localStorage.setItem("mode", "light");
+        document.getElementById("cssLink").href = "css/style.css";
+    } else {
+        window.localStorage.setItem("mode", "dark");
+        document.getElementById("cssLink").href = "css/darkStyle.css";
+
+    }
+}
+
+
+function displayIcon() {
+    let iconHolder = document.getElementById("icon");
+    let p = fetch("/get/imageID/");
+    p.then((response) => {
+        return response.text();
+    }).then((text) => {
+        iconHolder.src = "/get/profilePic/" + text;
+    });
 
 }
 
@@ -21,20 +35,22 @@ function displayIcon(){
 function mode() {
     let url = '/get/mode/';
     let p = fetch(url);
-    p.then((r)=>{
+    p.then((r) => {
         return r.text();
-    }).then((text)=>{
-        if(text.startsWith("light")){
+    }).then((text) => {
+        if (text.startsWith("light")) {
+            window.localStorage.setItem("mode", "light");
             document.getElementById("cssLink").href = "css/style.css";
         }
-        else{
+        else {
+            window.localStorage.setItem("mode", "dark");
             document.getElementById("cssLink").href = "css/darkStyle.css";
         }
     });
 }
 
 
-async function updateColor(){
+async function updateColor() {
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
 
@@ -50,36 +66,30 @@ var button = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
 var confirmButton = document.getElementById("confirm"); // Allows confirm button to work
 var channelList = document.getElementById("channelList");
- 
 
-button.onclick = function()
-{
+
+button.onclick = function () {
     modal.style.display = "block";
 }
 
-span.onclick = function()
-{
+span.onclick = function () {
     var text = document.getElementById("channelName");
-    if(text && text.value)
-    {
+    if (text && text.value) {
         text.value = "";
     }
     modal.style.display = "none";
 }
 
-confirmButton.onclick = function()
-{
+confirmButton.onclick = function () {
     var text = document.getElementById("channelName");
-    if(text && text.value)
-    {
+    if (text && text.value) {
         var newText = text.value;
         text.value = ""
         modal.style.display = "none";
         createChannelButton(newText);
 
     }
-    else
-    {   
+    else {
         alert("Please enter a channel name")
         modal.style.display = "block";
     }
@@ -87,19 +97,16 @@ confirmButton.onclick = function()
 }
 
 
-window.onclick = function(event)
-{
-    if(event.target == modal)
-    {
+window.onclick = function (event) {
+    if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-function createChannelButton(channelName)
-{
+function createChannelButton(channelName) {
     while (document.getElementById(channelName)) {
         var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
-        
+
         if (userResponse) {
             // If the user wants to choose a different name, prompt again
             channelName = prompt("Enter a different channel name:");
@@ -120,8 +127,7 @@ function createChannelButton(channelName)
     listItem.appendChild(newChannelButton);
 
 
-    newChannelButton.onclick = function()
-    {
+    newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
@@ -129,30 +135,26 @@ function createChannelButton(channelName)
 
     }
 
-    
+
     channelList.appendChild(listItem);
     saveChannel(channelName);
 
 }
 
-function saveChannel(channelName)
-{
+function saveChannel(channelName) {
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
-    if (!channels.includes(channelName)) 
-    {
+    if (!channels.includes(channelName)) {
         channels.push(channelName);
 
-    localStorage.setItem('channels', JSON.stringify(channels));
+        localStorage.setItem('channels', JSON.stringify(channels));
     }
 }
 
-function loadChannels()
-{
+function loadChannels() {
     channelList.innerHTML = "";
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
-    channels.forEach(function(channel)
-    {
+    channels.forEach(function (channel) {
         createChannelButton(channel);
     });
 }
@@ -161,26 +163,23 @@ function loadChannels()
 window.onload = loadChannels();
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
-function showChannelContent(channelName)
-{
+function showChannelContent(channelName) {
     var content = "";
-    
-    switch(channelName)
-    {
+
+    switch (channelName) {
         case 'channel1':
             content = test();
             break;
         default:
             content = "Default content";
-        }
-    
-        document.getElementById('content').innerHTML = content;
-    
+    }
+
+    document.getElementById('content').innerHTML = content;
+
 }
 
-function test()
-{
-    return  `   
+function test() {
+    return `   
     <div class="settings>
         <div id="logOutContent">
             <h2> Are you sure?</h2>
@@ -199,8 +198,7 @@ function test()
 
 
 //To potentially delete Channels ----Still In Progress ------
-channelList.addEventListener('contextmenu', function(event)
-{
+channelList.addEventListener('contextmenu', function (event) {
     event.preventDefault();
 
 
@@ -208,12 +206,12 @@ channelList.addEventListener('contextmenu', function(event)
 
     if (clickedChannelButton.tagName === 'BUTTON') {
         var confirmDelete = window.confirm("Are you sure you want to delete this channel?");
-        
+
         if (confirmDelete) {
             deleteChannel(clickedChannelButton.textContent);
         }
     }
-    
+
 });
 
 
@@ -221,7 +219,7 @@ function deleteChannel(channelName) {
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
     // Remove the channel from the array
-    var updatedChannels = channels.filter(function(channel) {
+    var updatedChannels = channels.filter(function (channel) {
         return channel !== channelName;
     });
 
@@ -237,7 +235,7 @@ function deleteChannel(channelName) {
 
 
 
-  
+
 
 
 

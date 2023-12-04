@@ -2,6 +2,7 @@ displayStyles();
 window.onloadstart = displayStyles();
 
 function displayStyles(){
+    setLocalMode();
     displayMode();
     updateColor();
     displayIcon();
@@ -16,6 +17,18 @@ function displayIcon() {
         iconHolder.src = "/get/profilePic/" + text;
     });
 
+}
+
+function setLocalMode() {
+    let currentMode = window.localStorage.getItem('mode');
+    if (currentMode == 'light') {
+        window.localStorage.setItem("mode", "light");
+        document.getElementById("cssLink").href = "css/style.css";
+    } else {
+        window.localStorage.setItem("mode", "dark");
+        document.getElementById("cssLink").href = "css/darkStyle.css";
+
+    }
 }
 
 function changeMode() {
@@ -36,6 +49,7 @@ function displayMode() {
     }).then((text) => {
         if (text.startsWith("light")) {
             document.getElementById("cssLink").href = "css/style.css";
+            window.localStorage.setItem("mode", "light");
             return false;
         }
         else{
@@ -44,6 +58,7 @@ function displayMode() {
         }
     }).then((dark)=>{
         if(document.getElementById("darkMode")!=null){
+            window.localStorage.setItem("mode", "dark");
             document.getElementById("darkMode").checked = dark;
         }
     })
