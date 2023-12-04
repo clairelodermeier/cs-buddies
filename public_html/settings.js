@@ -252,13 +252,9 @@ function changePic(imgFile) {
         body: formData,
     });
     imgP.then((r) => {
-        return r.json();
-    }).then((idObj) => {
-        let imgObj = { "id": idObj };
-        let p2 = fetch('/set/pic/', {
-            method: 'POST',
-            body: JSON.stringify(imgObj),
-        });
+        return r.text();
+    }).then((text) => {
+        let p2 = fetch('/set/pic/'+text);
         p2.then((r) => {
             return r.text();
         }).then((text) => {

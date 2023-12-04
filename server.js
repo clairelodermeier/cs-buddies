@@ -204,13 +204,13 @@ app.get('/get/imageID/', (req, res) => {
 
 });
 
-// POST request to change the user's profile pic image ID
-app.post('/set/pic/', (req, res) => {
+// GET request to change the user's profile pic image ID
+app.get('/set/pic/:newPic', (req, res) => {
     // find current user
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
         console.log(userDoc.pic);
-        userDoc.pic = req.body['id'];
+        userDoc.pic = (req.params.newPic).substring(1,req.params.newPic.length - 1);
         console.log(userDoc.pic);
         userDoc.save();
         res.end("SUCCESS");
