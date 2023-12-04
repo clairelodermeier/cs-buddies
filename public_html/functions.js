@@ -10,11 +10,13 @@ window.onloadstart = updateColor();
 window.onloadstart = displayIcon();
 window.onloadstart = setLocalDisplay();
 
+// This function updates display settings including mode and color from locally stored items. 
 function setLocalDisplay(){
     setLocalMode();
     setLocalColor();
 }
-
+// This function sets the mode (dark/light) using the mode item stored locally. 
+// Switches to the correct css file by updating the href of the link tag in the DOM
 function setLocalMode() {
     let currentMode = window.localStorage.getItem('mode');
     if (currentMode == 'light') {
@@ -26,6 +28,8 @@ function setLocalMode() {
     }
 }
 
+// This function updates the color scheme using the color item stored locally.
+// Updates the style.color attributes for DOM elements  
 function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
@@ -36,19 +40,20 @@ function setLocalColor() {
     }
 }
 
+// This function displays the user's profile picture icon. Creates a server request for the imageID
+// and updates the src attribute of the img tag 
 function displayIcon() {
     let iconHolder = document.getElementById("icon");
     let p = fetch("/get/imageID/");
     p.then((response) => {
         return response.text();
     }).then((text) => {
-        window.localStorage.setItem("pic", "/get/profilePic/" + text);
         iconHolder.src = "/get/profilePic/" + text;
     });
-
 }
 
-// display dark or light mode
+// This function updates the local storage and css in the dom to display dark or light mode. 
+// Creates a server request to get the user's stored mode.
 function mode() {
     let url = '/get/mode/';
     let p = fetch(url);
@@ -66,9 +71,10 @@ function mode() {
     });
 }
 
-
-async function updateColor() {
-    let colorStr = await getColor();
+// This function updates the color of the html elements based on the saved color for the user. 
+// It also sets the locally stored color. 
+function updateColor() {
+    let colorStr = getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
@@ -76,12 +82,18 @@ async function updateColor() {
     window.localStorage.setItem("color", colorStr);
 
 }
-async function getColor() {
-    let response = await fetch('/get/color/');
-    let colorStr = await response.text();
-    window.localStorage.setItem("color", '#'+colorStr);
-    return "#" + colorStr;
 
+// This function creates a server request to get the saved color for the user. 
+// Returns: a string in the format of a hex color "#XXXXXX" 
+function getColor() {
+    let p = fetch('/get/color/');
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        let colorStr = text;
+        window.localStorage.setItem("color", '#'+colorStr);
+    })
+    return window.localStorage.getItem("color");
 }
 
 var modal = document.getElementById("channelModal");
@@ -119,7 +131,6 @@ confirmButton.onclick = function () {
 
 }
 
-
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -140,7 +151,6 @@ function createChannelButton(channelName) {
     }
 
 
-
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
@@ -157,7 +167,6 @@ function createChannelButton(channelName) {
         console.log("List of channels:", channels);
 
     }
-
 
     channelList.appendChild(listItem);
     saveChannel(channelName);

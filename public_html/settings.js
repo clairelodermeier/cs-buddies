@@ -95,6 +95,7 @@ function getMode() {
     });
 }
 
+
 // This function creates a server request to set the user's preferred display mode
 // Param: mode, a string "light" or "dark"
 function setMode(mode) {
@@ -106,23 +107,21 @@ function setMode(mode) {
         if ((!t.startsWith("SUCCESS"))) {
             alert("Failed to set mode");
         }
-    }).then(()=>{
-        getMode();
     });
 }
 
 // This function updates the value of the color input field in settings based on the saved color 
 // for the user. It also sets the locally stored color. 
-async function updateColorValue(){
-    let colorStr = await getColor();
+function updateColorValue(){
+    let colorStr = getColor();
     document.getElementById("color").value = colorStr;
     window.localStorage.setItem("color", colorStr);
 }
 
 // This function updates the color of the html elements based on the saved color for the user. 
 // It also sets the locally stored color. 
-async function updateColor(){
-    let colorStr = await getColor();
+function updateColor(){
+    let colorStr = getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
@@ -132,11 +131,14 @@ async function updateColor(){
 
 // This function creates a server request to get the saved color for the user. 
 // Returns: a string in the format of a hex color "#XXXXXX" 
-async function getColor() {
-    let response = await fetch('/get/color/');
-    let colorStr = await response.text();
-    window.localStorage.setItem("color", '#'+colorStr);
-    return "#" + colorStr;
+function getColor() {
+    let p = fetch('/get/color/');
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        window.localStorage.setItem("color","#"+text);
+    });
+    return window.localStorage.getItem("color");
 }
 
 // This function creates a server request to set the user's saved color based on the color input.
@@ -158,7 +160,6 @@ function setColor(){
 
 // This function allows a user to delete their account. Confirms choice to delete and creates a 
 // server request. Alerts with result; if successful, redirects to login. 
-
 function deleteAccount(){
     window.confirm("Are you sure you want to delete your account?");
     let p = fetch('/delete/account/');

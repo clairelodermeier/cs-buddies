@@ -11,25 +11,23 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-const parser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const crypto = require('node:crypto');
 
 // for profile pictures
-const multer  = require('multer')
+const multer = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(express.static('public_html'));
-app.use(express.json({ limit: '10mb' })); 
+app.use(express.json({ limit: '10mb' }));
 
 app.use(cookieParser());
 
-
 // database setup
 const mongoose = require('mongoose');
-//const { ConnectionClosedEvent } = require('mongodb');
+const { stringify } = require('node:querystring');
 const mongoDBURL = 'mongodb+srv://claire:Tqnwquj0JCOxzNr6@cluster0.1nzpiqt.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(mongoDBURL, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
@@ -71,26 +69,42 @@ var postSchema = new Schema({
 // create mongoose schema for images
 const imgSchema = new Schema({
     fileName: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     file: {
-      data: Buffer,
-      contentType: String,
+        data: Buffer,
+        contentType: String,
     }
 });
 
-// mongoose models
-var User = mongoose.model('User', userSchema );
-var Channel = mongoose.model('Channel', channelSchema );
-var Post = mongoose.model('Post', postSchema );
-var Img = mongoose.model('Img', imgSchema );
+// create mongoose schema for events
+const eventSchema = new Schema({
+    title: String,
+    author: String,
+    rsvp: [String], // list of userIDs, 
+    date: String,
+    time: String,
+    location: String,
+});
 
+// mongoose models
+var User = mongoose.model('User', userSchema);
+var Channel = mongoose.model('Channel', channelSchema);
+var Post = mongoose.model('Post', postSchema);
+var Img = mongoose.model('Img', imgSchema);
+var Event = mongoose.model('Event', eventSchema);
 
 // create a list of sessions
 let sessions = {};
 
+// regularly remove sessions 
+setInterval(removeSessions, 2000);
 
+
+// This function adds a user's session with session id and time to a list of sessions. 
+// Param: username, a string denoting the user's username
+// Returns: sid, number which is the user's session id
 function addSession(username) {
     /*
     The purpose of this function is to add a session for a user logged in.
@@ -103,28 +117,28 @@ function addSession(username) {
     return sid;
 }
 
+// This function is removes expired sessions from the sessions object. 
 function removeSessions() {
-    /*
-    The purpose of this function is to remove expired sessions from the sessions object. 
-    */
+
     let now = Date.now();
     let usernames = Object.keys(sessions);
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
         // 15 minutes
-        if (last + 60000 * 15 < now) {
+        if (last + (60 * 1000 * 5) < now) {
             delete sessions[usernames[i]];
         }
     }
+    console.log(sessions);
+
 }
 
-setInterval(removeSessions, 2000); //Log out after 20 min
 
+// This function authenticates a user's credentials using cookies. 
+// Param: req, res (request and response objects), next (next server request to follow)
 function authenticate(req, res, next) {
-    /*
-    The purpose of this function is to authenticate a user's credentials using cookies. 
-    Param: req, res (request and response objects), next (next server request to follow)
-    */
+    console.log('authenticating...');
+
 
     let c = req.cookies;
 
@@ -133,26 +147,30 @@ function authenticate(req, res, next) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {
             // renew session
+            console.log("valid session found. renewing due to activity");
             sessions[c.login.username].time = Date.now();
             // continue to next server request
             next();
         }
         else {
             // otherwise, redirect to login screen
-            res.redirect('/login.html');
+            console.log('Invalid login. Redirecting to login');
+            res.redirect('/account/login.html');
+            return;
         }
     }
     else {
-        res.redirect('/login.html');
-    }
-
+        console.log('Login cookie undefined. Redirecting to login');
+        res.redirect('/account/login.html');
+    } return;
 }
 
 app.use('/get/*', authenticate);
 app.use('/set/*', authenticate);
 app.use('/delete/*', authenticate);
 
-app.get('/', (req,res)=>{
+// GET request, redirects to login screen from empty path
+app.get('/', (req, res) => {
     res.redirect('/account/login.html');
 });
 
@@ -175,10 +193,11 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     else { console.log('upload error') };
 });
 
-app.get('/get/imageID/', (req,res) => {
+// GET request for the user's profile pic image ID
+app.get('/get/imageID/', (req, res) => {
     // find current user
-    let p = User.findOne({"username": req.cookies.login.username}).exec();
-    p.then((userDoc)=>{
+    let p = User.findOne({ "username": req.cookies.login.username }).exec();
+    p.then((userDoc) => {
         const imageId = userDoc.pic;
         res.end(imageId);
     });
@@ -188,23 +207,23 @@ app.get('/get/imageID/', (req,res) => {
 //GET request for rendering image
 app.get('/get/profilePic/:id', async (req, res) => {
     const imageId = req.params.id;
-  
+
     // find the image by its ID
     const imgDoc = await Img.findById(imageId).exec();
 
     // set content type 
-    res.set('Content-Type', imgDoc.contentType); 
+    res.set('Content-Type', imgDoc.contentType);
 
     // send image data buffer 
     res.send(imgDoc.file.data);
-     
-  });
+
+});
 
 //POST request for creating a user
 app.post('/create/', (req, res) => {
 
     let userObj = req.body;
-    let p1 = User.find({"username": userObj.n}).exec();
+    let p1 = User.find({ "username": userObj.n }).exec();
     p1.then((results) => {
         if (results.length == 0) {
             let newSalt = '' + Math.floor(Math.random() * 10000000000);
@@ -235,36 +254,33 @@ app.post('/create/', (req, res) => {
     });
 });
 
-app.get('/delete/account/', async(req,res)=>{
+app.get('/delete/account/', async (req, res) => {
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
     var channels = userDoc.channels;
-    for (var i=0;i<channels.length;i++){
+    for (var i = 0; i < channels.length; i++) {
         leaveChannel(channels[i]);
     }
 
     let p = User.deleteOne({ "username": req.cookies.login.username }).exec()
-    p.then(()=>{
+    p.then(() => {
         res.end("SUCCESS");
     })
 });
 
 // POST request, user login
-app.post('/login/',  (req, res) => {
+app.post('/login/', (req, res) => {
 
     let u = req.body;
 
-    let p1 = User.find({username: u.username}).exec();
-    p1.then((results) =>
-    {
-        if(results.length == 0)
-        {
+    let p1 = User.find({ username: u.username }).exec();
+    p1.then((results) => {
+        if (results.length == 0) {
             res.end("Could not find account. Try again.");
         }
-        else
-        {
+        else {
             // find user by matching username
             let currentUser = results[0];
-            
+
             //concatenate password and saved salt
             let toHash = u.password + currentUser.salt;
 
@@ -276,15 +292,13 @@ app.post('/login/',  (req, res) => {
             let result = data.digest('hex');
 
             // check if hash matches saved hash
-            if(result == currentUser.hash)
-            {
+            if (result == currentUser.hash) {
                 let sid = addSession(u.username);
-                res.cookie("login", {username: u.username, sessionID: sid},
-                {maxAge: 60000 * 2 });
+                res.cookie("login", { username: u.username, sessionID: sid },
+                    { maxAge: 60000 * 2 });
                 res.end('SUCCESS');
             }
-            else
-            {
+            else {
                 res.end("Incorrect password.");
             }
         }
@@ -308,10 +322,10 @@ app.get('/set/mode/:mode', async (req, res) => {
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
 
     // set mode selected for user
-    if (req.params.mode == 'light'){
+    if (req.params.mode == 'light') {
         userDoc.mode = "light";
     }
-    else{
+    else {
         userDoc.mode = "dark";
     }
     userDoc.save();
@@ -332,13 +346,14 @@ app.get('/set/color/:color', async (req, res) => {
 });
 
 // GET request, color selected for a user
-app.get('/get/color/', async (req, res) => {
+app.get('/get/color/', (req, res) => {
     // find user document
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    let p = User.findOne({ "username": req.cookies.login.username }).exec();
+    p.then((userDoc) => {
+        // send color for user
+        res.end(userDoc.color);
+    });
 
-    // get color selected for user
-    const color = userDoc.color;
-    res.end(color);
 });
 
 // GET request, channels for a given user
@@ -362,7 +377,7 @@ app.get('/get/channels/', async (req, res) => {
 app.get('/get/posts/:channel', async (req, res) => {
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-   
+
     // TODO: find a channel in user's channels with name given by req.params.channel
     // get list of that channel's posts
 
@@ -375,19 +390,19 @@ app.get('/get/posts/:channel', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
-async function leaveChannel(channelId){
+async function leaveChannel(channelId) {
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-    var channelDoc = await Channel.findById({channelId}).exec();
+    var channelDoc = await Channel.findById({ channelId }).exec();
     var memberList = channelDoc.members;
     var index = memberList.indexOf(userDoc._id);
-    memberList.splice(index,1);
+    memberList.splice(index, 1);
 }
 
-async function removeChannel(channelId){
+async function removeChannel(channelId) {
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
     var channelList = userDoc.channels;
     var index = channelList.indexOf(channelId);
-    channelList.splice(index,1);
+    channelList.splice(index, 1);
 }
 
 app.listen(port, () => {
