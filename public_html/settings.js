@@ -7,30 +7,34 @@ channels, and display settings. Also uses local storage to load display settings
 
 window.onloadstart = displayStyles();
 
+// This function updates the display settings when the page loads. 
+// Updates mode, color, and profile picture.
 function displayStyles(){
     setLocalDisplay();
-    displayMode();
+    getMode();
     updateColor();
     displayIcon();
 }
 
+// This function updates display settings including mode and color from locally stored items. 
 function setLocalDisplay(){
     setLocalMode();
     setLocalColor();
 }
 
+// This function sets the mode (dark/light) using the mode item stored locally. 
+// Switches to the correct css file by updating the href of the link tag in the DOM
 function setLocalMode() {
     let currentMode = window.localStorage.getItem('mode');
     if (currentMode == 'light') {
-        window.localStorage.setItem("mode", "light");
         document.getElementById("cssLink").href = "css/style.css";
     } else if (currentMode == 'dark'){
-        window.localStorage.setItem("mode", "dark");
         document.getElementById("cssLink").href = "css/darkStyle.css";
-
     }
 }
 
+// This function updates the color scheme using the color item stored locally.
+// Updates the style.color attributes for DOM elements  
 function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
@@ -42,6 +46,8 @@ function setLocalColor() {
     }
 }
 
+// This function displays the user's profile picture icon. Creates a server request for the imageID
+// and updates the src attribute of the img tag 
 function displayIcon() {
     let iconHolder = document.getElementById("icon");
     let p = fetch("/get/imageID/");
@@ -50,9 +56,9 @@ function displayIcon() {
     }).then((text) => {
         iconHolder.src = "/get/profilePic/" + text;
     });
-
 }
 
+// This function chages the mode (light/dark) both in local storage and by changing the css in the DOM. 
 function changeMode() {
     if (document.getElementById("darkMode").checked==true) {
         document.getElementById("cssLink").href = "css/darkStyle.css";
@@ -65,7 +71,8 @@ function changeMode() {
     }
 }
 
-function displayMode() {
+// This function creates a server request to get the mode (light/dark) that the user has specified
+function getMode() {
     let url = '/get/mode/';
     let p = fetch(url);
     p.then((r) => {
@@ -88,6 +95,8 @@ function displayMode() {
     });
 }
 
+// This function creates a server request to set the user's preferred display mode
+// Param: mode, a string "light" or "dark"
 function setMode(mode) {
     let url = '/set/mode/' + mode;
     let p = fetch(url);
@@ -97,30 +106,32 @@ function setMode(mode) {
         if ((!t.startsWith("SUCCESS"))) {
             alert("Failed to set mode");
         }
-
     }).then(()=>{
-        displayMode();
+        getMode();
     });
 }
 
+// This function updates the value of the color input field in settings based on the saved color 
+// for the user. It also sets the locally stored color. 
 async function updateColorValue(){
     let colorStr = await getColor();
     document.getElementById("color").value = colorStr;
     window.localStorage.setItem("color", colorStr);
-
 }
 
+// This function updates the color of the html elements based on the saved color for the user. 
+// It also sets the locally stored color. 
 async function updateColor(){
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
-
     window.localStorage.setItem("color", colorStr);
-
-
 }
+
+// This function creates a server request to get the saved color for the user. 
+// Returns: a string in the format of a hex color "#XXXXXX" 
 async function getColor() {
     let response = await fetch('/get/color/');
     let colorStr = await response.text();
@@ -128,6 +139,8 @@ async function getColor() {
     return "#" + colorStr;
 }
 
+// This function creates a server request to set the user's saved color based on the color input.
+// After receiving a response from the server, calls the updateColor() function.
 function setColor(){
     let color = document.getElementById("color").value;
     let url = '/set/color/' + color.substring(1);
@@ -142,6 +155,9 @@ function setColor(){
         updateColor();
     });
 }
+
+// This function allows a user to delete their account. Confirms choice to delete and creates a 
+// server request. Alerts with result; if successful, redirects to login. 
 
 function deleteAccount(){
     window.confirm("Are you sure you want to delete your account?");
@@ -159,40 +175,40 @@ function deleteAccount(){
     });
 }
 
+// This function sets the content on the settings page depending on which category is selected. 
+// Param: type, a string denoting which settings to display
 function showContent(type) {
     var content = "";
-
     switch (type) {
+        // edit profile settings
         case 'editProfile':
             content = getEditProfileContent();
             break;
+        // display settings
         case 'display':
             content = getDisplayContent();
             document.getElementById('content').innerHTML = content;
-            displayMode();
+            getMode();
             updateColorValue();
-
             break;
-
+        // content settings
         case 'logOut':
             content = getLogOutContent();
             break;
+        // privacy settings
         case 'privacy':
             content = getPrivacyContent();
             break;
+        // notification settings
         case 'notification':
             content = getNotificationContent();
             break;
         // Add more cases for other buttons
-
         default:
             content = "Default content";
     }
-
     document.getElementById('content').innerHTML = content;
-
 }
-
 
 function getPrivacyContent() {
 
