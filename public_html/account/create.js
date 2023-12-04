@@ -1,24 +1,35 @@
+/*
+Claire Lodermeier
+The purpose of this file is to handle the client side of user account creations. Gets account info
+via the DOM, checks that passwords match. Creates server request to create a user. 
+*/
 
 const cb = document.getElementById('createAccountButton');
 cb.onclick = () => {
- createUser();
+  createUser();
 }
 
 //create user function
 function createUser() {
 
-    var name = document.getElementById('username').value;
-    var pass = document.getElementById('password').value;
-    var DoB = document.getElementById('birthdate').value;
-    var email = document.getElementById('email').value;
-  
+  var name = document.getElementById('username').value;
+  var pass = document.getElementById('password').value;
+  var confirmPassword = document.getElementById('confirmPassword').value;
+
+  var DoB = document.getElementById('birthdate').value;
+  var email = document.getElementById('email').value;
+
+  if (pass !== confirmPassword) {
+    alert('Passwords do not match. Please check again.');
+  }
+  else {
     var imgFile = document.getElementById('profilePic').files[0];
     var formData = new FormData();
     formData.append('photo', imgFile, imgFile.name);
-  
+
     // Create the fetch request for the image
     let imgUrl = '/upload';
-  
+
     let imgP = fetch(imgUrl, {
       method: 'POST',
       body: formData,
@@ -33,13 +44,13 @@ function createUser() {
         body: JSON.stringify(userObj),
         headers: { 'Content-Type': 'application/json' }
       });
-      p.then((r)=>{
+      p.then((r) => {
         return r.text();
-      }).then((text)=>{
-        if(text.startsWith("SUCCESS")){
+      }).then((text) => {
+        if (text.startsWith("SUCCESS")) {
           window.location.href = 'login.html';
-        }  
-        else{
+        }
+        else {
           alert("failed to create account");
         }
       });
@@ -47,36 +58,29 @@ function createUser() {
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const passwordMatchMessage = document.getElementById('passwordMatchMessage');
-  
-  
-    function checkPasswordMatch() {
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-  
-      if (password === confirmPassword) {
-        passwordMatchMessage.textContent = 'Passwords match!';
-        passwordMatchMessage.style.color = 'green';
-      } else {
-        passwordMatchMessage.textContent = 'Passwords do not match';
-        passwordMatchMessage.style.color = 'red';
-      }
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const passwordMatchMessage = document.getElementById('passwordMatchMessage');
+
+
+  function checkPasswordMatch() {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (password === confirmPassword) {
+      passwordMatchMessage.textContent = 'Passwords match!';
+      passwordMatchMessage.style.color = 'green';
+    } else {
+      passwordMatchMessage.textContent = 'Passwords do not match';
+      passwordMatchMessage.style.color = 'red';
     }
-    function handleFormSubmit(event) {
-      const password = passwordInput.value;
-      const confirmPassword = confirmPasswordInput.value;
-  
-      if (password !== confirmPassword) {
-        event.preventDefault(); // Prevent form submission if passwords don't match
-        alert('Passwords do not match. Please check again.');
-      }
-    }
-  
-    // Add event listeners
-    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
-    //registrationForm.addEventListener('click', handleFormSubmit);
-  
-  });
+  }
+
+  // Add event listeners
+  confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+});

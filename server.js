@@ -1,5 +1,9 @@
 /*
-The purpose of this file ____
+Claire Lodermeier
+The purpose of this file is to set up a server for an online application similar to discord, with
+channels for users to communicate via posts and events. Uses mongodb to store information about 
+users, channels, posts, _______. Handles a variety of GET and POST requests for _____. 
+Tracks cookies and sessions for authenticating login sessions. 
 */
 
 // server setup

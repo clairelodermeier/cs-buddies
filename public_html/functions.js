@@ -1,3 +1,10 @@
+/*
+Claire Lodermeier
+The purpose of this file is to implement client side functions for the main page of an online 
+social media application. It creates server requests for fetching user information, 
+channels, and display settings. Also uses local storage to load display settings faster.
+*/
+
 window.onloadstart = mode();
 window.onloadstart = updateColor();
 window.onloadstart = displayIcon();

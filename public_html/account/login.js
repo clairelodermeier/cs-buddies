@@ -1,3 +1,8 @@
+/*
+Claire Lodermeier
+The purpose of this file is to handle the client side of user logins. It gets login input from the 
+DOM and creates server requests for login. Redirects to main page after successful login.
+*/
 
 const lb = document.getElementById('loginButton');
 lb.onclick = () => {
