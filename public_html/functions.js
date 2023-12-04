@@ -210,7 +210,7 @@ function showChannelContent(channelName) {
     var content = "";
 
     switch (channelName) {
-        case 'channel1':
+        case channelList[0]:
             content = test();
             break;
         default:
@@ -248,7 +248,7 @@ channelList.addEventListener('contextmenu', function (event) {
     var clickedChannelButton = event.target;
 
     if (clickedChannelButton.tagName === 'BUTTON') {
-        var confirmDelete = window.confirm("Are you sure you want to delete this channel?");
+        var confirmDelete = window.confirm("Are you sure you want to leave this channel?");
 
         if (confirmDelete) {
             deleteChannel(clickedChannelButton.textContent);
@@ -273,6 +273,42 @@ function deleteChannel(channelName) {
     loadChannels();
 }
 
+
+//Sends messages to channels
+function sendMessage() {
+    const alias = document.getElementById('alias').value;
+    const message = document.getElementById('message').value;
+
+    const request = new XMLHttpRequest();
+
+    const url = `${URL_BASE}/chats/post/${alias}/${message}`;
+    console.log(`attempting POST ${url}`);
+    request.open('POST', url);
+    request.send();
+}
+
+function fetchMessages() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState === request.DONE && request.status === 200) {
+            const responseData = JSON.parse(request.responseText);
+            console.log(responseData);
+            let chatHtml = '';
+            for (const record of responseData) {
+                let alias = record.alias;
+                let message = record.message;
+                chatHtml += `<div class="chatMessage"><b>${alias}: </b>${message}</div>`;
+            }
+            const chatSection = document.getElementById('chatSection');
+            chatSection.innerHTML = chatHtml;
+        }
+    }
+
+    const url = `${URL_BASE}/chats`;
+    console.log(`attempting GET ${url}`);
+    request.open('GET', url);
+    request.send();
+}
 
 /*----------------------------------- */
 
