@@ -4,75 +4,78 @@ The purpose of this file is to handle the client side of user account creations.
 via the DOM, checks that passwords match. Creates server request to create a user. 
 */
 
+// DOM elements for user info
+const username = document.getElementById('username');
+const pass = document.getElementById('password');
+const confirmPassword = document.getElementById('confirmPassword');
+const bday = document.getElementById('birthdate');
+const email = document.getElementById('email');
+const imgHolder = document.getElementById('profilePic');
 
 // DOM element for create button
 const cb = document.getElementById('createAccountButton');
+// when the button is clicked, check fields, then create user if they are valid
 cb.onclick = () => {
-  var name = document.getElementById('username').value;
-  var pass = document.getElementById('password').value;
-  var confirmPassword = document.getElementById('confirmPassword').value;
-  var birthday = document.getElementById('birthdate').value;
-  var email = document.getElementById('email').value;
-  var imgFiles = document.getElementById('profilePic').files;
-
-  if (name==('') || pass==('') || confirmPassword==('') || birthday==('')|| email==('') || imgFiles.length == 0) {
+  // ensure all fields are filled out
+  if (username.value == ('') || pass.value == ('') || confirmPassword.value == ('') || bday.value == ('') || email.value == ('') || imgHolder.files.length == 0) {
     alert('One or more fields is incomplete.');
   }
-  else if (pass !== confirmPassword) {
+  // ensure passwords match
+  else if (pass.value !== confirmPassword.value) {
     alert('Passwords do not match. Please check again.');
   }
-  else{
-    createUser();
+  // if fields are valid, create user
+  else {
+    formData = getImgData();
+    createUser(formData);
   }
 }
+// This function creates a formData variable using the uploaded image file. 
+// Returns formData, a FormData object with image info
+function getImgData(){
+  // get image data
+  var formData = new FormData();
+  formData.append('photo', imgHolder.files[0], imgHolder.files[0].name);
+  return formData;
 
-// This function makes a server request to create a user.
-function createUser() {
-    var name = document.getElementById('username').value;
-    var pass = document.getElementById('password').value;
-    var birthday = document.getElementById('birthdate').value;
-    var email = document.getElementById('email').value;
-
-    var imgFile = document.getElementById('profilePic').files[0];
-    var formData = new FormData();
-    formData.append('photo', imgFile, imgFile.name);
-
-    // Create the fetch request for the image
-    let imgUrl = '/upload';
-
-    let imgP = fetch(imgUrl, {
+}
+// This function makes a server request to create a user. 
+// Param: formData, a formData object with image info
+function createUser(formData) {
+  // create request for image upload
+  let imgUrl = '/upload';
+  let imgP = fetch(imgUrl, {
+    method: 'POST',
+    body: formData,
+  });
+  imgP.then((r) => {
+    return r.json();
+  }).then((idObj) => {
+    var userObj = { n: username.value, p: pass.value, d: bday.value, e: email.value, i: idObj };
+    // create request for creating account
+    let url = '/create/';
+    let p = fetch(url, {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify(userObj),
+      headers: { 'Content-Type': 'application/json' }
     });
-    imgP.then((r) => {
-      return r.json();
-    }).then((idObj) => {
-      var userObj = { n: name, p: pass, d: birthday, e: email, i: idObj };
-      let url = '/create/';
-      let p = fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(userObj),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      p.then((r) => {
-        return r.text();
-      }).then((text) => {
-        if (text.startsWith("SUCCESS")) {
-          window.location.href = 'login.html';
-        }
-        else {
-          alert("failed to create account");
-        }
-      });
-
+    p.then((r) => {
+      return r.text();
+    }).then((text) => {
+      // if account creation was successful, redirect to login
+      if (text.startsWith("SUCCESS")) {
+        window.location.href = 'login.html';
+      } else {
+        alert("failed to create account");
+      }
     });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById('password');
   const confirmPasswordInput = document.getElementById('confirmPassword');
   const passwordMatchMessage = document.getElementById('passwordMatchMessage');
-
 
   function checkPasswordMatch() {
     const password = passwordInput.value;
