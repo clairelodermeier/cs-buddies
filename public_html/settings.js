@@ -2,11 +2,34 @@ displayStyles();
 window.onloadstart = displayStyles();
 
 function displayStyles(){
-    setLocalMode();
+    setLocalDisplay();
     displayMode();
     updateColor();
     displayIcon();
 }
+
+function setLocalDisplay(){
+    setLocalMode();
+    setLocalColor();
+}
+
+function setLocalMode() {
+    let currentMode = window.localStorage.getItem('mode');
+    if (currentMode == 'light') {
+        window.localStorage.setItem("mode", "light");
+        document.getElementById("cssLink").href = "css/style.css";
+    } else if (currentMode == 'dark'){
+        window.localStorage.setItem("mode", "dark");
+        document.getElementById("cssLink").href = "css/darkStyle.css";
+
+    }
+}
+
+function setLocalColor() {
+    let headerElement = document.getElementById("mainHeader");
+    headerElement.style.backgroundColor = window.localStorage.getItem("color");
+}
+
 
 function displayIcon() {
     let iconHolder = document.getElementById("icon");
@@ -19,25 +42,15 @@ function displayIcon() {
 
 }
 
-function setLocalMode() {
-    let currentMode = window.localStorage.getItem('mode');
-    if (currentMode == 'light') {
-        window.localStorage.setItem("mode", "light");
-        document.getElementById("cssLink").href = "css/style.css";
-    } else {
-        window.localStorage.setItem("mode", "dark");
-        document.getElementById("cssLink").href = "css/darkStyle.css";
-
-    }
-}
-
 function changeMode() {
     if (document.getElementById("darkMode").checked==true) {
         document.getElementById("cssLink").href = "css/darkStyle.css";
+        window.localStorage.setItem("mode", "dark");
         setMode("dark");
     } else {
         document.getElementById("cssLink").href = "css/style.css";
         setMode("light");
+        window.localStorage.setItem("mode", "light");
     }
 }
 
@@ -54,14 +67,14 @@ function displayMode() {
         }
         else{
             document.getElementById("cssLink").href = "css/darkStyle.css";
+            window.localStorage.setItem("mode", "dark");
             return true;
         }
     }).then((dark)=>{
         if(document.getElementById("darkMode")!=null){
-            window.localStorage.setItem("mode", "dark");
             document.getElementById("darkMode").checked = dark;
         }
-    })
+    });
 }
 
 function setMode(mode) {
@@ -107,7 +120,7 @@ function setColor(){
         }
     }).then(()=>{
         updateColor();
-    })
+    });
 }
 
 function deleteAccount(){

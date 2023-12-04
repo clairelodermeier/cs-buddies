@@ -1,24 +1,30 @@
-mode();
-updateColor();
-
 window.onloadstart = mode();
 window.onloadstart = updateColor();
 window.onloadstart = displayIcon();
-window.onloadstart = setLocalMode();
+window.onloadstart = setLocalDisplay();
 
+function setLocalDisplay(){
+    setLocalMode();
+    setLocalColor();
+}
 
 function setLocalMode() {
     let currentMode = window.localStorage.getItem('mode');
     if (currentMode == 'light') {
         window.localStorage.setItem("mode", "light");
         document.getElementById("cssLink").href = "css/style.css";
-    } else {
+    } else if (currentMode == 'dark'){
         window.localStorage.setItem("mode", "dark");
         document.getElementById("cssLink").href = "css/darkStyle.css";
-
     }
 }
 
+function setLocalColor() {
+    let headerElement = document.getElementById("mainHeader");
+    if (window.localStorage.getItem("color")!=null){
+        headerElement.style.backgroundColor = window.localStorage.getItem("color");
+    }
+}
 
 function displayIcon() {
     let iconHolder = document.getElementById("icon");
@@ -26,6 +32,7 @@ function displayIcon() {
     p.then((response) => {
         return response.text();
     }).then((text) => {
+        window.localStorage.setItem("pic", "/get/profilePic/" + text);
         iconHolder.src = "/get/profilePic/" + text;
     });
 
@@ -53,12 +60,15 @@ function mode() {
 async function updateColor() {
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
+    window.localStorage.setItem("color", '#'+colorStr);
 
 }
 async function getColor() {
     let response = await fetch('/get/color/');
     let colorStr = await response.text();
+    window.localStorage.setItem("color", '#'+colorStr);
     return "#" + colorStr;
+
 }
 
 var modal = document.getElementById("channelModal");
