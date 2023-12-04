@@ -270,7 +270,7 @@ function changePic(imgFile) {
 }
 
 // This function creates a request to the server to change a user's password. 
-function changePassword(imgFile) {
+function changePassword() {
     var pass = document.getElementById("changePassword");
     var confirm = document.getElementById("confirmPassword");
     if(pass.value!=confirm.value){
@@ -280,7 +280,8 @@ function changePassword(imgFile) {
         let pObj = {'p': pass.value}
         let p = fetch('/set/password/', {
             method: 'POST',
-            body: pObj.p,
+            body: JSON.stringify(pObj),
+            headers: { 'Content-Type': 'application/json' },
         });
         p.then((r)=>{
             return r.text();
@@ -291,6 +292,10 @@ function changePassword(imgFile) {
             else{
                 alert("Unable to change password.");
             }
+        // clear input fields
+        }).finally(()=>{
+            pass.value = '';
+            confirm.value = '';
         });
     }
 }

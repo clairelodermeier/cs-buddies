@@ -236,28 +236,19 @@ app.post('/set/password/', async (req, res) => {
     let u = await User.findOne({ "username": req.cookies.login.username }).exec();
 
     let newSalt = '' + Math.floor(Math.random() * 10000000000);
-    console.log(passObj.p);
     let toHash = passObj.p + newSalt;
     let h = crypto.createHash('sha3-256');
     let data = h.update(toHash, 'utf-8');
     let result = data.digest('hex');
 
     u.salt = newSalt;
-
-    console.log("new salt: " + newSalt);
-    console.log("new hash: " + result);
-
     let p = u.save();
 
     p.then(() => {
         u.hash = result;
         u.save();
     }).then(() => {
-        console.log("new saved salt: " + u.salt);
-        console.log("new saved hash: " + u.hash);
-
         res.end("SUCCESS");
-
     });
 });
 
