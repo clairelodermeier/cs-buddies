@@ -35,6 +35,10 @@ li {
 
 }
 
+input{
+    margin: 20px;
+}
+
 button:hover {
     background-color: rgb(150, 150, 150);
 }

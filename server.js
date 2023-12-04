@@ -204,6 +204,32 @@ app.get('/get/imageID/', (req, res) => {
 
 });
 
+// POST request to change the user's profile pic image ID
+app.post('/set/pic/', (req, res) => {
+    // find current user
+    let p = User.findOne({ "username": req.cookies.login.username }).exec();
+    p.then((userDoc) => {
+        console.log(userDoc.pic);
+        userDoc.pic = req.body['id'];
+        console.log(userDoc.pic);
+        userDoc.save();
+        res.end("SUCCESS");
+    });
+
+});
+
+// GET request to change the user's email
+app.get('/set/email/:newEmail', (req, res) => {
+    // find current user
+    let p = User.findOne({ "username": req.cookies.login.username }).exec();
+    p.then((userDoc) => {
+        userDoc.email = req.params.newEmail;
+        userDoc.save();
+        res.end("SUCCESS");
+    });
+
+});
+
 //GET request for rendering image
 app.get('/get/profilePic/:id', async (req, res) => {
     const imageId = req.params.id;

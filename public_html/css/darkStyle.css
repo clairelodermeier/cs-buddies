@@ -22,6 +22,10 @@ h3 {
     margin: 0px;
 }
 
+input{
+    margin: 20px;
+}
+
 h4{
     color:rgb(193, 19, 62);
     font-size: 150%;
