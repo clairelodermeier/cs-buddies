@@ -44,7 +44,6 @@ var userSchema = new Schema({
     pic: String,
     channels: [String],
     salt: String,
-    hash: String,
     mode: String,
     color: String
 
@@ -125,7 +124,7 @@ function removeSessions() {
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
         // 15 minutes
-        if (last + (6* 1000 * 15) < now) {
+        if (last + (6 * 1000 * 15) < now) {
             delete sessions[usernames[i]];
         }
     }
@@ -211,7 +210,7 @@ app.get('/set/pic/:newPic', (req, res) => {
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
         console.log(userDoc.pic);
-        userDoc.pic = (req.params.newPic).substring(1,req.params.newPic.length - 1);
+        userDoc.pic = (req.params.newPic).substring(1, req.params.newPic.length - 1);
         console.log(userDoc.pic);
         userDoc.save();
         res.end("SUCCESS");
@@ -229,6 +228,37 @@ app.get('/set/email/:newEmail', (req, res) => {
         res.end("SUCCESS");
     });
 
+});
+
+// POST request to change the user's password
+app.post('/set/password/', async (req, res) => {
+    let passObj = req.body;
+    let u = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    let newSalt = '' + Math.floor(Math.random() * 10000000000);
+    console.log(passObj.p);
+    let toHash = passObj.p + newSalt;
+    let h = crypto.createHash('sha3-256');
+    let data = h.update(toHash, 'utf-8');
+    let result = data.digest('hex');
+
+    u.salt = newSalt;
+
+    console.log("new salt: " + newSalt);
+    console.log("new hash: " + result);
+
+    let p = u.save();
+
+    p.then(() => {
+        u.hash = result;
+        u.save();
+    }).then(() => {
+        console.log("new saved salt: " + u.salt);
+        console.log("new saved hash: " + u.hash);
+
+        res.end("SUCCESS");
+
+    });
 });
 
 //GET request for rendering image
@@ -323,6 +353,10 @@ app.post('/login/', (req, res) => {
             //hash password+salt
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
+
+            console.log("result is " + result);
+            console.log("result should be " + currentUser.hash);
+
 
             // check if hash matches saved hash
             if (result == currentUser.hash) {
@@ -423,7 +457,7 @@ app.get('/get/channels/', async (req, res) => {
 app.get('/get/posts/:channelID', async (req, res) => {
 
     // find user document
-    var channelDoc = await Channel.findById( req.params.channelID ).exec();
+    var channelDoc = await Channel.findById(req.params.channelID).exec();
 
     // create an array of posts docs that correspond to post ids
     for (let i = 0; i < channelDoc.posts.length; i++) {

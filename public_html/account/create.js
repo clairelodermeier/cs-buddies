@@ -66,7 +66,7 @@ function createUser(formData) {
       if (text.startsWith("SUCCESS")) {
         window.location.href = 'login.html';
       } else {
-        alert("failed to create account");
+        alert(text);
       }
     });
   });

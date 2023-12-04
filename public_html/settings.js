@@ -269,6 +269,32 @@ function changePic(imgFile) {
     });
 }
 
+// This function creates a request to the server to change a user's password. 
+function changePassword(imgFile) {
+    var pass = document.getElementById("changePassword");
+    var confirm = document.getElementById("confirmPassword");
+    if(pass.value!=confirm.value){
+        alert("Passwords do not match.");
+    }
+    else{
+        let pObj = {'p': pass.value}
+        let p = fetch('/set/password/', {
+            method: 'POST',
+            body: pObj.p,
+        });
+        p.then((r)=>{
+            return r.text();
+        }).then((text)=>{
+            if(text.startsWith("SUCCESS")){
+                alert("Password successfully changed.");
+            }
+            else{
+                alert("Unable to change password.");
+            }
+        });
+    }
+}
+
 // This function logs a user out by deleting their session and redirecting to login.
 // Creates a request to the server to logout the current user
 function logout(){
@@ -299,7 +325,8 @@ function getPrivacyContent() {
                   <label for="confirmPassword">Confirm Password:</label>
                   <input type="password" id="confirmPassword" name="confirmPassword"><br>
               
-              
+                  <button id = "confirmChange" onclick = "changePassword()" >Change</button>
+
                   <button id = "deleteButton" onclick = "deleteAccount()" >Delete Account?</button>
           </div>
       </div>

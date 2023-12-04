@@ -31,7 +31,7 @@ function login() {
     if (text.startsWith('SUCCESS')) {
       window.location.href = '../main.html';
     } else {
-      alert("Unable to log in.");
+      alert(text);
     }
   });
 }
