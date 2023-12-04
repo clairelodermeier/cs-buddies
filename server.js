@@ -87,6 +87,13 @@ const eventSchema = new Schema({
     time: String,
     location: String,
 });
+//Creates message schema for messages
+const ChatMessageSchema = new Schema({
+    time: Number,
+    alias: String,
+    message: String
+});
+
 
 // mongoose models
 var User = mongoose.model('User', userSchema);
@@ -94,6 +101,8 @@ var Channel = mongoose.model('Channel', channelSchema);
 var Post = mongoose.model('Post', postSchema);
 var Img = mongoose.model('Img', imgSchema);
 var Event = mongoose.model('Event', eventSchema);
+
+const ChatMessage = mongoose.model('ChatMessage', ChatMessageSchema);
 
 // create a list of sessions
 let sessions = {};
@@ -470,4 +479,27 @@ async function removeChannel(channelId) {
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
+});
+
+
+
+
+// Adds a new message to the database
+app.post('/chats/post/:alias/:message', function (req, res) {
+    console.log('received a message');
+    const alias = req.params.alias
+    const message = req.params.message
+    const thisMessage = new ChatMessage({ time: Date.now(), alias: alias, message: message });
+    thisMessage.save();
+});
+
+// Sends all text messages currently on record
+app.get('/chats', function (req, res) {
+    const query = ChatMessage.find({});
+    query.select('alias message');
+    query.sort({ time: 1 });
+    query.exec(function (error, result) {
+        if (error) console.error('Error getting chat messages');
+        res.end(JSON.stringify(result));
+    });
 });
