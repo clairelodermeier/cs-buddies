@@ -281,13 +281,19 @@ app.post('/create/', (req, res) => {
     });
 });
 
+// GET request, delete user account
 app.get('/delete/account/', async (req, res) => {
+    // remove from channels
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
     var channels = userDoc.channels;
     for (var i = 0; i < channels.length; i++) {
         leaveChannel(channels[i]);
     }
 
+    // end session
+    delete sessions[req.cookies.login.username];
+
+    // delete userDoc
     let p = User.deleteOne({ "username": req.cookies.login.username }).exec()
     p.then(() => {
         res.end("SUCCESS");
