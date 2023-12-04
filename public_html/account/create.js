@@ -4,25 +4,35 @@ The purpose of this file is to handle the client side of user account creations.
 via the DOM, checks that passwords match. Creates server request to create a user. 
 */
 
+
+// DOM element for create button
 const cb = document.getElementById('createAccountButton');
 cb.onclick = () => {
-  createUser();
-}
-
-//create user function
-function createUser() {
-
   var name = document.getElementById('username').value;
   var pass = document.getElementById('password').value;
   var confirmPassword = document.getElementById('confirmPassword').value;
-
-  var DoB = document.getElementById('birthdate').value;
+  var birthday = document.getElementById('birthdate').value;
   var email = document.getElementById('email').value;
+  var imgFiles = document.getElementById('profilePic').files;
 
-  if (pass !== confirmPassword) {
+  if (name==('') || pass==('') || confirmPassword==('') || birthday==('')|| email==('') || imgFiles.length == 0) {
+    alert('One or more fields is incomplete.');
+  }
+  else if (pass !== confirmPassword) {
     alert('Passwords do not match. Please check again.');
   }
-  else {
+  else{
+    createUser();
+  }
+}
+
+// This function makes a server request to create a user.
+function createUser() {
+    var name = document.getElementById('username').value;
+    var pass = document.getElementById('password').value;
+    var birthday = document.getElementById('birthdate').value;
+    var email = document.getElementById('email').value;
+
     var imgFile = document.getElementById('profilePic').files[0];
     var formData = new FormData();
     formData.append('photo', imgFile, imgFile.name);
@@ -37,7 +47,7 @@ function createUser() {
     imgP.then((r) => {
       return r.json();
     }).then((idObj) => {
-      var userObj = { n: name, p: pass, d: DoB, e: email, i: idObj };
+      var userObj = { n: name, p: pass, d: birthday, e: email, i: idObj };
       let url = '/create/';
       let p = fetch(url, {
         method: 'POST',
@@ -56,9 +66,6 @@ function createUser() {
       });
 
     });
-  }
-
-
 }
 
 document.addEventListener("DOMContentLoaded", function () {
