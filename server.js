@@ -124,8 +124,8 @@ function removeSessions() {
     let usernames = Object.keys(sessions);
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
-        // 15 minutes
-        if (last + (60 * 1000 * 5) < now) {
+        // 5 seconds
+        if (last + (1000 * 5) < now) {
             delete sessions[usernames[i]];
         }
     }
@@ -196,6 +196,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
 // GET request for the user's profile pic image ID
 app.get('/get/imageID/', (req, res) => {
     // find current user
+    console.log('getting image ID');
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
         const imageId = userDoc.pic;
@@ -232,6 +233,7 @@ app.get('/set/email/:newEmail', (req, res) => {
 
 //GET request for rendering image
 app.get('/get/profilePic/:id', async (req, res) => {
+    console.log('getting profile pic');
     const imageId = req.params.id;
 
     // find the image by its ID
@@ -334,6 +336,8 @@ app.post('/login/', (req, res) => {
 
 // GET request, mode selected for a user
 app.get('/get/mode/', async (req, res) => {
+    console.log('getting mode');
+
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
 
@@ -361,6 +365,8 @@ app.get('/set/mode/:mode', async (req, res) => {
 
 // GET request, set color for a user
 app.get('/set/color/:color', async (req, res) => {
+    console.log('setting color');
+
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
 
@@ -384,6 +390,8 @@ app.get('/get/color/', (req, res) => {
 
 // GET request, channels for a given user
 app.get('/get/channels/', async (req, res) => {
+    console.log('getting channels');
+
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
 
@@ -400,17 +408,15 @@ app.get('/get/channels/', async (req, res) => {
 });
 
 // GET request, posts for a given channel
-app.get('/get/posts/:channel', async (req, res) => {
+app.get('/get/posts/:channelID', async (req, res) => {
+    console.log('getting channel');
+
     // find user document
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channelDoc = await Channel.findById( req.params.channelID ).exec();
 
-    // TODO: find a channel in user's channels with name given by req.params.channel
-    // get list of that channel's posts
-
-    // create an array of posts that correspond to post ids
-    const channelPosts = [];
-    for (let i = 0; i < posts.length; i++) {
-        const currentPost = await Post.findById(posts[i]).exec();
+    // create an array of posts docs that correspond to post ids
+    for (let i = 0; i < channelDoc.posts.length; i++) {
+        let currentPost = await Post.findById(channelDoc.posts[i]).exec();
         channelPosts.push(currentPost);
     }
     res.end(JSON.stringify(channelPosts));
