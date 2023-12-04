@@ -75,6 +75,22 @@ button:hover {
     padding-left: 10px;
 }
 
+#helpButton {
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding: 10px;
+    color: rgb(193, 19, 62);
+    background-color: white;
+    font-size: 18px;
+    border-color: rgb(193, 19, 62);
+    border-style: solid;
+}
+
+#helpButton:hover{
+    background-color:#aaa;
+}
+
 
 #bottomButtons {
     position: fixed;
@@ -83,7 +99,6 @@ button:hover {
     width: 200px;
     text-align: center;
 }
-
 
 
 #settingsButton {
@@ -117,6 +132,10 @@ button:hover {
     top:0;
     right:0;
 
+}
+
+#deleteButton{
+    margin-top: 25px;
 }
 
 .modal{

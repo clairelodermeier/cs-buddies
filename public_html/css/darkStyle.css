@@ -65,6 +65,8 @@ button:hover {
     height: 100%;
     margin-left: -40px;
     margin-bottom: 20px;
+    font-family: monospace;
+
 
 }
 
@@ -79,6 +81,23 @@ button:hover {
     padding-left: 10px;
 }
 
+#helpButton {
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding: 10px;
+    color: rgb(193, 19, 62);
+    background-color: rgb(50,50,50);
+    font-size: 18px;
+    border-color: rgb(193, 19, 62);
+    border-style: solid;
+    font-family: monospace;
+
+}
+
+#helpButton:hover{
+    background-color:black;
+}
 
 #bottomButtons {
     position: fixed;
@@ -88,7 +107,9 @@ button:hover {
     text-align: center;
 }
 
-
+#deleteButton{
+    margin-top: 25px;
+}
 
 #settingsButton {
     left: 100px;
@@ -125,6 +146,8 @@ button:hover {
 
 #displayContent {
     background-color: white;
+    font-family: monospace;
+
 }
 
 .modal{
