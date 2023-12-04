@@ -269,6 +269,22 @@ function changePic(imgFile) {
     });
 }
 
+// This function logs a user out by deleting their session and redirecting to login.
+// Creates a request to the server to logout the current user
+function logout(){
+    let p = fetch('/logout/');
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith("SUCCESS")){
+            window.location.href = '../account/login.html';
+        }
+        else{
+            alert("Couldn't log you out.");
+        }
+    });
+}
+
 function getPrivacyContent() {
 
     return `
@@ -360,6 +376,7 @@ function getNotificationContent() {
   `;
 }
 
+
 function getLogOutContent() {
 
     return `
@@ -367,10 +384,8 @@ function getLogOutContent() {
       <div id="logOutContent">
           <h2> Are you sure?</h2>
           <li>
-              <a href="../account/login.html">
-              <button class="decisions" id="yes">Yes</button>
-              </a>
-              <a href="./main.html">
+              <button class="decisions" onclick = "logout()" id="yes">Yes</button>
+              <a href="./settings.html">
                   <button class="decisions" id="no">No</button>
               </a>
           </li>
@@ -378,4 +393,7 @@ function getLogOutContent() {
   </div>
   `;
 }
+
+
+
 

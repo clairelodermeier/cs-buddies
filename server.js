@@ -124,8 +124,8 @@ function removeSessions() {
     let usernames = Object.keys(sessions);
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
-        // 5 seconds
-        if (last + (1000 * 5) < now) {
+        // 15 minutes
+        if (last + (6* 1000 * 15) < now) {
             delete sessions[usernames[i]];
         }
     }
@@ -331,6 +331,13 @@ app.post('/login/', (req, res) => {
         }
     });
 
+});
+
+// GET request, user logout
+app.get('/logout/', (req, res) => {
+
+    delete sessions[req.cookies.login.username];
+    res.end("SUCCESS");
 });
 
 // GET request, mode selected for a user
