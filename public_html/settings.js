@@ -27,9 +27,10 @@ function setLocalMode() {
 
 function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
-    headerElement.style.backgroundColor = window.localStorage.getItem("color");
+    if(window.localStorage.getItem("color")!=null){
+        headerElement.style.backgroundColor = window.localStorage.getItem("color");
+    }
 }
-
 
 function displayIcon() {
     let iconHolder = document.getElementById("icon");
@@ -95,16 +96,21 @@ function setMode(mode) {
 async function updateColorValue(){
     let colorStr = await getColor();
     document.getElementById("color").value = colorStr;
+    window.localStorage.setItem("color", colorStr);
+
 }
 
 async function updateColor(){
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
+    window.localStorage.setItem("color", colorStr);
+
 
 }
 async function getColor() {
     let response = await fetch('/get/color/');
     let colorStr = await response.text();
+    window.localStorage.setItem("color", '#'+colorStr);
     return "#" + colorStr;
 }
 

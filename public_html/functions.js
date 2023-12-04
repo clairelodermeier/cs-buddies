@@ -60,7 +60,7 @@ function mode() {
 async function updateColor() {
     let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
-    window.localStorage.setItem("color", '#'+colorStr);
+    window.localStorage.setItem("color", colorStr);
 
 }
 async function getColor() {
