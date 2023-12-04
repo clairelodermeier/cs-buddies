@@ -485,11 +485,10 @@ app.listen(port, () => {
 
 
 // Adds a new message to the database
-app.post('/chats/post/:alias/:message', function (req, res) {
+app.post('/chats/post/:message', function (req, res) {
     console.log('received a message');
-    const alias = req.params.alias
     const message = req.params.message
-    const thisMessage = new ChatMessage({ time: Date.now(), alias: alias, message: message });
+    const thisMessage = new ChatMessage({ time: Date.now(), message: message });
     thisMessage.save();
 });
 
