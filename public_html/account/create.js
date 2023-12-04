@@ -72,15 +72,18 @@ function createUser(formData) {
   });
 }
 
+// This function displays message to users about whether their passwords match.
 document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById('password');
   const confirmPasswordInput = document.getElementById('confirmPassword');
   const passwordMatchMessage = document.getElementById('passwordMatchMessage');
 
+  // This function checks whether the password field input matches the confirm password field input
   function checkPasswordMatch() {
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
 
+    // Display message 
     if (password === confirmPassword) {
       passwordMatchMessage.textContent = 'Passwords match!';
       passwordMatchMessage.style.color = 'green';
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
       passwordMatchMessage.style.color = 'red';
     }
   }
-
+  
   // Add event listeners
   confirmPasswordInput.addEventListener('input', checkPasswordMatch);
 
