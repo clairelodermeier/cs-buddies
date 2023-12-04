@@ -113,7 +113,6 @@ var span = document.getElementsByClassName("close")[0];
 var confirmButton = document.getElementById("confirm"); // Allows confirm button to work
 var channelList = document.getElementById("channelList");
 
-
 button.onclick = function () {
     modal.style.display = "block";
 }

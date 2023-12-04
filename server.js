@@ -29,7 +29,8 @@ app.use(cookieParser());
 const mongoose = require('mongoose');
 const { stringify } = require('node:querystring');
 const mongoDBURL = 'mongodb+srv://claire:Tqnwquj0JCOxzNr6@cluster0.1nzpiqt.mongodb.net/?retryWrites=true&w=majority';
-mongoose.connect(mongoDBURL, { useNewUrlParser: true });
+mongoose.connect(mongoDBURL);
+//, { useNewUrlParser: true } delete due to deprecated option (can added back in if necessary)
 mongoose.connection.on('error', () => {
     console.log('MongoDB connection error');
 });

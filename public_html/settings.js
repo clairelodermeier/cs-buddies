@@ -387,7 +387,7 @@ function getDisplayContent() {
                 <label>
                     <input type="checkbox" id="darkMode" onclick="changeMode()"> Dark Mode
                 </label><br>
-    
+
                 <label for="color">Color Scheme: </label>
                 <input type="color" id="color" onchange = "setColor()" value = ${getColor()} name="color"><br>
   
