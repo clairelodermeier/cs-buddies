@@ -169,14 +169,19 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-
+    var content = "";
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
+        console.log("Channel length: ", channels.length);
+        //content = test();
+
 
     }
+
+    //document.getElementById('content').innerHTML = content;
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
@@ -207,17 +212,41 @@ window.onload = loadChannels();
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
     var content = "";
+    var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
-    switch (channelName) {
-        case channelList[0]:
-            content = test();
-            break;
-        default:
-            content = "Default content";
+    var channelIndex = channels.indexOf(channelName);
+
+    if(channelIndex !== -1)
+    {
+        content = getChannelContent(channelName);
+    }
+    else
+    {
+        content = getDefaultChannelContent()
     }
 
     document.getElementById('content').innerHTML = content;
 
+}
+
+function getChannelContent(channelName)
+{
+    return `
+        <div class="channelContent">
+            <h2>${channelName}</h2>
+            <!-- Your specific content for ${channelName} goes here -->
+        </div>
+    `;
+}
+
+function getDefaultChannelContent()
+{
+    return `
+        <div class="defaultChannelContent">
+            <h2>Default Content</h2>
+            <!-- Your default content for other channels goes here -->
+        </div>
+    `;
 }
 
 function test() {
@@ -273,14 +302,15 @@ function deleteChannel(channelName) {
 }
 
 
+const URL_BASE = "http://localhost:3000";
+
 //Sends messages to channels
 function sendMessage() {
-    const alias = document.getElementById('alias').value;
     const message = document.getElementById('message').value;
 
     const request = new XMLHttpRequest();
 
-    const url = `${URL_BASE}/chats/post/${alias}/${message}`;
+    const url = `${URL_BASE}/chats/post/${message}`;
     console.log(`attempting POST ${url}`);
     request.open('POST', url);
     request.send();
@@ -294,7 +324,7 @@ function fetchMessages() {
             console.log(responseData);
             let chatHtml = '';
             for (const record of responseData) {
-                let alias = record.alias;
+                let alias = record.username;
                 let message = record.message;
                 chatHtml += `<div class="chatMessage"><b>${alias}: </b>${message}</div>`;
             }
