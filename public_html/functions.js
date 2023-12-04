@@ -73,8 +73,8 @@ function mode() {
 
 // This function updates the color of the html elements based on the saved color for the user. 
 // It also sets the locally stored color. 
-function updateColor() {
-    let colorStr = getColor();
+async function updateColor() {
+    let colorStr = await getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
@@ -85,15 +85,12 @@ function updateColor() {
 
 // This function creates a server request to get the saved color for the user. 
 // Returns: a string in the format of a hex color "#XXXXXX" 
-function getColor() {
-    let p = fetch('/get/color/');
-    p.then((r)=>{
-        return r.text();
-    }).then((text)=>{
-        let colorStr = text;
-        window.localStorage.setItem("color", '#'+colorStr);
-    })
-    return window.localStorage.getItem("color");
+async function getColor() {
+    let response = await fetch('/get/color/');
+    let colorStr = await response.text();
+    window.localStorage.setItem("color", '#'+colorStr);
+    return "#" + colorStr;
+
 }
 
 var modal = document.getElementById("channelModal");

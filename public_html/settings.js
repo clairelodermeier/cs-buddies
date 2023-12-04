@@ -263,6 +263,7 @@ function changePic(imgFile) {
             }
             else{
                 alert("Picture updated.");
+                displayIcon();
             }
         });
     });
