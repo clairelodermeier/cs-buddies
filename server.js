@@ -124,7 +124,7 @@ function removeSessions() {
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
         // 15 minutes
-        if (last + (6 * 1000 * 15) < now) {
+        if (last + ( 6* 1000 * 15) < now) {
             delete sessions[usernames[i]];
         }
     }
@@ -154,14 +154,12 @@ function authenticate(req, res, next) {
         else {
             // otherwise, redirect to login screen
             console.log('Invalid login. Redirecting to login');
-            res.redirect('/account/login.html');
-            return;
+            res.end("INVALID")
         }
     }
     else {
         console.log('Login cookie undefined. Redirecting to login');
-        res.redirect('/account/login.html');
-        return;
+        res.end("INVALID");
     }
 }
 
@@ -344,10 +342,6 @@ app.post('/login/', (req, res) => {
             //hash password+salt
             let data = h.update(toHash, 'utf-8');
             let result = data.digest('hex');
-
-            console.log("result is " + result);
-            console.log("result should be " + currentUser.hash);
-
 
             // check if hash matches saved hash
             if (result == currentUser.hash) {

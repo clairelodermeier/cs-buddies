@@ -54,7 +54,13 @@ function displayIcon() {
     p.then((response) => {
         return response.text();
     }).then((text) => {
-        iconHolder.src = "/get/profilePic/" + text;
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else{
+            iconHolder.src = "/get/profilePic/" + text;
+        }
     });
 }
 
@@ -78,7 +84,11 @@ function getMode() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if (text.startsWith("light")) {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else if (text.startsWith("light")) {
             document.getElementById("cssLink").href = "css/style.css";
             window.localStorage.setItem("mode", "light");
             return false;
@@ -231,7 +241,11 @@ function changeEmail(newEmail) {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if (!(text.startsWith("SUCCESS"))) {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else if (!(text.startsWith("SUCCESS"))) {
             alert("Failed to change email.");
         }
         else{
@@ -286,7 +300,11 @@ function changePassword() {
         p.then((r)=>{
             return r.text();
         }).then((text)=>{
-            if(text.startsWith("SUCCESS")){
+            if(text.startsWith("INVALID")){
+                window.location.href = '/account/login.html';
+                return;
+            }
+            else if(text.startsWith("SUCCESS")){
                 alert("Password successfully changed.");
             }
             else{

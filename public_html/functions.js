@@ -48,7 +48,13 @@ function displayIcon() {
     p.then((response) => {
         return response.text();
     }).then((text) => {
-        iconHolder.src = "/get/profilePic/" + text;
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else{
+            iconHolder.src = "/get/profilePic/" + text;
+        }
     });
 }
 
@@ -60,7 +66,11 @@ function mode() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if (text.startsWith("light")) {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else if (text.startsWith("light")) {
             window.localStorage.setItem("mode", "light");
             document.getElementById("cssLink").href = "css/style.css";
         }
@@ -88,6 +98,10 @@ async function updateColor() {
 async function getColor() {
     let response = await fetch('/get/color/');
     let colorStr = await response.text();
+    if(colorStr.startsWith("INVALID")){
+        window.location.href = '/account/login.html';
+        return;
+    }
     window.localStorage.setItem("color", '#'+colorStr);
     return "#" + colorStr;
 
