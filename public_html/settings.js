@@ -330,9 +330,8 @@ function getPrivacyContent() {
                   <label for="confirmPassword">Confirm Password:</label>
                   <input type="password" id="confirmPassword" name="confirmPassword"><br>
               
-                  <button id = "confirmChange" onclick = "changePassword()" >Change</button>
-
-                  <button id = "deleteButton" onclick = "deleteAccount()" >Delete Account?</button>
+                  <div><button id = "confirmChange" onclick = "changePassword()" >Change</button></div>
+                  <div><button id = "deleteButton" onclick = "deleteAccount()" >Delete Account?</button></div>
           </div>
       </div>
       `;
