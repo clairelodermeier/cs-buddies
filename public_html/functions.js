@@ -108,15 +108,16 @@ async function getColor() {
 }
 
 var modal = document.getElementById("channelModal");
-var button = document.getElementById("addButton");
+var addButton = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
 var confirmButton = document.getElementById("confirm"); // Allows confirm button to work
 var channelList = document.getElementById("channelList");
 
-button.onclick = function () {
+// When the '+' button is clicked, the create channel popup appears 
+addButton.onclick = function () {
     modal.style.display = "block";
 }
-
+// close popup, clear field
 span.onclick = function () {
     var text = document.getElementById("channelName");
     if (text && text.value) {
@@ -125,42 +126,51 @@ span.onclick = function () {
     modal.style.display = "none";
 }
 
+// when button to confirm channel creation is clicked
 confirmButton.onclick = function () {
     var text = document.getElementById("channelName");
     if (text && text.value) {
         var newText = text.value;
+        // clear fields and close popup
         text.value = ""
         modal.style.display = "none";
+        // call create channel functions
         createChannelButton(newText);
-
+        createChannel(newText);
     }
+    // handle invalid input
     else {
         alert("Please enter a channel name")
         modal.style.display = "block";
     }
 
 }
-
+// when the window is clicked, close the popup
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
+// This function adds a channel button to the DOM on the left sidebar.
+//Param: channelName, string for name of channel
 function createChannelButton(channelName) {
-    while (document.getElementById(channelName)) {
-        var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
 
-        if (userResponse) {
-            // If the user wants to choose a different name, prompt again
-            channelName = prompt("Enter a different channel name:");
-        } else {
-            // If the user doesn't want to choose a different name, exit the loop
-            return;
-        }
-    }
+    // commented this out, because will implement on server side
 
+    // while (document.getElementById(channelName)) {
+    //     var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
 
+    //     if (userResponse) {
+    //         // If the user wants to choose a different name, prompt again
+    //         channelName = prompt("Enter a different channel name:");
+    //     } else {
+    //         // If the user doesn't want to choose a different name, exit the loop
+    //         return;
+    //     }
+    // }
+
+    // create button DOM element
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
@@ -169,18 +179,41 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
+    var content = "";
 
+    // when the button is clicked, load posts in channel 
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
+        console.log("Channel length: ", channels.length);
+        //content = test();
+
 
     }
+
+    //document.getElementById('content').innerHTML = content;
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
 
+}
+
+// This function creates a channel. 
+// It sends a request to the server to create a new channel object with one member and no posts. 
+function createChannel(channelName){
+    let p = fetch('/add/channel/'+channelName);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+        }
+        else if(!(text.startsWith("SUCCESS"))){
+            alert("Failed to create channel");
+        }
+    });
 }
 
 function saveChannel(channelName) {
@@ -207,17 +240,41 @@ window.onload = loadChannels();
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
     var content = "";
+    var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
-    switch (channelName) {
-        case channelList[0]:
-            content = test();
-            break;
-        default:
-            content = "Default content";
+    var channelIndex = channels.indexOf(channelName);
+
+    if(channelIndex !== -1)
+    {
+        content = getChannelContent(channelName);
+    }
+    else
+    {
+        content = getDefaultChannelContent()
     }
 
     document.getElementById('content').innerHTML = content;
 
+}
+
+function getChannelContent(channelName)
+{
+    return `
+        <div class="channelContent">
+            <h2>${channelName}</h2>
+            <!-- Your specific content for ${channelName} goes here -->
+        </div>
+    `;
+}
+
+function getDefaultChannelContent()
+{
+    return `
+        <div class="defaultChannelContent">
+            <h2>Default Content</h2>
+            <!-- Your default content for other channels goes here -->
+        </div>
+    `;
 }
 
 function test() {
@@ -256,7 +313,6 @@ channelList.addEventListener('contextmenu', function (event) {
 
 });
 
-
 function deleteChannel(channelName) {
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
@@ -273,19 +329,26 @@ function deleteChannel(channelName) {
 }
 
 
-//Sends messages to channels
-function sendMessage() {
-    const alias = document.getElementById('alias').value;
+// This function posts a text content message to a channel. 
+// Creates a server request to create the post and add to channel.
+// Param: channelId, string for the current channel's id to add the post to. 
+
+function createPost(channelId) {
     const message = document.getElementById('message').value;
-
-    const request = new XMLHttpRequest();
-
-    const url = `${URL_BASE}/chats/post/${alias}/${message}`;
-    console.log(`attempting POST ${url}`);
-    request.open('POST', url);
-    request.send();
+    let url = '/add/post/'+message+'/' + channelId;
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = "/account/login.html";
+        }
+        else if(!(text.startsWith("SUCCESS"))){
+            alert("Failed to create post.");
+        }
+    });
 }
-
+/* 
 function fetchMessages() {
     const request = new XMLHttpRequest();
     request.onreadystatechange = function () {
@@ -294,7 +357,7 @@ function fetchMessages() {
             console.log(responseData);
             let chatHtml = '';
             for (const record of responseData) {
-                let alias = record.alias;
+                let alias = record.username;
                 let message = record.message;
                 chatHtml += `<div class="chatMessage"><b>${alias}: </b>${message}</div>`;
             }
@@ -307,7 +370,7 @@ function fetchMessages() {
     console.log(`attempting GET ${url}`);
     request.open('GET', url);
     request.send();
-}
+} */
 
 /*----------------------------------- */
 
