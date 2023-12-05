@@ -33,9 +33,13 @@ function setLocalMode() {
 function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
+    let bottomButton = document.getElementsByClassName("bottomButton");
     if (window.localStorage.getItem("color")!=null){
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
+       for (i = 0, len = bottomButton.length; i < len; i++) {
+        bottomButton[i].style.color = window.localStorage.getItem("color");
+        }
         helpButton.style.borderColor = window.localStorage.getItem("color");    
     }
 }
@@ -86,8 +90,12 @@ function mode() {
 function updateColor() {
     let colorStr = getColor();
     let headerElement = document.getElementById("mainHeader");
-    headerElement.style.backgroundColor = window.localStorage.getItem("color");
     let helpButton = document.getElementById("helpButton");
+    let bottomButton = document.getElementsByClassName("bottomButton");
+    headerElement.style.backgroundColor = window.localStorage.getItem("color");
+    for (i = 0, len = bottomButton.length; i < len; i++) {
+        bottomButton[i].style.color = window.localStorage.getItem("color");
+    }
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
     window.localStorage.setItem("color", colorStr);
