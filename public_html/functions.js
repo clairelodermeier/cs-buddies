@@ -232,7 +232,7 @@ function createDate(event, date, time)
     
 
     var newEvent = document.createElement("p");
-    newEvent.textContent = event;
+    newEvent.textContent = "Event Name: " + event + " Date: " + date + " Time: " + time;
     newEvent.date = date;
     newEvent.time = time;
 
@@ -334,7 +334,7 @@ function loadDates()
 
 
 window.onload = loadChannels();
-//window.onload = loadDates();
+//window.onload = loadDates(); This also breaks right clicking
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
