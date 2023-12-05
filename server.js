@@ -43,7 +43,6 @@ var userSchema = new Schema({
     email: String,
     DoB: String,
     pic: String,
-    channels: [String],
     salt: String,
     mode: String,
     color: String
@@ -54,7 +53,6 @@ var userSchema = new Schema({
 var channelSchema = new Schema({
     name: String,
     posts: [String],
-    members: [String],
     events: [String]
 
 });
@@ -87,12 +85,6 @@ const eventSchema = new Schema({
     time: String,
     location: String,
 });
-//Creates message schema for messages
-const ChatMessageSchema = new Schema({
-    time: Number,
-    alias: String,
-    message: String
-});
 
 
 // mongoose models
@@ -101,8 +93,6 @@ var Channel = mongoose.model('Channel', channelSchema);
 var Post = mongoose.model('Post', postSchema);
 var Img = mongoose.model('Img', imgSchema);
 var Event = mongoose.model('Event', eventSchema);
-
-const ChatMessage = mongoose.model('ChatMessage', ChatMessageSchema);
 
 // create a list of sessions
 let sessions = {};
@@ -139,7 +129,6 @@ function removeSessions() {
         }
     }
     console.log(sessions);
-
 }
 
 
@@ -178,11 +167,104 @@ app.use('/set/*', authenticate);
 app.use('/delete/*', authenticate);
 app.use('/add/*', authenticate);
 
-
 // GET request, redirects to login screen from empty path
 app.get('/', (req, res) => {
     res.redirect('/account/login.html');
 });
+
+/*-------------------- account requests --------------------- */
+
+//POST request for creating a user
+app.post('/create/', (req, res) => {
+    let userObj = req.body;
+    let p1 = User.find({ "username": userObj.n }).exec();
+    p1.then((results) => {
+        if (results.length == 0) {
+            let newSalt = '' + Math.floor(Math.random() * 10000000000);
+            let toHash = userObj.p + newSalt;
+            let h = crypto.createHash('sha3-256');
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+            let u = new User({
+                username: userObj.n,
+                hash: result,
+                DoB: userObj.d,
+                email: userObj.e,
+                pic: userObj.i,
+                channels: [],
+                salt: newSalt,
+                mode: 'light',
+                color: 'C1133E'
+            });
+            u.save();
+            console.log("user " + u.username + " created!");
+            res.end("SUCCESS");
+
+        } else {
+            res.end('Username already taken');
+        }
+    });
+});
+
+// POST request, user login
+app.post('/login/', (req, res) => {
+
+    let u = req.body;
+
+    let p1 = User.find({ username: u.username }).exec();
+    p1.then((results) => {
+        if (results.length == 0) {
+            res.end("Could not find account. Try again.");
+        }
+        else {
+            // find user by matching username
+            let currentUser = results[0];
+
+            //concatenate password and saved salt
+            let toHash = u.password + currentUser.salt;
+
+            // generate hash
+            let h = crypto.createHash('sha3-256');
+
+            //hash password+salt
+            let data = h.update(toHash, 'utf-8');
+            let result = data.digest('hex');
+
+            // check if hash matches saved hash
+            if (result == currentUser.hash) {
+                let sid = addSession(u.username);
+                res.cookie("login", { username: u.username, sessionID: sid },
+                    { maxAge: 60000 * 2 });
+                res.end('SUCCESS');
+            }
+            else {
+                res.end("Incorrect password.");
+            }
+        }
+    });
+
+});
+
+// GET request, user logout
+app.get('/logout/', (req, res) => {
+    delete sessions[req.cookies.login.username];
+    res.end("SUCCESS");
+});
+
+// GET request, delete user account
+app.get('/delete/account/', async (req, res) => {
+
+    // end session
+    delete sessions[req.cookies.login.username];
+
+    // delete userDoc
+    let p = User.deleteOne({ "username": req.cookies.login.username }).exec()
+    p.then(() => {
+        res.end("SUCCESS");
+    })
+});
+
+/*-------------------- profile requests --------------------- */
 
 // POST request for image upload
 app.post('/upload', upload.single('photo'), async (req, res) => {
@@ -277,99 +359,7 @@ app.get('/get/profilePic/:id', async (req, res) => {
 
 });
 
-//POST request for creating a user
-app.post('/create/', (req, res) => {
-
-    let userObj = req.body;
-    let p1 = User.find({ "username": userObj.n }).exec();
-    p1.then((results) => {
-        if (results.length == 0) {
-            let newSalt = '' + Math.floor(Math.random() * 10000000000);
-            let toHash = userObj.p + newSalt;
-            let h = crypto.createHash('sha3-256');
-            let data = h.update(toHash, 'utf-8');
-            let result = data.digest('hex');
-
-            let u = new User({
-                username: userObj.n,
-                hash: result,
-                DoB: userObj.d,
-                email: userObj.e,
-                pic: userObj.i,
-                channels: [],
-                salt: newSalt,
-                mode: 'light',
-                color: 'C1133E'
-            });
-
-            u.save();
-            console.log("user " + u.username + " created!");
-            res.end("SUCCESS");
-
-        } else {
-            res.end('Username already taken');
-        }
-    });
-});
-
-// GET request, delete user account
-app.get('/delete/account/', async (req, res) => {
-
-    // end session
-    delete sessions[req.cookies.login.username];
-
-    // delete userDoc
-    let p = User.deleteOne({ "username": req.cookies.login.username }).exec()
-    p.then(() => {
-        res.end("SUCCESS");
-    })
-});
-
-// POST request, user login
-app.post('/login/', (req, res) => {
-
-    let u = req.body;
-
-    let p1 = User.find({ username: u.username }).exec();
-    p1.then((results) => {
-        if (results.length == 0) {
-            res.end("Could not find account. Try again.");
-        }
-        else {
-            // find user by matching username
-            let currentUser = results[0];
-
-            //concatenate password and saved salt
-            let toHash = u.password + currentUser.salt;
-
-            // generate hash
-            let h = crypto.createHash('sha3-256');
-
-            //hash password+salt
-            let data = h.update(toHash, 'utf-8');
-            let result = data.digest('hex');
-
-            // check if hash matches saved hash
-            if (result == currentUser.hash) {
-                let sid = addSession(u.username);
-                res.cookie("login", { username: u.username, sessionID: sid },
-                    { maxAge: 60000 * 2 });
-                res.end('SUCCESS');
-            }
-            else {
-                res.end("Incorrect password.");
-            }
-        }
-    });
-
-});
-
-// GET request, user logout
-app.get('/logout/', (req, res) => {
-
-    delete sessions[req.cookies.login.username];
-    res.end("SUCCESS");
-});
+/*-------------------- display requests --------------------- */
 
 // GET request, mode selected for a user
 app.get('/get/mode/', async (req, res) => {
@@ -426,23 +416,7 @@ app.get('/get/color/', (req, res) => {
 
 });
 
-// GET request, channels for a given user
-app.get('/get/channels/', async (req, res) => {
-
-    // find user document
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-
-    // get channel ids for user
-    const channels = userDoc.channels;
-
-    // create an array of channels that correspond to channel ids
-    const userChannels = [];
-    for (let i = 0; i < channels.length; i++) {
-        const currentChannel = await Channel.findById(channels[i]).exec();
-        userChannels.push(currentChannel);
-    }
-    res.end(JSON.stringify(userChannels));
-});
+/*-------------------- post and channel requests --------------------- */
 
 // GET request, posts for a given channel
 app.get('/get/posts/:channelID', async (req, res) => {
@@ -458,21 +432,10 @@ app.get('/get/posts/:channelID', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
-
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
-
 //GET request, creates a channel doc
-app.get('/add/channel/:channelName', async function(req,res){
-    console.log("creating channel " + req.params.channelName);
-    var thisUser = await User.findOne({ "username": req.cookies.login.username }).exec();
-    const thisChannel = new Channel({name: req.params.channelName, posts: [], members: [thisUser._id], events: []});
-    let p = thisChannel.save();
-    p.then(()=>{
-        thisUser.channels.push(thisChannel._id);
-        thisUser.save();
-    });
+app.get('/add/channel/:channelName', function(req,res){
+    const thisChannel = new Channel({name: req.params.channelName, posts: [], events: []});
+    thisChannel.save();
 });
 
 // GET request, creates a post doc and adds it to the channel's list
@@ -500,4 +463,10 @@ app.get('/chats', function (req, res) {
         if (error) console.error('Error getting chat messages');
         res.end(JSON.stringify(result));
     });
+});
+
+
+// Server start
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });

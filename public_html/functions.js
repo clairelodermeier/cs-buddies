@@ -158,17 +158,17 @@ function createChannelButton(channelName) {
 
     // commented this out, because will implement on server side
 
-    // while (document.getElementById(channelName)) {
-    //     var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
+    while (document.getElementById(channelName)) {
+        var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
 
-    //     if (userResponse) {
-    //         // If the user wants to choose a different name, prompt again
-    //         channelName = prompt("Enter a different channel name:");
-    //     } else {
-    //         // If the user doesn't want to choose a different name, exit the loop
-    //         return;
-    //     }
-    // }
+        if (userResponse) {
+            // If the user wants to choose a different name, prompt again
+            channelName = prompt("Enter a different channel name:");
+        } else {
+            // If the user doesn't want to choose a different name, exit the loop
+            return;
+        }
+    }
 
     // create button DOM element
     var newChannelButton = document.createElement("button");
@@ -373,11 +373,5 @@ function fetchMessages() {
 } */
 
 /*----------------------------------- */
-
-
-
-
-
-
 
 
