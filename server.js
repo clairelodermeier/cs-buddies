@@ -432,6 +432,20 @@ app.get('/get/posts/:channelID', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
+// GET request, get all channel names
+app.get('/get/channels/', async (req, res) => {
+
+    // get all channels
+    var channels = await Channel.find({}).exec();
+    var channelNames = [];
+
+    // create an array of posts docs that correspond to post ids
+    for (let i = 0; i < channels.length; i++) {
+        channelNames.push(channels[i].name);
+    }
+    res.end(JSON.stringify(channelNames));
+});
+
 //GET request, creates a channel doc
 app.get('/add/channel/:channelName', function(req,res){
     const thisChannel = new Channel({name: req.params.channelName, posts: [], events: []});
