@@ -481,11 +481,14 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
 
-
-
+//GET request, creates a channel doc
+app.get('/add/channel/:channelName', async function(req,res){
+    var thisUser = await User.findOne({ "username": req.cookies.login.username }).exec();
+    const thisChannel = new Channel({name: req.params.channelName, posts: [], members: [thisUser], events: []});
+});
 
 // GET request, creates a post doc and adds it to the channel's list
-app.get('/post/:content/:channelId', function (req, res) {
+app.get('/add/post/:content/:channelId', function (req, res) {
     console.log('received a message');
     const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
     thisPost.save();
