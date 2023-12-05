@@ -35,7 +35,7 @@ li {
     width: 200px;
     height: 30px;
     list-style: none;
-
+    font-family: monospace;
 }
 
 button:hover {
@@ -51,7 +51,9 @@ button:hover {
     width: 200px;
     color: white;
     background-color: rgb(40, 40, 40);
+    font-family: monospace;
 }
+
 .rightBar {
     position: fixed;
     top: 81px;
@@ -72,12 +74,11 @@ button:hover {
     margin-left: -40px;
     margin-bottom: 40px;
     font-family: monospace;
-
-
 }
 
 .settings{
     text-align:center;
+    font-family: monospace;
 }
 
 .bottomButton {
@@ -125,12 +126,9 @@ button:hover {
     text-align: center;
 }
 
-#deleteButton{
-    margin-top: 25px;
-}
-
 #settingsButton {
     left: 100px;
+    font-family: monospace;
 }
 
 #addButton {
@@ -140,6 +138,10 @@ button:hover {
 
 #goBack{
     text-align: center;
+}
+#displayContent {
+    background-color: white;
+    font-family: monospace;
 }
 
 #mainHeader {
@@ -170,13 +172,9 @@ button:hover {
     height:85px;
     top:0;
     left:92%;
-
 }
-
-#displayContent {
-    background-color: white;
-    font-family: monospace;
-
+#deleteButton{
+    margin-top: 25px;
 }
 
 #contributors {
@@ -211,7 +209,6 @@ button:hover {
     padding: 20px;
     border: 3px solid ;
     width: 300px;
-
 }
 
 .close{
@@ -226,6 +223,13 @@ button:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.closeCalendar:hover,
+.closeCalendar:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /*Animations*/

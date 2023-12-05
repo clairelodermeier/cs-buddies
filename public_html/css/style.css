@@ -21,6 +21,10 @@ h3 {
     margin: 0px;
 }
 
+input{
+    margin: 20px;
+}
+
 h4{
     color:rgb(0, 0, 0);
     font-size: 150%;
@@ -31,12 +35,6 @@ li {
     height: 30px;
     list-style: none;
     font-family: monospace;
-
-
-}
-
-input{
-    margin: 20px;
 }
 
 button:hover {
@@ -51,8 +49,8 @@ button:hover {
     width: 200px;
     background-color: rgb(205, 205, 205);
     font-family: monospace;
-
 }
+
 .rightBar {
     position: fixed;
     top: 81px;
@@ -72,14 +70,11 @@ button:hover {
     margin-left: -40px;
     margin-bottom: 40px;
     font-family: monospace;
-
-
 }
 
 .settings{
     text-align:center;
     font-family: monospace;
-
 }
 
 .bottomButton {
@@ -129,16 +124,13 @@ button:hover {
     text-align: center;
 }
 
+#deleteButton{
+    margin-top: 25px;
+}
 
 #settingsButton {
     left: 100px;
     font-family: monospace;
-
-}
-
-#displayContent {
-    font-family: monospace;
-
 }
 
 #addButton {
@@ -148,6 +140,11 @@ button:hover {
 
 #goBack{
     text-align: center;
+}
+
+#displayContent {
+    font-family: monospace;
+
 }
 
 #mainHeader {
@@ -178,11 +175,21 @@ button:hover {
     height:81px;
     top:0;
     right:0;
-
 }
 
 #deleteButton{
     margin-top: 25px;
+}
+
+#contributors {
+    width: 50%;
+    margin-left: 42%;
+    margin-top: 20px;
+}
+
+#help {
+    width: 85%;
+    margin-right: 220px;
 }
 
 .modal{
@@ -193,7 +200,6 @@ button:hover {
     top:50%;
     width:500px;
     transform:translate(-50%, -50%);
-
     background-color: rgb(221, 219, 219);
     -webkit-animation-name: fadeIn;
     -webkit-animation-duration: 0.4s;
@@ -209,7 +215,6 @@ button:hover {
     padding: 20px;
     border: 3px solid ;
     width: 300px;
-
 }
 
 

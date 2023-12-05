@@ -406,15 +406,15 @@ function getChannelContent(channelName)
         <h2>${channelName}</h2>
         <!-- Your specific content for ${channelName} goes here -->
         <p> Test </p>
-    < /div>
+    </div>
 
     <div class="messageBox">
-    <label for="message">Post</label>
-    <input type="text" id="message">
-</div>
-<div class="controlElement">
-    <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
-</div>
+        <label for="message">Post</label>
+        <input type="text" id="message">
+    </div>
+    <div class="controlElement">
+        <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
+    </div>
     `;
 }
 
