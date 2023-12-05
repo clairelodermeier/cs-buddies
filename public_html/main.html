@@ -31,7 +31,7 @@
                 <button class="leftListItem" id="eventChannel" onclick="showEvents()">Events</button>
 
             </li>
-                <button class="leftListItem" id="channelList" onclick="showChannelContent('channel1')">Channel holder 1</button>
+                <button class="leftListItem" id="channelList">Channel holder 1</button>
             <li>
             </li>
 
@@ -39,7 +39,7 @@
 
         <div class="rightBar">
             <div class = "channels">
-                <div id="content">
+                <div id="postList">
                     <h3>Top Posts</h3>
                     <li>Pugs are cute</li>
                     <li>I aced my CSC244 Exam!!!</li>
@@ -53,7 +53,7 @@
                     <input type="text" id="message">
                 </div>
                 <div class="controlElement">
-                    <button id = 'sendPostButton'>Send post</button>
+                    <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
                 </div>
             </div>
 
