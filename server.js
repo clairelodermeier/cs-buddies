@@ -55,7 +55,7 @@ var channelSchema = new Schema({
     name: String,
     posts: [String],
     members: [String],
-    // more fields??
+    events: [String]
 
 });
 
@@ -63,7 +63,7 @@ var channelSchema = new Schema({
 var postSchema = new Schema({
     content: String,
     author: String, // User ID
-    // timestamp??
+    time: Number
 });
 
 // create mongoose schema for images
@@ -484,12 +484,20 @@ app.listen(port, () => {
 
 
 
-// Adds a new message to the database
-app.post('/chats/post/:message', function (req, res) {
+// GET request, creates a post doc and adds it to the channel's list
+app.get('/post/:content/:channelId', function (req, res) {
     console.log('received a message');
-    const message = req.params.message
-    const thisMessage = new ChatMessage({ time: Date.now(), message: message });
-    thisMessage.save();
+    const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
+    thisPost.save();
+
+    let thisChannel = Channel.findById(req.params.channelId).exec();
+    thisChannel.then((channelDoc)=>{
+        channelDoc.addPost(thisPost);
+    }).then((channelDoc)=>{
+        channelDoc.save();
+    }).then(()=>{
+        res.end("SUCCESS");
+    })
 });
 
 // Sends all text messages currently on record

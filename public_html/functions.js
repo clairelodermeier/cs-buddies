@@ -304,16 +304,22 @@ function deleteChannel(channelName) {
 
 const URL_BASE = "http://localhost:3000";
 
-//Sends messages to channels
-function sendMessage() {
+// This function posts a text content message to a channel. 
+// Creates a server request to create the post and add to channel.
+function createPost() {
     const message = document.getElementById('message').value;
-
-    const request = new XMLHttpRequest();
-
-    const url = `${URL_BASE}/chats/post/${message}`;
-    console.log(`attempting POST ${url}`);
-    request.open('POST', url);
-    request.send();
+    let url = '/post/'+message;
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = "/account/login.html";
+        }
+        else if(!(text.startsWith("SUCCESS"))){
+            alert("Failed to create post.");
+        }
+    });
 }
 
 function fetchMessages() {
