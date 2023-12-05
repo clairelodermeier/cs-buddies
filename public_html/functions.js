@@ -160,7 +160,7 @@ var calendarModal = document.getElementById("calendarModal");
 var buttonCalendar = document.getElementById("calendar");
 var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
-var dateList = document.getElementById("postList")
+var dateList = document.getElementById("eventList")
 
 buttonCalendar.onclick = function()
 {
@@ -368,13 +368,8 @@ function getEventContent()
 {
     return `
     <div class="events">
-        <h3>Top Posts</h3>
-        <ul id = "postList">
-            <li>Pugs are cute</li>
-            <li>I aced my CSC244 Exam!!!</li>
-            <li>Anyone confused on the CSC210 assignment?</li>
-        </ul>
-
+        <h3>Upcoming Events</h3>
+        <button class="rightBar" id="eventList">Event Holder 1</button>
 
     </div>
 
@@ -480,6 +475,8 @@ function addPostToList(message) {
     // Add the new post item to the list
     postList.appendChild(postItem);
 }
+
+
 
 
 
