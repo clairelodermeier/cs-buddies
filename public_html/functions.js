@@ -152,7 +152,7 @@ var calendarModal = document.getElementById("calendarModal");
 var buttonCalendar = document.getElementById("calendar");
 var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
-//var dateList = document.getElementById("eventChannel")
+var dateList = document.getElementById("postList")
 
 buttonCalendar.onclick = function()
 {
