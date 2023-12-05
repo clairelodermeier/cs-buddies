@@ -415,14 +415,30 @@ app.get('/get/color/', (req, res) => {
 /*-------------------- post and channel requests --------------------- */
 
 // GET request, posts  for a given channel
-app.get('/get/posts/:channelName', async (req, res) => {
+app.get('/get/channels/', async (req, res) => {
+
+    // get all channels
+    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+
+    // get channel ids for user
+    const channels = userDoc.channels;
+
+    // create an array of channels that correspond to channel ids
+    const userChannels = [];
+    for (let i = 0; i < channels.length; i++) {
+        const currentChannel = await Channel.findById(channels[i]).exec();
+        userChannels.push(currentChannel);
+    }
+    res.end(JSON.stringify(userChannels));
+});
+
+// GET request, posts  for a given channel
+app.get('/get/posts/:channelID', async (req, res) => {
 
     // find user document
-    var channelDoc = Channel.findOne({"name": channelName}).exec();
+    var channelDoc = await Channel.findById(req.params.channelID).exec();
 
-    var channelPosts = [];
-
-    // create an array of posts doc ids
+    // create an array of posts docs that correspond to post ids
     for (let i = 0; i < channelDoc.posts.length; i++) {
         let currentPost = await Post.findById(channelDoc.posts[i]).exec();
         channelPosts.push(currentPost);
@@ -430,20 +446,6 @@ app.get('/get/posts/:channelName', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
-
-// GET request, get all channel names
-app.get('/get/channels/', async (req, res) => {
-
-    // get all channels
-    var channels = await Channel.find({}).exec();
-    var channelNames = [];
-
-    // create an array of posts docs that correspond to post ids
-    for (let i = 0; i < channels.length; i++) {
-        channelNames.push(channels[i].name);
-    }
-    res.end(JSON.stringify(channelNames));
-});
 
 //GET request, creates a channel doc
 app.get('/add/channel/:channelName', function(req,res){
