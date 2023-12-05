@@ -151,6 +151,18 @@ button:hover {
     width: 100%;
     padding: 20px;
     font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo{
+    position: fixed;
+    width: 85px;
+    height:85px;
+    top: 0;
+    left: 0;
+/*    right:50%;*/
 }
 
 #icon{
