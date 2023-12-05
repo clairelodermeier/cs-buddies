@@ -209,10 +209,6 @@ function showContent(type) {
         case 'privacy':
             content = getPrivacyContent();
             break;
-        // notification settings
-        case 'notification':
-            content = getNotificationContent();
-            break;
         // Add more cases for other buttons
         default:
             content = "Default content";
@@ -402,29 +398,6 @@ function getDisplayContent() {
         `;
 
 }
-
-
-function getNotificationContent() {
-
-    return `
-  <div class="settings>
-  <div id="notificationContent">
-      <h2>Notification Settings</h2>  
-      <label>
-          <input type="checkbox" id="notifications"> Notifications Enabled
-      </label><br>
-
-      <label for="timeout"> Notification Time Out: </label>
-      <input type="time" id="timeout" name="timeout"><br>
-      
-      <!-- Add more display settings as needed -->
-      
-  </div>
-</div>
-  
-  `;
-}
-
 
 function getLogOutContent() {
 
