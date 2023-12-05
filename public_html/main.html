@@ -28,7 +28,7 @@
         <ul>
 
             <li>
-                <button class="leftListItem" id="eventChannel" onclick="showEvents">Events</button>
+                <button class="leftListItem" id="eventChannel" onclick="showEvents()">Events</button>
 
             </li>
             <li id = 'channelList'>
@@ -46,12 +46,12 @@
                     <li>Anyone confused on the CSC210 assignment?</li>
 
                     <div class="messageBox">
-                        <label for="message">Message</label>
+                        <label for="message">Post</label>
                         <input type="text" id="message">
                     </div>
 
                     <div class="controlElement">
-                        <button onclick="sendMessage()">Send Message</button>
+                        <button id = 'sendPostButton'>Send post</button>
                     </div>
                 </div>
             </div>
