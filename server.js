@@ -176,6 +176,8 @@ function authenticate(req, res, next) {
 app.use('/get/*', authenticate);
 app.use('/set/*', authenticate);
 app.use('/delete/*', authenticate);
+app.use('/add/*', authenticate);
+
 
 // GET request, redirects to login screen from empty path
 app.get('/', (req, res) => {
@@ -312,12 +314,6 @@ app.post('/create/', (req, res) => {
 
 // GET request, delete user account
 app.get('/delete/account/', async (req, res) => {
-    // remove from channels
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-    var channels = userDoc.channels;
-    for (var i = 0; i < channels.length; i++) {
-        leaveChannel(channels[i]);
-    }
 
     // end session
     delete sessions[req.cookies.login.username];
@@ -462,8 +458,8 @@ app.get('/get/posts/:channelID', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
-async function leaveChannel(channelId) {
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+async function leaveChannel(channelId, username) {
+    var userDoc = await User.findOne({ "username": username }).exec();
     var channelDoc = await Channel.findById({ channelId }).exec();
     var memberList = channelDoc.members;
     var index = memberList.indexOf(userDoc._id);
@@ -483,8 +479,14 @@ app.listen(port, () => {
 
 //GET request, creates a channel doc
 app.get('/add/channel/:channelName', async function(req,res){
+    console.log("creating channel " + req.params.channelName);
     var thisUser = await User.findOne({ "username": req.cookies.login.username }).exec();
-    const thisChannel = new Channel({name: req.params.channelName, posts: [], members: [thisUser], events: []});
+    const thisChannel = new Channel({name: req.params.channelName, posts: [], members: [thisUser._id], events: []});
+    let p = thisChannel.save();
+    p.then(()=>{
+        thisUser.channels.push(thisChannel._id);
+        thisUser.save();
+    });
 });
 
 // GET request, creates a post doc and adds it to the channel's list
