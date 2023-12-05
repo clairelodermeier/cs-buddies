@@ -106,7 +106,7 @@ async function getColor() {
     return "#" + colorStr;
 
 }
-
+//Add Channel
 var modal = document.getElementById("channelModal");
 var button = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
@@ -147,6 +147,80 @@ window.onclick = function (event) {
     }
 }
 
+//Calendar
+var calendarModal = document.getElementById("calendarModal");
+var buttonCalendar = document.getElementById("calendar");
+var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
+var confirmCalendarButton = document.getElementById("confirmCalendar");
+//var dateList = document.getElementById("eventChannel")
+
+buttonCalendar.onclick = function()
+{
+    calendarModal.style.display = "block";
+}
+
+spanCalendar.onclick = function()
+{
+    var text = document.getElementById("calendar");
+    if (text && text.value) {
+        text.value = "";
+    }
+    calendarModal.style.display = "none";
+}
+
+confirmCalendarButton.onclick = function () {
+    var text = document.getElementById("eventName");
+    if (text && text.value) {
+        var newText = text.value;
+        text.value = ""
+        calendarModal.style.display = "none";
+        createDate(newText);
+
+    }
+    else {
+        alert("Please enter a date.")
+        calendarModal.style.display = "block";
+    }
+
+}
+
+window.onclick = function (event) {
+    if (event.target == modal) {
+        calendarModal.style.display = "none";
+    }
+}
+
+function createDate(date)
+{
+    while(document.getElementById(date))
+    {
+        var userResponse = confirm("Event name is already taken. Would you like to change the name?");
+
+        if (userResponse) {
+            // If the user wants to choose a different name, prompt again
+            channelName = prompt("Enter a different event name:");
+        } else {
+            // If the user doesn't want to choose a different name, exit the loop
+            return;
+        }
+    }
+
+    var newDate = document.createElement("p");
+    newDate.textContent = date;
+    newDate.className = "rightBar";
+    newDate.id = date;
+
+
+    var listItem = document.createElement("li");
+    listItem.appendChild(newDate);
+
+
+}
+
+
+
+
+
 function createChannelButton(channelName) {
     while (document.getElementById(channelName)) {
         var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
@@ -170,7 +244,7 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-    var content = "";
+
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
 
@@ -199,6 +273,16 @@ function saveChannel(channelName) {
     }
 }
 
+function saveDate(date)
+{
+    var dates = JSON.parse(localStorage.getItem('events')) || [];
+    if(!dates.include(date))
+    {
+        dates.push(date);
+        localStorage.setItem('events', JSON.stringify(dates));
+    }
+}
+
 function loadChannels() {
     channelList.innerHTML = "";
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
@@ -208,8 +292,21 @@ function loadChannels() {
     });
 }
 
+function loadDates()
+{
+    dateList.innerHTML = "";
+    var dates = JSON.parse(localStorage.getItem('events')) || [];
+
+    dates.forEach(function (date)
+    {
+        createDate(date);
+    });
+
+}
+
 
 window.onload = loadChannels();
+window.onload = loadDates();
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
@@ -285,6 +382,14 @@ function getChannelContent(channelName)
         <!-- Your specific content for ${channelName} goes here -->
         <p> Test </p>
     < /div>
+
+    <div class="messageBox">
+                    <label for="message">Post</label>
+                    <input type="text" id="message">
+                </div>
+                <div class="controlElement">
+                    <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
+                </div>
     `;
 }
 
