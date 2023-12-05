@@ -384,12 +384,12 @@ function getChannelContent(channelName)
     < /div>
 
     <div class="messageBox">
-                    <label for="message">Post</label>
-                    <input type="text" id="message">
-                </div>
-                <div class="controlElement">
-                    <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
-                </div>
+    <label for="message">Post</label>
+    <input type="text" id="message">
+</div>
+<div class="controlElement">
+    <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
+</div>
     `;
 }
 
@@ -467,7 +467,7 @@ function addPostToList(message) {
     postItem.textContent = message;
 
     // Get the post list element
-    const postList = document.getElementById('postListContainer');
+    const postList = document.getElementById('channelContentContainer');
 
     // Add the new post item to the list
     postList.appendChild(postItem);
