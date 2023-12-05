@@ -85,7 +85,8 @@ function mode() {
 // It also sets the locally stored color. 
 function updateColor() {
     let colorStr = getColor();
-    document.getElementById("mainHeader").style.backgroundColor = colorStr;
+    let headerElement = document.getElementById("mainHeader");
+    headerElement.style.backgroundColor = window.localStorage.getItem("color");
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
@@ -157,8 +158,6 @@ window.onclick = function (event) {
 //Param: channelName, string for name of channel
 function createChannelButton(channelName) {
 
-    // commented this out, because will implement on server side
-
     while (document.getElementById(channelName)) {
         var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
 
@@ -182,6 +181,8 @@ function createChannelButton(channelName) {
     // when the button is clicked, load posts in channel 
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
+        
+        displayChannel(channelName);
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
@@ -194,6 +195,15 @@ function createChannelButton(channelName) {
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
+
+}// This function is called when a user selects a channel from the left bar. 
+// It calls functions to load the chats in the channel and allow users to
+// add posts. 
+function displayChannel(channelName){
+
+    showChannelContent(channelName);
+    let postButton = document.getElementById("sendPostButton");
+    postButton.onclick = createPost(channelName);
 
 }
 
