@@ -114,7 +114,6 @@ async function getColor() {
     return "#" + colorStr;
 
 }
-//Add Channel
 var modal = document.getElementById("channelModal");
 var button = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
@@ -160,7 +159,7 @@ var calendarModal = document.getElementById("calendarModal");
 var buttonCalendar = document.getElementById("calendar");
 var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
-var dateList = document.getElementById("eventList")
+var eventList = document.getElementById("eventList")
 
 buttonCalendar.onclick = function()
 {
@@ -169,26 +168,42 @@ buttonCalendar.onclick = function()
 
 spanCalendar.onclick = function()
 {
-    var text = document.getElementById("calendar");
-    if (text && text.value) {
-        text.value = "";
+    var event = document.getElementById("eventName");
+    var date = document.getElementById("calendar");
+    var time = document.getElementById("time");
+    if ((event && event.value) && (date && date.vaue) && (time && time.value)) {
+        event.value = "";
+        date.value = "";
+        time.value = "";
     }
     calendarModal.style.display = "none";
+
 }
 
 confirmCalendarButton.onclick = function () {
-    var text = document.getElementById("eventName");
-    if (text && text.value) {
-        var newText = text.value;
-        text.value = ""
-        calendarModal.style.display = "none";
-        createDate(newText);
+    var event = document.getElementById("eventName");
+    var date = document.getElementById("date");
+    var time = document.getElementById("eventTime");
 
+    console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + time.value);
+    if((event && event.value) && (date && date.value) && (time && time.value))
+    {
+        var newEvent = event.value;
+        var newDate = date.value;
+        var newTime = time.value;
+
+        event.value = "";
+        date.value = "";
+        time.value = "";
+        calendarModal.style.display = "none";
+        createDate(newEvent, newDate, newTime);
     }
-    else {
-        alert("Please enter a date.")
+    else
+    {
+        alert("Please fill out all entries.");
         calendarModal.style.display = "block";
     }
+
 
 }
 
@@ -198,35 +213,41 @@ window.onclick = function (event) {
     }
 }
 
-function createDate(date)
+
+function createDate(event, date, time)
 {
-    while(document.getElementById(date))
+    while(document.getElementById(event))
     {
         var userResponse = confirm("Event name is already taken. Would you like to change the name?");
 
         if (userResponse) {
             // If the user wants to choose a different name, prompt again
-            channelName = prompt("Enter a different event name:");
+            event = prompt("Enter a different event name:");
         } else {
             // If the user doesn't want to choose a different name, exit the loop
             return;
         }
     }
 
-    var newDate = document.createElement("p");
-    newDate.textContent = date;
-    newDate.className = "rightBar";
-    newDate.id = date;
+    
+
+    var newEvent = document.createElement("p");
+    newEvent.textContent = event;
+    newEvent.date = date;
+    newEvent.time = time;
+
+    newEvent.className = "rightBar";
+    newEvent.id = event;
 
 
     var listItem = document.createElement("li");
-    listItem.appendChild(newDate);
+    listItem.appendChild(newEvent);
+
+    eventList.appendChild(listItem);
+    saveDate(event);
 
 
 }
-
-
-
 
 
 function createChannelButton(channelName) {
@@ -260,12 +281,9 @@ function createChannelButton(channelName) {
         console.log("List of channels:", channels);
         console.log("Channel length: ", channels.length);
         showChannelContent(channelName)
-        //content = test();
-
 
     }
 
-    //document.getElementById('content').innerHTML = content;
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
@@ -283,13 +301,14 @@ function saveChannel(channelName) {
 
 function saveDate(date)
 {
-    var dates = JSON.parse(localStorage.getItem('events')) || [];
-    if(!dates.include(date))
+    var events = JSON.parse(localStorage.getItem('events')) || [];
+    if(!events.include(date))
     {
-        dates.push(date);
-        localStorage.setItem('events', JSON.stringify(dates));
+        events.push(date);
+        localStorage.setItem('events', JSON.stringify(events));
     }
 }
+
 
 function loadChannels() {
     channelList.innerHTML = "";
@@ -300,21 +319,22 @@ function loadChannels() {
     });
 }
 
+
 function loadDates()
 {
-    dateList.innerHTML = "";
+    eventList.innerHTML = "";
     var dates = JSON.parse(localStorage.getItem('events')) || [];
 
-    dates.forEach(function (date)
+    dates.forEach(function (event, date, time)
     {
-        createDate(date);
+        createDate(event, date, time);
     });
 
 }
 
 
 window.onload = loadChannels();
-window.onload = loadDates();
+//window.onload = loadDates();
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
@@ -331,6 +351,7 @@ function showChannelContent(channelName) {
 function showEvents(){
     // TODO: implement this. 
     alert("events button clicked!");
+    console.log(eventList);
     
     var postListContainer = document.getElementById('postListContainer');
     var channelContentContainer = document.getElementById('channelContentContainer');
@@ -370,7 +391,8 @@ function getEventContent()
     <div class="events">
         <h3>Upcoming Events</h3>
         <div class="eventList>
-        <p>Event Holder</p>
+
+            <p>Event Holder</p>
         </div>
 
 
@@ -378,6 +400,7 @@ function getEventContent()
 
     `;
 }
+
 
 function getChannelContent(channelName)
 {
@@ -400,20 +423,22 @@ function getChannelContent(channelName)
 
 
 //To potentially delete Channels ----Still In Progress ------
+    // Attach the event listener after the DOM is fully loaded
 channelList.addEventListener('contextmenu', function (event) {
     event.preventDefault();
-
 
     var clickedChannelButton = event.target;
 
     if (clickedChannelButton.tagName === 'BUTTON') {
+        
+
         var confirmDelete = window.confirm("Are you sure you want to leave this channel?");
 
         if (confirmDelete) {
+            console.log("Deleting channel:", clickedChannelButton.textContent);
             deleteChannel(clickedChannelButton.textContent);
         }
     }
-
 });
 
 
