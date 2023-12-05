@@ -38,11 +38,14 @@ function setLocalMode() {
 function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
-
+    let bottomButton = document.getElementsByClassName("bottomButton");
     if (window.localStorage.getItem("color") != null) {
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
         helpButton.style.borderColor = window.localStorage.getItem("color");
+        for (var i = 0; i < bottomButton.length; i++){
+		    bottomButton[i].style.color = window.localStorage.getItem("color");
+	    }
     }
 }
 
@@ -131,10 +134,14 @@ function updateColorValue() {
 // It also sets the locally stored color. 
 function updateColor() {
     let colorStr = getColor();
+    let bottomButton = document.getElementsByClassName("bottomButton");
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
+    for (var i = 0; i < bottomButton.length; i++){
+        bottomButton[i].style.color = window.localStorage.getItem("color");
+    }
     window.localStorage.setItem("color", colorStr);
 }
 
@@ -158,8 +165,12 @@ function setColor() {
     // immediately update colors on the dom
     document.getElementById("mainHeader").style.backgroundColor = color;
     let helpButton = document.getElementById("helpButton");
+    let bottomButton = document.getElementsByClassName("bottomButton");
     helpButton.style.color = color;
     helpButton.style.borderColor = color;
+    for (var i = 0; i < bottomButton.length; i++){
+        bottomButton[i].style.color = color;
+    }
 
     // update in local storage
     window.localStorage.setItem("color", color);
