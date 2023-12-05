@@ -39,7 +39,6 @@
         <div class="rightBar">
             <div class = "channels">
                 <div id="channelContentContainer">
-
                 </div>
             </div>
         </div>
@@ -48,7 +47,7 @@
         <div class="rightBar">
             <div class = "channels">
                 <div id="postListContainer">
-
+                    <h3>Welcome to Study Buddies!</h3>
                 </div>
 
                 <div class="messageBox">
@@ -71,12 +70,15 @@
             <a href = "./settings.html">
             <button class='bottomButton' id='settingsButton'>&#x2699</button>
             </a>
+            <button class='bottomButton' id='calendar'>&#x1F4C5</button>
+            
         </div>
 
         <a href="./settings.html">
         <button id='helpButton'>Need help?</button>
         </a>
 
+        <!--Adding Channels-->
         <div id="channelModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -92,6 +94,29 @@
             </div>
 
         </div>
+
+        <!--Adding a calander Event-->
+        <div id="calendarModal" class="modal">
+            <div class="modal-content">
+                <span class="closeCalendar">&times;</span>
+                <h4>Add Calendar Event</h4>
+                <li>
+                    <label for='eventName'>Event Name</label>
+                    <input type='text' id='eventName'>
+                </li>
+                <li></li>
+                <li>
+                    <label for='calendar'>Calendar Date</label>
+                    <input type="date" id="calendar">
+                </li>
+                <li></li>
+   
+                <li>
+                    <button id="confirmCalendar">Confirm</button>
+                </li>
+            </div>
+        </div>
+
     </div>
 
     <script src="./functions.js">
