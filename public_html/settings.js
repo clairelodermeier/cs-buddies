@@ -154,6 +154,18 @@ function getColor() {
 // After receiving a response from the server, calls the updateColor() function.
 function setColor() {
     let color = document.getElementById("color").value;
+
+    // immediately update colors on the dom
+    document.getElementById("mainHeader").style.backgroundColor = color;
+    let helpButton = document.getElementById("helpButton");
+    helpButton.style.color = color;
+    helpButton.style.borderColor = color;
+
+    // update in local storage
+    window.localStorage.setItem("color", color);
+
+
+    // change saved color on the server
     let url = '/set/color/' + color.substring(1);
     let p = fetch(url);
     p.then((r) => {
@@ -162,8 +174,6 @@ function setColor() {
         if (!(text.startsWith("SUCCESS"))) {
             alert("Couldn't change color");
         }
-    }).then(() => {
-        updateColor();
     });
 }
 
