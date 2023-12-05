@@ -328,21 +328,49 @@ function deleteChannel(channelName) {
 // Creates a server request to create the post and add to channel.
 // Param: channelId, string for the current channel's id to add the post to. 
 function createPost(channelName) {
-    const message = document.getElementById('message').value;
-    let url = '/add/post/'+message+'/' + channelName;
-    let p = fetch(url);
-    p.then((r)=>{
-        return r.text();
-    }).then((text)=>{
-        if(text.startsWith("INVALID")){
-            window.location.href = "/account/login.html";
-            return;
-        }
-        else if(!(text.startsWith("SUCCESS"))){
-            alert("Failed to create post.");
-        }
-    });
+    const messageInput = document.getElementById('message');
+    const message = messageInput.value;
+    if (message.trim() !== '') {
+        // Add the new post to the list
+        addPostToList(message);
+
+        // Additional logic to send the post to the server if needed
+        // ...
+        let url = '/add/post/'+message+'/' + channelName;
+        let p = fetch(url);
+        p.then((r)=>{
+            return r.text();
+        }).then((text)=>{
+            if(text.startsWith("INVALID")){
+                window.location.href = "/account/login.html";
+                return;
+            }
+            else if(!(text.startsWith("SUCCESS"))){
+                alert("Failed to create post.");
+            }
+        });
+
+        // Clear the message input after posting
+        messageInput.value = '';
+    } else {
+        alert('Please enter a post message.');
+    }
 }
+
+function addPostToList(message) {
+    // Create a new list item for the post
+    const postItem = document.createElement('li');
+    postItem.textContent = message;
+
+    // Get the post list element
+    const postList = document.getElementById('postList');
+
+    // Add the new post item to the list
+    postList.appendChild(postItem);
+}
+
+
+
 
 /*----------------------------------- */
 
