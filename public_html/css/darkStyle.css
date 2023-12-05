@@ -97,7 +97,6 @@ button:hover {
 .helpParagraph{
     text-align: center;
     padding-right:220px;
-
 }
 
 #helpButton {
@@ -178,6 +177,17 @@ button:hover {
     background-color: white;
     font-family: monospace;
 
+}
+
+#contributors {
+    width: 50%;
+    margin-left: 42%;
+    margin-top: 20px;
+}
+
+#help {
+    width: 85%;
+    margin-right: 220px;
 }
 
 .modal{
