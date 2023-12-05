@@ -107,6 +107,7 @@ async function getColor() {
 
 }
 
+// DOM elements for channels
 var modal = document.getElementById("channelModal");
 var addButton = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
@@ -158,17 +159,17 @@ function createChannelButton(channelName) {
 
     // commented this out, because will implement on server side
 
-    // while (document.getElementById(channelName)) {
-    //     var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
+    while (document.getElementById(channelName)) {
+        var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
 
-    //     if (userResponse) {
-    //         // If the user wants to choose a different name, prompt again
-    //         channelName = prompt("Enter a different channel name:");
-    //     } else {
-    //         // If the user doesn't want to choose a different name, exit the loop
-    //         return;
-    //     }
-    // }
+        if (userResponse) {
+            // If the user wants to choose a different name, prompt again
+            channelName = prompt("Enter a different channel name:");
+        } else {
+            // If the user doesn't want to choose a different name, exit the loop
+            return;
+        }
+    }
 
     // create button DOM element
     var newChannelButton = document.createElement("button");
@@ -209,6 +210,7 @@ function createChannel(channelName){
     }).then((text)=>{
         if(text.startsWith("INVALID")){
             window.location.href = '/account/login.html';
+            return;
         }
         else if(!(text.startsWith("SUCCESS"))){
             alert("Failed to create channel");
@@ -225,17 +227,45 @@ function saveChannel(channelName) {
     }
 }
 
-function loadChannels() {
-    channelList.innerHTML = "";
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
-
-    channels.forEach(function (channel) {
-        createChannelButton(channel);
-    });
+// This function updates the local storage for channel names by requesting the list of channels 
+// from the server. 
+function updateLocalChannels() {
+    let url = '/get/channels/';
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.json();
+    }).then((j)=>{
+        console.log(j);
+        localStorage.setItem('channels',JSON.stringify(j));
+    }).then(()=>{
+        channelList.innerHTML = "";
+        var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    
+        channels.forEach(function (channel) {
+            createChannelButton(channel);
+        });
+    }).then(()=>{
+        loadChannels();
+    })
 }
 
+// This function loads the channels from local storage into the html. 
+function loadChannels() {
+  
+        channelList.innerHTML = "";
+        var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    
+        channels.forEach(function (channel) {
+            createChannelButton(channel);
+        });
 
+}
+
+// every minute, update the locally stored channels to ensure none have been added/deleted
+setInterval(updateLocalChannels,1000*60);
+// load channels from local storage when the page loads
 window.onload = loadChannels();
+
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
@@ -325,14 +355,13 @@ function deleteChannel(channelName) {
     localStorage.setItem('channels', JSON.stringify(updatedChannels));
 
     // Reload channels to reflect the changes
-    loadChannels();
+    updateLocalChannels();
 }
 
 
 // This function posts a text content message to a channel. 
 // Creates a server request to create the post and add to channel.
 // Param: channelId, string for the current channel's id to add the post to. 
-
 function createPost(channelId) {
     const message = document.getElementById('message').value;
     let url = '/add/post/'+message+'/' + channelId;
@@ -342,13 +371,15 @@ function createPost(channelId) {
     }).then((text)=>{
         if(text.startsWith("INVALID")){
             window.location.href = "/account/login.html";
+            return;
         }
         else if(!(text.startsWith("SUCCESS"))){
             alert("Failed to create post.");
         }
     });
 }
-/* 
+
+
 function fetchMessages() {
     const request = new XMLHttpRequest();
     request.onreadystatechange = function () {
@@ -370,14 +401,8 @@ function fetchMessages() {
     console.log(`attempting GET ${url}`);
     request.open('GET', url);
     request.send();
-} */
+}
 
 /*----------------------------------- */
-
-
-
-
-
-
 
 
