@@ -364,9 +364,9 @@ function deleteChannel(channelName) {
 // This function posts a text content message to a channel. 
 // Creates a server request to create the post and add to channel.
 // Param: channelId, string for the current channel's id to add the post to. 
-function createPost(channelId) {
+function createPost(channelName) {
     const message = document.getElementById('message').value;
-    let url = '/add/post/'+message+'/' + channelId;
+    let url = '/add/post/'+message+'/' + channelName;
     let p = fetch(url);
     p.then((r)=>{
         return r.text();
@@ -381,29 +381,6 @@ function createPost(channelId) {
     });
 }
 
-
-function fetchMessages() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (request.readyState === request.DONE && request.status === 200) {
-            const responseData = JSON.parse(request.responseText);
-            console.log(responseData);
-            let chatHtml = '';
-            for (const record of responseData) {
-                let alias = record.username;
-                let message = record.message;
-                chatHtml += `<div class="chatMessage"><b>${alias}: </b>${message}</div>`;
-            }
-            const chatSection = document.getElementById('chatSection');
-            chatSection.innerHTML = chatHtml;
-        }
-    }
-
-    const url = `${URL_BASE}/chats`;
-    console.log(`attempting GET ${url}`);
-    request.open('GET', url);
-    request.send();
-}
 
 /*----------------------------------- */
 
