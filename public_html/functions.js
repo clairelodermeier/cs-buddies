@@ -177,26 +177,16 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-    var content = "";
     // when the button is clicked, load posts in channel 
-    newChannelButton.onclick = function () {
-        alert("Button: " + channelName + " got clicked!");
-        
+    newChannelButton.onclick = function () {        
         displayChannel(channelName);
 
-        var channels = JSON.parse(localStorage.getItem('channels')) || [];
-        console.log("List of channels:", channels);
-        console.log("Channel length: ", channels.length);
-        //content = test();
-
     }
-
-    //document.getElementById('content').innerHTML = content;
-
     channelList.appendChild(listItem);
     saveChannel(channelName);
+}
 
-}// This function is called when a user selects a channel from the left bar. 
+// This function is called when a user selects a channel from the left bar. 
 // It calls functions to load the chats in the channel and allow users to
 // add posts. 
 function displayChannel(channelName){
@@ -286,21 +276,26 @@ function showChannelContent(channelName) {
 
     var channelIndex = channels.indexOf(channelName);
 
-    if(channelIndex !== -1)
-    {
+    if(channelIndex != -1){
         content = getChannelContent(channelName);
-    }
-    else
-    {
-        content = getDefaultChannelContent()
+    }else{
+        content = getDefaultChannelContent();
     }
 
     document.getElementById('content').innerHTML = content;
-
 }
 
-function getChannelContent(channelName)
-{
+// This function creates a server requests to get the posts in a channel. 
+function getPosts(channelName){
+    let p = fetch('/get/posts/'+channelName);
+    p.then((r)=>{
+        return r.json();
+    }).then((posts)=>{
+        displayPosts(posts);
+    });
+}
+
+function getChannelContent(channelName){
     return `
         <div class="channelContent">
             <h2>${channelName}</h2>
@@ -318,25 +313,6 @@ function getDefaultChannelContent()
         </div>
     `;
 }
-
-function test() {
-    return `   
-    <div class="settings>
-        <div id="logOutContent">
-            <h2> Are you sure?</h2>
-            <li>
-                <a href="./login.html">
-                <button class="decisions" id="yes">Yes</button>
-                </a>
-                <a href="./main.html">
-                    <button class="decisions" id="yes">No</button>
-                </a>
-            </li>
-        </div>
-    </div>
-    `;
-}
-
 
 //To potentially delete Channels ----Still In Progress ------
 channelList.addEventListener('contextmenu', function (event) {
