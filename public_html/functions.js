@@ -213,22 +213,28 @@ window.onload = loadChannels();
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
-    var content = "";
-    
-    
-    content = getDefaultChannelContent(channelName)
+    var postListContainer = document.getElementById('postListContainer');
+    var channelContentContainer = document.getElementById('channelContentContainer');
 
-
-    document.getElementById('content').innerHTML = content;
+    // Hide the post list and show the channel content
+    postListContainer.style.display = 'none';
+    channelContentContainer.innerHTML = getChannelContent(channelName);
+    channelContentContainer.style.display = 'block';
 
 }
 
 function showEvents(){
     // TODO: implement this. 
     alert("events button clicked!");
-    var content = getEventContent();
+    
+    var postListContainer = document.getElementById('postListContainer');
+    var channelContentContainer = document.getElementById('channelContentContainer');
 
-    document.getElementById('content').innerHTML = content;
+    // Show the post list and hide the channel content
+    channelContentContainer.style.display = 'none';
+    postListContainer.innerHTML = getEventContent();
+    postListContainer.style.display = 'block';
+
 
 }
 
@@ -256,29 +262,22 @@ function displayPosts(posts){
 function getEventContent()
 {
     return `
-    <div class = "channels">
-    <div id="content">
+    <div class="events">
         <h3>Top Posts</h3>
-        <li>Pugs are cute</li>
-        <li>I aced my CSC244 Exam!!!</li>
-        <li>Anyone confused on the CSC210 assignment?</li>
+        <ul id = "postList">
+            <li>Pugs are cute</li>
+            <li>I aced my CSC244 Exam!!!</li>
+            <li>Anyone confused on the CSC210 assignment?</li>
+        </ul>
 
 
     </div>
 
-    <div class="messageBox">
-        <label for="message">Post</label>
-        <input type="text" id="message">
-    </div>
-    <div class="controlElement">
-        <button id = 'sendPostButton'>Send post</button>
-    </div>
-</div>
     `;
 }
 
 
-function getDefaultChannelContent(channelName)
+function getChannelContent(channelName)
 {
     return `
     <div class="channelContent">
@@ -363,7 +362,7 @@ function addPostToList(message) {
     postItem.textContent = message;
 
     // Get the post list element
-    const postList = document.getElementById('postList');
+    const postList = document.getElementById('postListContainer');
 
     // Add the new post item to the list
     postList.appendChild(postItem);
@@ -373,11 +372,3 @@ function addPostToList(message) {
 
 
 /*----------------------------------- */
-
-
-
-
-
-
-
-
