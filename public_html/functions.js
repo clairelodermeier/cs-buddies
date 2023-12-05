@@ -166,6 +166,7 @@ function createChannelButton(channelName) {
     newChannelButton.className = "leftListItem";
     newChannelButton.id = channelName;
 
+
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
@@ -176,6 +177,7 @@ function createChannelButton(channelName) {
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
         console.log("Channel length: ", channels.length);
+        showChannelContent(channelName)
         //content = test();
 
 
@@ -284,24 +286,6 @@ function getDefaultChannelContent(channelName)
         <!-- Your specific content for ${channelName} goes here -->
         <p> Test </p>
     < /div>
-    `;
-}
-
-function test() {
-    return `   
-    <div class="settings>
-        <div id="logOutContent">
-            <h2> Are you sure?</h2>
-            <li>
-                <a href="./login.html">
-                <button class="decisions" id="yes">Yes</button>
-                </a>
-                <a href="./main.html">
-                    <button class="decisions" id="yes">No</button>
-                </a>
-            </li>
-        </div>
-    </div>
     `;
 }
 
