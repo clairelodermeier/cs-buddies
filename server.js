@@ -53,8 +53,6 @@ var userSchema = new Schema({
 var channelSchema = new Schema({
     name: String,
     posts: [String],
-    events: [String]
-
 });
 
 // create mongoose schema for posts
@@ -79,11 +77,9 @@ const imgSchema = new Schema({
 // create mongoose schema for events
 const eventSchema = new Schema({
     title: String,
-    author: String,
-    rsvp: [String], // list of userIDs, 
     date: String,
-    time: String,
     location: String,
+    time: Number,
 });
 
 
@@ -448,7 +444,7 @@ app.get('/get/channels/', async (req, res) => {
 
 //GET request, creates a channel doc
 app.get('/add/channel/:channelName', function(req,res){
-    const thisChannel = new Channel({name: req.params.channelName, posts: [], events: []});
+    const thisChannel = new Channel({name: req.params.channelName, posts: []});
     thisChannel.save();
 });
 
@@ -467,6 +463,19 @@ app.get('/add/post/:content/:channelId', function (req, res) {
         res.end("SUCCESS");
     })
 });
+
+/*-------------------- calendar event requests --------------------- */
+
+// POST request, create event
+app.post('/add/event/', (req, res) => {
+
+    let info = req.body;
+    let thisEvent = new Event({title: info.title, date: info.date, location: info.loc, time: Date.now()});
+    thisEvent.save();
+
+});
+
+
 
 // Sends all text messages currently on record
 app.get('/chats', function (req, res) {

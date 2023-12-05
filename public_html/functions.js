@@ -83,8 +83,8 @@ function mode() {
 
 // This function updates the color of the html elements based on the saved color for the user. 
 // It also sets the locally stored color. 
-async function updateColor() {
-    let colorStr = await getColor();
+function updateColor() {
+    let colorStr = getColor();
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
@@ -170,18 +170,15 @@ function createChannelButton(channelName) {
             return;
         }
     }
-
     // create button DOM element
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
     newChannelButton.id = channelName;
-
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
     var content = "";
-
     // when the button is clicked, load posts in channel 
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
@@ -190,7 +187,6 @@ function createChannelButton(channelName) {
         console.log("List of channels:", channels);
         console.log("Channel length: ", channels.length);
         //content = test();
-
 
     }
 
@@ -266,6 +262,12 @@ setInterval(updateLocalChannels,1000*60);
 // load channels from local storage when the page loads
 window.onload = loadChannels();
 
+// This function displays all the events in the events channel. 
+// Creates a request to the server to get a list of all the event documents. 
+function showEvents(){
+    // TODO
+    alert("events button clicked!");
+}
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
