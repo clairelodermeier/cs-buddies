@@ -210,10 +210,18 @@ button:hover {
     border: 3px solid ;
     width: 300px;
 
-    
 }
 
+
+
 .close{
+    color:#aaa;
+    float:right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeCalendar{
     color:#aaa;
     float:right;
     font-size: 28px;
@@ -225,6 +233,13 @@ button:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.closeCalendar:hover,
+.closeCalendar:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /*Animations*/
