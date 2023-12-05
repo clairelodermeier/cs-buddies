@@ -37,10 +37,10 @@ function setLocalColor() {
     if (window.localStorage.getItem("color")!=null){
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
-       for (i = 0, len = bottomButton.length; i < len; i++) {
+        helpButton.style.borderColor = window.localStorage.getItem("color");
+        for (i = 0, len = bottomButton.length; i < len; i++) {
         bottomButton[i].style.color = window.localStorage.getItem("color");
-        }
-        helpButton.style.borderColor = window.localStorage.getItem("color");    
+        };
     }
 }
 
@@ -92,10 +92,10 @@ function updateColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
     let bottomButton = document.getElementsByClassName("bottomButton");
-    headerElement.style.backgroundColor = window.localStorage.getItem("color");
     for (i = 0, len = bottomButton.length; i < len; i++) {
         bottomButton[i].style.color = window.localStorage.getItem("color");
-    }
+    };
+    headerElement.style.backgroundColor = window.localStorage.getItem("color");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
     window.localStorage.setItem("color", colorStr);
