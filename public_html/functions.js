@@ -169,19 +169,14 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-    var content = "";
+
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
-        console.log("Channel length: ", channels.length);
-        //content = test();
-
 
     }
-
-    //document.getElementById('content').innerHTML = content;
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
@@ -212,41 +207,17 @@ window.onload = loadChannels();
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
     var content = "";
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
-    var channelIndex = channels.indexOf(channelName);
-
-    if(channelIndex !== -1)
-    {
-        content = getChannelContent(channelName);
-    }
-    else
-    {
-        content = getDefaultChannelContent()
+    switch (channelName) {
+        case channelList[0]:
+            content = test();
+            break;
+        default:
+            content = "Default content";
     }
 
     document.getElementById('content').innerHTML = content;
 
-}
-
-function getChannelContent(channelName)
-{
-    return `
-        <div class="channelContent">
-            <h2>${channelName}</h2>
-            <!-- Your specific content for ${channelName} goes here -->
-        </div>
-    `;
-}
-
-function getDefaultChannelContent()
-{
-    return `
-        <div class="defaultChannelContent">
-            <h2>Default Content</h2>
-            <!-- Your default content for other channels goes here -->
-        </div>
-    `;
 }
 
 function test() {
@@ -302,24 +273,17 @@ function deleteChannel(channelName) {
 }
 
 
-const URL_BASE = "http://localhost:3000";
-
-// This function posts a text content message to a channel. 
-// Creates a server request to create the post and add to channel.
-function createPost() {
+//Sends messages to channels
+function sendMessage() {
+    const alias = document.getElementById('alias').value;
     const message = document.getElementById('message').value;
-    let url = '/post/'+message;
-    let p = fetch(url);
-    p.then((r)=>{
-        return r.text();
-    }).then((text)=>{
-        if(text.startsWith("INVALID")){
-            window.location.href = "/account/login.html";
-        }
-        else if(!(text.startsWith("SUCCESS"))){
-            alert("Failed to create post.");
-        }
-    });
+
+    const request = new XMLHttpRequest();
+
+    const url = `${URL_BASE}/chats/post/${alias}/${message}`;
+    console.log(`attempting POST ${url}`);
+    request.open('POST', url);
+    request.send();
 }
 
 function fetchMessages() {
@@ -330,7 +294,7 @@ function fetchMessages() {
             console.log(responseData);
             let chatHtml = '';
             for (const record of responseData) {
-                let alias = record.username;
+                let alias = record.alias;
                 let message = record.message;
                 chatHtml += `<div class="chatMessage"><b>${alias}: </b>${message}</div>`;
             }

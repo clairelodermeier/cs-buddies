@@ -216,3 +216,36 @@ button:hover {
     from{opacity:0}
     to{opacity: 1}
 }
+
+.content-container {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.messageBox{
+    position:fixed;
+    bottom:0px;
+    text-align: left;
+    font-size:15px;
+    padding:15px;
+    width:500px;
+    left:200px;
+
+}
+
+#message{
+    width:300px;
+}
+
+.controlElement {
+    position: fixed;
+    text-align: left;
+    bottom:15px;
+    padding: 20px;
+    font-size: 15px;
+    left:600px;
+    width:100%;
+}
