@@ -114,6 +114,7 @@ async function getColor() {
     return "#" + colorStr;
 
 }
+//Add Channel
 var modal = document.getElementById("channelModal");
 var button = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
@@ -216,10 +217,9 @@ window.onclick = function (event) {
 
 function createDate(event, date, time)
 {
-    while(document.getElementById(event))
-    {
+    
+    while (document.getElementById(event)) {
         var userResponse = confirm("Event name is already taken. Would you like to change the name?");
-
         if (userResponse) {
             // If the user wants to choose a different name, prompt again
             event = prompt("Enter a different event name:");
@@ -228,8 +228,6 @@ function createDate(event, date, time)
             return;
         }
     }
-
-    
 
     var newEvent = document.createElement("p");
     newEvent.textContent = "Event Name: " + event + " Date: " + date + " Time: " + time;
@@ -302,7 +300,7 @@ function saveChannel(channelName) {
 function saveDate(date)
 {
     var events = JSON.parse(localStorage.getItem('events')) || [];
-    if(!events.include(date))
+    if(!events.includes(date))
     {
         events.push(date);
         localStorage.setItem('events', JSON.stringify(events));
@@ -351,7 +349,6 @@ function showChannelContent(channelName) {
 function showEvents(){
     // TODO: implement this. 
     alert("events button clicked!");
-    console.log(eventList);
     
     var postListContainer = document.getElementById('postListContainer');
     var channelContentContainer = document.getElementById('channelContentContainer');
@@ -502,10 +499,6 @@ function addPostToList(message) {
     // Add the new post item to the list
     postList.appendChild(postItem);
 }
-
-
-
-
 
 
 /*----------------------------------- */
