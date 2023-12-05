@@ -111,13 +111,13 @@ button {
     font-size: 15px;
 }
 
-#icon{
-    position: fixed;
-    width: 85px;
-    height:85px;
-    top:0;
-    left:92%;
-}
+/*#icon{*/
+/*    position: fixed;*/
+/*    width: 85px;*/
+/*    height:85px;*/
+/*    top:0;*/
+/*    left:92%;*/
+/*}*/
 
 .buttonA:hover {
     background-color: rgb(153, 0, 62);
