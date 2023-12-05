@@ -87,6 +87,18 @@ button:hover {
     padding-left: 10px;
 }
 
+.helpHeading{
+    text-align:left;
+    font-size:20px;
+    
+}
+
+.helpParagraph{
+    text-align: center;
+    padding-right:220px;
+
+}
+
 #helpButton {
     position:fixed;
     right:25px;
