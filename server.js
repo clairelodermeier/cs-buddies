@@ -458,20 +458,6 @@ app.get('/get/posts/:channelID', async (req, res) => {
     res.end(JSON.stringify(channelPosts));
 });
 
-async function leaveChannel(channelId, username) {
-    var userDoc = await User.findOne({ "username": username }).exec();
-    var channelDoc = await Channel.findById({ channelId }).exec();
-    var memberList = channelDoc.members;
-    var index = memberList.indexOf(userDoc._id);
-    memberList.splice(index, 1);
-}
-
-async function removeChannel(channelId) {
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
-    var channelList = userDoc.channels;
-    var index = channelList.indexOf(channelId);
-    channelList.splice(index, 1);
-}
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
