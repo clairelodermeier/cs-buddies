@@ -83,6 +83,7 @@ button:hover {
 }
 
 .bottomButton {
+    color: rgb(193, 19, 62);
     border-radius: 50px;
     font-size: 30px;
     padding-right: 10px;
