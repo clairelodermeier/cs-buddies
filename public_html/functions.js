@@ -369,13 +369,15 @@ function getEventContent()
     return `
     <div class="events">
         <h3>Upcoming Events</h3>
-        <button class="rightBar" id="eventList">Event Holder 1</button>
+        <div class="eventList>
+        <p>Event Holder</p>
+        </div>
+
 
     </div>
 
     `;
 }
-
 
 function getChannelContent(channelName)
 {
