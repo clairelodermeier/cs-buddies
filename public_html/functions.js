@@ -265,28 +265,28 @@ window.onload = loadChannels();
 // This function displays all the events in the events channel. 
 // Creates a request to the server to get a list of all the event documents. 
 function showEvents(){
-    // TODO
+    // TODO: implement this. 
     alert("events button clicked!");
 }
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
+//Param: channelName, a string with the name of the channel
 function showChannelContent(channelName) {
-    var content = "";
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
     var channelIndex = channels.indexOf(channelName);
 
     if(channelIndex != -1){
-        content = getChannelContent(channelName);
+        displayChannelContent();
     }else{
-        content = getDefaultChannelContent();
+        displayDefaultContent();
     }
 
-    document.getElementById('content').innerHTML = content;
 }
 
 // This function creates a server requests to get the posts in a channel. 
-function getPosts(channelName){
+//Param: channelName, a string with the name of the channel
+function displayChannelContent(channelName){
     let p = fetch('/get/posts/'+channelName);
     p.then((r)=>{
         return r.json();
@@ -295,15 +295,20 @@ function getPosts(channelName){
     });
 }
 
-function getChannelContent(channelName){
-    return `
-        <div class="channelContent">
-            <h2>${channelName}</h2>
-            <!-- Your specific content for ${channelName} goes here -->
-        </div>
-    `;
+// This function displays the posts in a channel. 
+// Param: posts, a list of Post objects. 
+function displayPosts(posts){
+    let content = '';
+    // TODO: implement this
+    // Sort the posts by time stamp
+    // Display them so that you can see the content and author and time stamp
+    // List format in the dom?
 }
 
+function displayDefaultContent(){
+    let content = getDefaultContent();
+    document.getElementById('content').innerHTML = content;
+}
 function getDefaultChannelContent()
 {
     return `
