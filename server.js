@@ -414,7 +414,7 @@ app.get('/get/color/', (req, res) => {
 
 /*-------------------- post and channel requests --------------------- */
 
-// GET request, post IDs for a given channel
+// GET request, posts  for a given channel
 app.get('/get/posts/:channelName', async (req, res) => {
 
     // find user document

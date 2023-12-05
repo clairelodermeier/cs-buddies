@@ -185,33 +185,23 @@ function createChannelButton(channelName) {
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-    var content = "";
     // when the button is clicked, load posts in channel 
-    newChannelButton.onclick = function () {
-        alert("Button: " + channelName + " got clicked!");
-        
+    newChannelButton.onclick = function () {        
         displayChannel(channelName);
 
-        var channels = JSON.parse(localStorage.getItem('channels')) || [];
-        console.log("List of channels:", channels);
-        console.log("Channel length: ", channels.length);
-        //content = test();
-
     }
-
-    //document.getElementById('content').innerHTML = content;
-
     channelList.appendChild(listItem);
     saveChannel(channelName);
+}
 
-}// This function is called when a user selects a channel from the left bar. 
+// This function is called when a user selects a channel from the left bar. 
 // It calls functions to load the chats in the channel and allow users to
 // add posts. 
 function displayChannel(channelName){
 
     showChannelContent(channelName);
     let postButton = document.getElementById("sendPostButton");
-    postButton.onclick = createPost(channelName);
+    postButton.onclick = function() {createPost(channelName);};
 
 }
 
@@ -283,40 +273,50 @@ window.onload = loadChannels();
 // This function displays all the events in the events channel. 
 // Creates a request to the server to get a list of all the event documents. 
 function showEvents(){
-    // TODO
+    // TODO: implement this. 
     alert("events button clicked!");
 }
 
 //To show different chats depending on the channel --WORK IN PROGRESS--
+//Param: channelName, a string with the name of the channel
 function showChannelContent(channelName) {
-    var content = "";
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
     var channelIndex = channels.indexOf(channelName);
 
-    if(channelIndex !== -1)
-    {
-        content = getChannelContent(channelName);
-    }
-    else
-    {
-        content = getDefaultChannelContent()
+    if(channelIndex != -1){
+        displayChannelContent();
+    }else{
+        displayDefaultContent();
     }
 
+}
+
+// This function creates a server requests to get the posts in a channel. 
+//Param: channelName, a string with the name of the channel
+function displayChannelContent(channelName){
+    let p = fetch('/get/posts/'+channelName);
+    p.then((r)=>{
+        return r.json();
+    }).then((posts)=>{
+        displayPosts(posts);
+    });
+}
+
+// This function displays the posts in a channel. 
+// Param: posts, a list of Post objects. 
+function displayPosts(posts){
+    let content = '';
+    // TODO: implement this
+    // Sort the posts by time stamp
+    // Display them so that you can see the content and author and time stamp
+    // List format in the dom?
+}
+
+function displayDefaultContent(){
+    let content = getDefaultContent();
     document.getElementById('content').innerHTML = content;
-
 }
-
-function getChannelContent(channelName)
-{
-    return `
-        <div class="channelContent">
-            <h2>${channelName}</h2>
-            <!-- Your specific content for ${channelName} goes here -->
-        </div>
-    `;
-}
-
 function getDefaultChannelContent()
 {
     return `
@@ -326,25 +326,6 @@ function getDefaultChannelContent()
         </div>
     `;
 }
-
-function test() {
-    return `   
-    <div class="settings>
-        <div id="logOutContent">
-            <h2> Are you sure?</h2>
-            <li>
-                <a href="./login.html">
-                <button class="decisions" id="yes">Yes</button>
-                </a>
-                <a href="./main.html">
-                    <button class="decisions" id="yes">No</button>
-                </a>
-            </li>
-        </div>
-    </div>
-    `;
-}
-
 
 //To potentially delete Channels ----Still In Progress ------
 channelList.addEventListener('contextmenu', function (event) {
