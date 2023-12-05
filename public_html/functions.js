@@ -212,19 +212,10 @@ window.onload = loadChannels();
 //To show different chats depending on the channel --WORK IN PROGRESS--
 function showChannelContent(channelName) {
     var content = "";
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    
+    
+    content = getDefaultChannelContent(channelName)
 
-    var channelIndex = channels.indexOf(channelList);
-    console.log(channelIndex);
-
-    if(channelIndex !== -1)
-    {
-        content = getChannelContent(channelName);
-    }
-    else
-    {
-        content = getDefaultChannelContent()
-    }
 
     document.getElementById('content').innerHTML = content;
 
@@ -284,23 +275,15 @@ function getEventContent()
     `;
 }
 
-function getChannelContent(channelName)
-{
-    return `
-        <div class="channelContent">
-            <h2>${channelName}</h2>
-            <!-- Your specific content for ${channelName} goes here -->
-        </div>
-    `;
-}
 
-function getDefaultChannelContent()
+function getDefaultChannelContent(channelName)
 {
     return `
-        <div class="defaultChannelContent">
-            <h2>Default Content</h2>
-            <!-- Your default content for other channels goes here -->
-        </div>
+    <div class="channelContent">
+        <h2>${channelName}</h2>
+        <!-- Your specific content for ${channelName} goes here -->
+        <p> Test </p>
+    < /div>
     `;
 }
 
