@@ -414,19 +414,22 @@ app.get('/get/color/', (req, res) => {
 
 /*-------------------- post and channel requests --------------------- */
 
-// GET request, posts for a given channel
-app.get('/get/posts/:channelID', async (req, res) => {
+// GET request, post IDs for a given channel
+app.get('/get/posts/:channelName', async (req, res) => {
 
     // find user document
-    var channelDoc = await Channel.findById(req.params.channelID).exec();
+    var channelDoc = Channel.findOne({"name": channelName}).exec();
 
-    // create an array of posts docs that correspond to post ids
+    var channelPosts = [];
+
+    // create an array of posts doc ids
     for (let i = 0; i < channelDoc.posts.length; i++) {
         let currentPost = await Post.findById(channelDoc.posts[i]).exec();
         channelPosts.push(currentPost);
     }
     res.end(JSON.stringify(channelPosts));
 });
+
 
 // GET request, get all channel names
 app.get('/get/channels/', async (req, res) => {
@@ -449,12 +452,12 @@ app.get('/add/channel/:channelName', function(req,res){
 });
 
 // GET request, creates a post doc and adds it to the channel's list
-app.get('/add/post/:content/:channelId', function (req, res) {
+app.get('/add/post/:content/:channelName', function (req, res) {
     console.log('received a message');
     const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
     thisPost.save();
 
-    let thisChannel = Channel.findById(req.params.channelId).exec();
+    let thisChannel = Channel.find({"name": req.params.channelName}).exec();
     thisChannel.then((channelDoc)=>{
         channelDoc.addPost(thisPost);
     }).then((channelDoc)=>{
@@ -463,6 +466,7 @@ app.get('/add/post/:content/:channelId', function (req, res) {
         res.end("SUCCESS");
     })
 });
+
 
 /*-------------------- calendar event requests --------------------- */
 
@@ -475,17 +479,11 @@ app.post('/add/event/', (req, res) => {
 
 });
 
-
-
-// Sends all text messages currently on record
-app.get('/chats', function (req, res) {
-    const query = ChatMessage.find({});
-    query.select('alias message');
-    query.sort({ time: 1 });
-    query.exec(function (error, result) {
-        if (error) console.error('Error getting chat messages');
-        res.end(JSON.stringify(result));
-    });
+//GET requests, sends a list of all event objects
+app.get('/get/events/', (req,res) =>{
+    var events = Event.find({}).exec();
+    res.end(JSON.stringify(events));
+    
 });
 
 
