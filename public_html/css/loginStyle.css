@@ -79,7 +79,7 @@ button {
     width: 100%;
     padding: 20px;
     font-size: 35px;
-   display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -118,3 +118,14 @@ button {
     top:0;
     left:92%;
 }
+
+.buttonA:hover {
+    background-color: rgb(153, 0, 62);
+    color: white;
+}
+
+.buttonB:hover {
+    background-color: rgb(193, 19, 62);
+    color: white;
+}
+
