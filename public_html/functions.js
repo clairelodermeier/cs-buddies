@@ -193,7 +193,7 @@ function displayChannel(channelName){
 
     showChannelContent(channelName);
     let postButton = document.getElementById("sendPostButton");
-    postButton.onclick = createPost(channelName);
+    postButton.onclick = function() {createPost(channelName);};
 
 }
 
