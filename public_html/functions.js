@@ -260,6 +260,10 @@ function createChannelButton(channelName) {
         }
     }
 
+    if(channelName == null){
+        return;
+    }
+
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
@@ -357,6 +361,7 @@ function showEvents() {
 // This function creates a channel. 
 // It sends a request to the server to create a new channel object with one member and no posts. 
 function createChannel(channelName) {
+    console.log("creating channel "+ channelName);
     let p = fetch('/add/channel/' + channelName);
     p.then((r) => {
         return r.text();
