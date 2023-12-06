@@ -87,6 +87,12 @@ button:hover {
     font-family: monospace;
 }
 
+.postContent{
+    text-align:left;
+}
+.authorContent{
+    color:#aaa;
+}
 .bottomButton {
     color: rgb(193, 19, 62);
     border-radius: 50px;

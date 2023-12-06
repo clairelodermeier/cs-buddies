@@ -441,7 +441,6 @@ function displayPosts(posts) {
 
     channelContentContainer.innerHTML = '';
     for (var i = 0; i < posts.length; i++) {
-        var newPostElement = document.createElement("div");
         createPostElement(posts[i].content, posts[i].author);
     }
 
@@ -456,13 +455,15 @@ function createPostElement(content, author){
 
     // create spans for text and author with classes
     var contentElement = document.createElement("span");
-    contentElement.textContent = content;
+    contentElement.innerText = content;
     var authorElement = document.createElement("span");
-    authorElement.textContent = author;
+    authorElement.innerText = author;
     contentElement.className = "postContent";
     authorElement.className = "authorContent";
 
     // create a list item element and append the post
+    postElement.appendChild(contentElement);
+    postElement.appendChild(authorElement);
     var listItem = document.createElement("li");
     listItem.appendChild(postElement);
     channelContentContainer.appendChild(listItem);

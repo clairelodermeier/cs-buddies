@@ -105,8 +105,8 @@ button:hover {
     width:90%;
     margin-left:5%;
 
-
 }
+
 
 #helpButton {
     position:fixed;
@@ -199,6 +199,13 @@ button:hover {
 
 #help {
     width: 100%;
+}
+
+.postContent{
+    text-align:left;
+}
+.authorContent{
+    color:#aaa;
 }
 
 .modal{
