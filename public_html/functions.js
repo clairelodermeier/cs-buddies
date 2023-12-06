@@ -259,8 +259,8 @@ function createDate(event, date, time) {
     newEvent.date = date;
     newEvent.time = time;
 
-    newEvent.className = "rightBar";
-    newEvent.id = event;
+    newEvent.className = "events";
+    newEvent.id = "eventList";
     
     var listItem = document.createElement("li");
     listItem.appendChild(newEvent);
@@ -272,6 +272,8 @@ function createDate(event, date, time) {
 
 
 }
+
+
 
 // This function handles duplicate channel names by asking user to choose a new name.
 // Param: channelName, a string for the initial name chosen.
@@ -384,9 +386,14 @@ function loadDates() {
 
 }
 
-window.onload = loadChannels();
 
-window.onload = loadDates(); 
+window.onload = function()
+{
+    window.onload = loadChannels();
+
+    window.onload = loadDates(); 
+};
+
 
 
 // ADD A COMMENT HERE
@@ -631,6 +638,8 @@ function updateLocalChannels() {
 
     // Reload channels to reflect the changes
     loadChannels();
+
+    
 } 
 
 
