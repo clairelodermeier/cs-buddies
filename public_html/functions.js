@@ -379,7 +379,6 @@ function displayChannelContent(channelName) {
     // Hide the post list and show the channel content
     postListContainer.style.display = 'none';
     channelContentContainer.style.display = 'block';
-    rightBar = document.getElementById("rightBar");
 
     let p = fetch('/get/posts/' + channelName);
     p.then((r) => {
@@ -389,7 +388,7 @@ function displayChannelContent(channelName) {
         let postingDiv = document.createElement('div');
         postingDiv.innerHTML = getPostingDiv();
 
-        rightBar.appendChild(postingDiv);
+        channelContentContainer.appendChild(postingDiv);
     });
 }
 
@@ -418,8 +417,7 @@ function displayPosts(posts) {
         channelContentContainer.appendChild(listItem);
     }
 
-    let postButton = document.getElementById("sendPostButton");
-    postButton.onclick = createPost();
+
 
 }
 
@@ -448,23 +446,6 @@ function getDefaultChannelList() {
     </li>
     `;
 
-}
-function getChannelContent(channelName) {
-    return `
-    <div class="channelContent">
-        <h2>${channelName}</h2>
-        <!-- Your specific content for ${channelName} goes here -->
-
-        <p> Test </p>
-    </div>
-    <div class="messageBox">
-        <label for="message">Post</label>
-        <input type="text" id="message">
-     </div>
-    <div class="controlElement">
-        <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
-    </div>
-    `;
 }
 
 
