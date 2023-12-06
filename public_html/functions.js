@@ -236,22 +236,9 @@ confirmCalendarButton.onclick = function () {
 
 }
 
+// This function creates a new event object. 
+// It makes a post request to the server to create the Event document. 
 function createEvent(eventName, eventDate, eventLoc, eventTime){
-
-    /* if(isEventAlreadyExists(eventName))
-    {
-        return;
-    } */
-    while (document.getElementById(eventName)) {
-        var userResponse = confirm("Event name already taken. Change the name?");
-        if (userResponse) {
-            // If the user wants to choose a different name, prompt again
-            eventName = prompt("Enter a different event name:");
-        } else {
-            // If the user doesn't want to choose a different name, exit the loop
-            return;
-        }
-    }
     let url = '/add/event/';
     let data = { title: eventName, date: eventDate, loc: eventLoc, time: eventTime };
     let p = fetch(url, {
@@ -270,6 +257,10 @@ function createEvent(eventName, eventDate, eventLoc, eventTime){
             alert("Unable to add event");
             return;
         }
+        else{
+            // load posts at the end
+            loadPosts();
+        }
     });
 }
 
@@ -286,7 +277,10 @@ window.onclick = function (event) {
     return storedEvents.some(existingEvent => existingEvent.event === event);
 } */
 
-// ADD A COMMENT HERE
+// This function creates an element in the DOM for an event to be displayed. 
+// It creates and nests divs to represent the event details
+// Param: title, a string for event title; date, a string for event date;
+//      location: a string for event location; time: a string for event time
 function createEventElement(title, date, location, time) {
     console.log('creating event element for ' + title);
 
@@ -315,10 +309,8 @@ function createEventElement(title, date, location, time) {
     newEvent.appendChild(eventTimeElement);
     newEvent.appendChild(eventLocationElement);
 
-
     document.getElementById("eventHolder").appendChild(newEvent);
     saveEvent({title, date, time});
-
 }
 
 
