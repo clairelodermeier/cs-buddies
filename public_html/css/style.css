@@ -42,8 +42,10 @@ button:hover {
 }
 
 .banner{
-    width:80%;
-    overflow-x: visible;
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+    overflow-x:visible;
 }
 
 .leftBar {
@@ -61,7 +63,7 @@ button:hover {
     top: 81px;
     left: 200px;
     height: 75%;
-    width: 100%;
+    width:calc(100% - 200px);
     background-color:rgb(white);
     padding:15px;
     text-align: center;

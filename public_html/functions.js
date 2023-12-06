@@ -433,7 +433,7 @@ function displayPosts(posts) {
 function getEventContent() {
     return `
     <div class="events">
-        <h3>Upcoming Events</h3>
+        <h3 class = 'banner' >Upcoming Events</h3>
         <div class="eventList>
 
             <p>Event Holder</p>

@@ -120,7 +120,7 @@ function removeSessions() {
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
         // 15 minutes
-        if (last + ( 6* 1000 * 15) < now) {
+        if (last + ( 60 * 1000 * 15) < now) {
             delete sessions[usernames[i]];
         }
     }
@@ -132,8 +132,6 @@ function removeSessions() {
 // Param: req, res (request and response objects), next (next server request to follow)
 function authenticate(req, res, next) {
     console.log('authenticating...');
-
-
     let c = req.cookies;
 
     if (c != undefined && c.login != undefined) {

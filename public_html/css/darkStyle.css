@@ -44,7 +44,10 @@ button:hover {
 }
 
 .banner{
-    width:80%;
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+    overflow-x:visible;
 }
 
 .leftBar {
@@ -62,8 +65,8 @@ button:hover {
     position: fixed;
     top: 81px;
     left: 200px;
+    width:calc(100% - 200px);
     height: 75%;
-    width: 100%;
     padding:15px;
     text-align: center;
 }
@@ -171,8 +174,8 @@ button:hover {
 
 #icon{
     position: fixed;
-    width: 85px;
-    height:85px;
+    width: 81px;
+    height:81px;
     top:0;
     left:92%;
 }
