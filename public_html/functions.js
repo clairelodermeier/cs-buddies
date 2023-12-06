@@ -1,5 +1,5 @@
 /*
-Claire Lodermeier
+Claire Lodermeier, Audrey Hall, Joyce Dam
 The purpose of this file is to implement client side functions for the main page of an online 
 social media application. It creates server requests for fetching user information, 
 channels, and display settings. Also uses local storage to load display settings faster.
@@ -226,8 +226,8 @@ window.onclick = function (event) {
     }
 }
 
+// ADD A COMMENT HERE
 function createDate(event, date, time) {
-
     while (document.getElementById(event)) {
         var userResponse = confirm("Event name is already taken. Would you like to change the name?");
         if (userResponse) {
@@ -324,6 +324,7 @@ function saveChannel(channelName) {
     }
 }
 
+// ADD A COMMENT HERE
 function saveDate(date) {
     var events = JSON.parse(localStorage.getItem('events')) || [];
     if (!events.includes(date)) {
@@ -345,6 +346,7 @@ function loadChannels() {
     };
 }
 
+// ADD A COMMENT HERE
 function loadDates() {
     eventList.innerHTML = "";
     var dates = JSON.parse(localStorage.getItem('events')) || [];
@@ -359,6 +361,7 @@ window.onload = loadChannels();
 //window.onload = loadDates(); This also breaks right clicking
 
 
+// ADD A COMMENT HERE
 function showEvents() {
     // TODO: implement this. 
     window.localStorage.setItem("currentChannel", null);
@@ -405,7 +408,6 @@ function loadPosts() {
 // load posts every 15 seconds
 setInterval(loadPosts, 15000);
 
-
 // This function displays the posts in a channel in the dom. 
 // Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
@@ -441,9 +443,7 @@ function displayChannelTitle(){
     var titleBanner = document.createElement('h3');
     titleBanner.className = 'banner';
     titleBanner.innerText = window.localStorage.getItem("currentChannel");
-
     titleElement.appendChild(titleBanner);
-
 }
 
 // This function gets the html for the post message elements at the bottom of a channel.
@@ -593,8 +593,6 @@ function createPost() {
         // Add the new post to the list
         addPostToList(message);
         console.log('adding post ' + message);
-        // Additional logic to send the post to the server if needed
-        // ...
         let url = '/add/post/' + message + '/' + channelName;
         let p = fetch(url);
         p.then((r) => {
@@ -638,13 +636,6 @@ function addPostToList(content) {
     var listItem = document.createElement("li");
     listItem.appendChild(postElement);
     channelContentContainer.appendChild(listItem);
-    // Get the post list element
-    //const postList = document.getElementById('channelContentContainer');
-
-    // Add the new post item to the list
-    //postList.appendChild(postElement);
-
-
 }
 
 /*----------------------------------- */
