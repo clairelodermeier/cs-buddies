@@ -385,6 +385,8 @@ function createChannel(channelName) {
 function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
     var postListContainer = document.getElementById('postListContainer');
+    var titleElement = document.getElementById("channelTitle");
+    titleElement.setInnerHTML = '';
 
     // Hide the post list and show the channel content
     postListContainer.style.display = 'none';
@@ -396,12 +398,26 @@ function displayChannelContent(channelName) {
     }).then((posts) => {
         posts.sort((a, b) => a.time - b.time);
 
+        displayChannelTitle();
         displayPosts(posts);
         let postingDiv = document.createElement('div');
         postingDiv.innerHTML = getPostingDiv();
 
         channelContentContainer.appendChild(postingDiv);
     });
+}
+
+// This function displays a banner with the title of the channel. 
+function displayChannelTitle(){
+    var titleElement = document.getElementById("channelTitle");
+    titleElement.setInnerHTML = '';
+
+    var titleBanner = document.createElement('h3');
+    titleBanner.className = 'banner';
+    titleBanner.innerText = window.localStorage.getItem("currentChannel");
+
+    titleElement.appendChild(titleBanner);
+
 }
 
 // This function gets the html for the post message elements at the bottom of a channel.
@@ -420,6 +436,9 @@ function getPostingDiv() {
 // This function displays the posts in a channel by creating dom elements.
 // Param: posts, a list of Post objects. 
 function displayPosts(posts) {
+    var titleElement = document.getElementById("channelTitle");
+    titleElement.setInnerHTML = '';
+
     channelContentContainer.innerHTML = '';
     for (var i = 0; i < posts.length; i++) {
         var newPostElement = document.createElement("div");
@@ -491,17 +510,15 @@ function updateLocalChannels() {
     p.then((r) => {
         return r.json();
     }).then((j) => {
-        console.log(j);
-        window.localStorage.setItem('channels', JSON.stringify(j));
+       var sortedChannels = j.sort((a, b) => a.name - b.name);
+        window.localStorage.setItem('channels', JSON.stringify(sortedChannels));
     }).then(() => {
         channelList.innerHTML = "";
         var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
         for (var i = 0; i < channels.length; i++) {
             createChannelButton(channels[i].name);
         }
-        // channels.forEach(function (channel) {
-        //     createChannelButton(channel);
-        // });
+    
     }).then(() => {
         loadChannels();
     })
