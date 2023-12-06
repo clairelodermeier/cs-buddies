@@ -7,6 +7,8 @@ channels, and display settings. Also uses local storage to load display settings
 
 window.onloadstart = updateDisplay();
 setInterval(setLocalColor, 100);
+const postListContainer = document.getElementById('postListContainer');
+
 
 // This function calls several other functions to fetch display and channel info from the server, 
 // update locally stored preferences, and display them in the dom. 
@@ -224,10 +226,9 @@ confirmCalendarButton.onclick = function () {
         loc.value = "";
 
         calendarModal.style.display = "none";
-
         console.log("New Event details: ", newEvent, newDate, newTime)
-        createDate(newEvent, newDate, newLocation, newTime);
-        loadDates();
+        //createDate(newEvent, newDate, newLocation, newTime);
+        //loadDates();
     }
     // handle invalid input
     else {
@@ -238,8 +239,23 @@ confirmCalendarButton.onclick = function () {
 }
 
 function createEvent(eventName, eventDate, eventLoc, eventTime){
+
+    /* if(isEventAlreadyExists(eventName))
+    {
+        return;
+    } */
+    while (document.getElementById(eventName)) {
+        var userResponse = confirm("Event name already taken. Change the name?");
+        if (userResponse) {
+            // If the user wants to choose a different name, prompt again
+            eventName = prompt("Enter a different event name:");
+        } else {
+            // If the user doesn't want to choose a different name, exit the loop
+            return;
+        }
+    }
     let url = '/add/event/';
-    let data = { name: eventName, date: eventDate, loc: eventLoc, time: eventTime };
+    let data = { title: eventName, date: eventDate, loc: eventLoc, time: eventTime };
     let p = fetch(url, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -266,46 +282,26 @@ window.onclick = function (event) {
     }
 }
 
-function isEventAlreadyExists(event)
+/* function isEventAlreadyExists(event)
 {
     var storedEvents = JSON.parse(localStorage.getItem('events')) || [];
     return storedEvents.some(existingEvent => existingEvent.event === event);
-}
+} */
 
 // ADD A COMMENT HERE
-function createDate(event, date, time) {
-    if(isEventAlreadyExists(event))
-    {
-        return;
-    }
-
-    while (document.getElementById(event)) {
-        var userResponse = confirm("Event name already taken. Change the name?");
-        if (userResponse) {
-            // If the user wants to choose a different name, prompt again
-            event = prompt("Enter a different event name:");
-        } else {
-            // If the user doesn't want to choose a different name, exit the loop
-            return;
-        }
-    }
+function createEventElement(name, date, time) {
+    console.log('creating event element for ' + name);
 
     var newEvent = document.createElement("p");
-    newEvent.textContent = "Event Name: " + event + " Date: " + date + " Time: " + time;
-    newEvent.date = date;
-    newEvent.time = time;
+    newEvent.textContent = "Event Name: " + name + " Date: " + date + " Time: " + time;
 
     newEvent.className = "events";
-    newEvent.id = "eventList";
     
     var listItem = document.createElement("li");
     listItem.appendChild(newEvent);
 
-
-
-    eventList.appendChild(listItem);
-    saveDate({event, date, time});
-
+    postListContainer.appendChild(listItem);
+    saveEvent({name, date, time});
 
 }
 
@@ -359,7 +355,7 @@ function createChannelButton(channelName) {
         var titleElement = document.getElementById("channelTitle");
         titleElement.innerHTML = '';
         window.localStorage.setItem("currentChannel", channelName);
-        var channels = JSON.parse(localStorage.getItem('channels')) || [];
+        //(localStorage.getItem('channels')) || [];
         displayChannelContent(channelName);
     };
 
@@ -379,11 +375,12 @@ function saveChannel(channelName) {
 }
 
 // ADD A COMMENT HERE
-function saveDate(date) {
+function saveEvent(event) {
+
     var events = JSON.parse(localStorage.getItem('events')) || [];
 
-    if (date && date.event && date.date && date.time) {
-        events.push(date);
+    if (event && event.name && event.time && event.location && event.date) {
+        events.push(event);
         window.localStorage.setItem('events', JSON.stringify(events));
     }
 }
@@ -400,7 +397,7 @@ function loadChannels() {
         createChannelButton(channels[i]);
     };
 }
-
+/* 
 // ADD A COMMENT HERE
 function loadDates() {
     eventList.innerHTML = "";
@@ -421,25 +418,26 @@ function loadDates() {
 
 
 }
-
+ */
 
 window.onload = function()
 {
     window.onload = loadChannels();
 
-    window.onload = loadDates(); 
+    //window.onload = loadDates(); 
 };
 
 
 
 // ADD A COMMENT HERE
 function showEvents() {
+    // update the locally stored list of events
+    updateLocalEvents();
     // TODO: implement this. 
     window.localStorage.setItem("currentChannel", 'events');
 
     var postListContainer = document.getElementById('postListContainer');
     postListContainer.style.display = 'block';
-
 
     var channelContentContainer = document.getElementById('channelContentContainer');
     channelContentContainer.style.display = 'none';
@@ -450,7 +448,14 @@ function showEvents() {
     // Show the post list and hide the channel content
     channelContentContainer.innerHTML = '';
     postListContainer.innerHTML = getEventContent();
-   
+
+    if(window.localStorage.getItem('events')==[]){
+        return;
+    }
+    var events = JSON.parse(localStorage.getItem('events')) || [];
+    for (let i=0;i<events.length;i++){
+        createEventElement(events[i].name, events[i].date, events[i].location, events[i].time);
+    }
 
 
 }
@@ -489,6 +494,7 @@ function loadPosts() {
 
 // load posts every 15 seconds
 setInterval(loadPosts, 15000);
+
 
 // This function displays the posts in a channel in the dom. 
 // Param: channelName, a string for the name of the channel.
@@ -642,6 +648,29 @@ channelList.addEventListener('contextmenu', function (event) {
 
 }); 
 
+// This function updates the local storage for events by requesting the list of events 
+// from the server. 
+function updateLocalEvents() {
+    console.log("Updating local events from the server...");
+    window.localStorage.setItem('events', []);
+
+    let url = '/events/';
+    let p = fetch(url);
+    p.then((r) => {
+        return r.json();
+    }).then((j) => {
+       //var sortedEvents = j.sort((a, b) => a.date - b.date);
+        window.localStorage.setItem('events', JSON.stringify(j));
+        console.log("Locally stored events : " + window.localStorage.getItem('events'));
+    //}).then(() => {
+        // channelList.innerHTML = "";
+        // var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
+        // for (var i = 0; i < channels.length; i++) {
+        //     createChannelButton(channels[i].name);
+        // }
+    });
+}
+
 // This function updates the local storage for channel names by requesting the list of channels 
 // from the server. 
 function updateLocalChannels() {
@@ -663,7 +692,7 @@ function updateLocalChannels() {
     
     }).then(() => {
         loadChannels();
-    })
+    });
 }
 
  function deleteChannel(channelName) {

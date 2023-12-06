@@ -470,9 +470,11 @@ app.post('/add/event/', (req, res) => {
 });
 
 //GET requests, sends a list of all event objects
-app.get('/get/events/', (req,res) =>{
-    var events = Event.find({}).exec();
-    res.end(JSON.stringify(events));
+app.get('/events/', (req,res) =>{
+    let p = Event.find({}).exec();
+    p.then((events)=>{
+        res.end(JSON.stringify(events));
+    });
 });
 
 
