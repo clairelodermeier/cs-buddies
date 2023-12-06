@@ -293,7 +293,7 @@ function saveChannel(channelName) {
     if (!channels.includes(channelName)) {
         channels.push(channelName);
 
-        localStorage.setItem('channels', JSON.stringify(channels));
+        window.localStorage.setItem('channels', JSON.stringify(channels));
     }
 }
 
@@ -301,18 +301,18 @@ function saveDate(date) {
     var events = JSON.parse(localStorage.getItem('events')) || [];
     if (!events.includes(date)) {
         events.push(date);
-        localStorage.setItem('events', JSON.stringify(events));
+        window.localStorage.setItem('events', JSON.stringify(events));
     }
 }
 
 
 function loadChannels() {
     channelList.innerHTML = getDefaultChannelList();
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
 
-    channels.forEach(function (channel) {
-        createChannelButton(channel);
-    });
+    for(var i=0;i<channels.length;i++){
+        createChannelButton(channels[i]);
+    };
 }
 
 
@@ -389,6 +389,8 @@ function displayChannelContent(channelName) {
     p.then((r) => {
         return r.json();
     }).then((posts) => {
+        posts.sort((a, b) => a.time - b.time);
+
         displayPosts(posts);
         let postingDiv = document.createElement('div');
         postingDiv.innerHTML = getPostingDiv();
