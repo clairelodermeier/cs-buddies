@@ -264,12 +264,10 @@ function createChannelButton(channelName) {
         }
     }
 
-
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
     newChannelButton.id = channelName;
-
 
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
@@ -312,7 +310,7 @@ function saveDate(date)
 
 
 function loadChannels() {
-    channelList.innerHTML = "";
+    channelList.innerHTML = getDefaultChannelList();
     var channels = JSON.parse(localStorage.getItem('channels')) || [];
 
     channels.forEach(function (channel) {
@@ -401,6 +399,15 @@ function getEventContent()
     `;
 }
 
+function getDefaultChannelList(){
+    return `    
+    <li>
+    <button class="leftListItem" id="eventList" onclick="showEvents()">Events</button>
+
+    </li>
+    `;
+
+}
 function getChannelContent(channelName)
 {
     return `
@@ -451,7 +458,7 @@ function updateLocalChannels() {
         return r.json();
     }).then((j)=>{
         console.log(j);
-        window.localStorage.setItem('channels',JSON.stringify(j));
+        window.localStorage.setItem('channels', JSON.stringify(j));
     }).then(()=>{
         channelList.innerHTML = "";
         var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
