@@ -1,16 +1,14 @@
 <!--
     Claire Lodermeier, Audrey Hall, Joyce Dam
-    The purpose of this file is to build the settings page for a social media web application.
-    It contains a navigation bar on the left with settings categories, with settings content
-    displayed on the right. Initial content displayed is help page. Has icon buttons and help 
-    button on the bottom.
+    The purpose of this file is to build the help page for a social media web application.
+    It displays simple text about how to navigate the application. 
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Home page</title>
+    <title>Help</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" id ="cssLink">
     <meta charset="UTF-8">
 </head>
@@ -24,42 +22,7 @@
     </div>
     <img id="icon">
 
-    <div class='leftBar'>
-        <h3 class = 'narrowHeading'>Settings</h3>
-        <ul id ='settings'>
-            <li>
-                <button class="leftListItem" id="profileButton" 
-                onclick="showContent('editProfile')">
-                    Edit profile
-                </button>
-            </li>
-            <li>
-                <button class="leftListItem" id="displayButton" onclick="showContent('display')">
-                    Display
-                </button>
-            </li>
-
-            <li>
-                <button class="leftListItem" id="privacyButton" onclick="showContent('privacy')">
-                    Privacy and Account info
-                </button>
-            </li>
-      
-
-            <!-- Keep log out button on the bottom -->
-            <li>
-      
-                <button class="leftListItem" id="logOutButton"
-                onclick="showContent('logOut')">Log Out</button>
-                </a>
-            </li>
-            <!--Add more settings options-->
-
-        </ul>
-
-    </div>
-    <div class="rightBar">
-        <div id="content">
+    <div id="content">
             <div id="help">
                 <div>
                     <h3 class = 'banner'>Help</h3>
@@ -111,12 +74,7 @@
         </a>
     </div>
 
-    <a href="help.html">
-        <button id='helpButton'>Need help?</button>
-    </a>
 
-    <script src="settings.js">
-    </script>
 </body>
 
     
