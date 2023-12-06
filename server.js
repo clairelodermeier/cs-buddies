@@ -1,9 +1,9 @@
 /*
-Claire Lodermeier
-The purpose of this file is to set up a server for an online application similar to discord, with
-channels for users to communicate via posts and events. Uses mongodb to store information about 
-users, channels, posts, _______. Handles a variety of GET and POST requests for _____. 
-Tracks cookies and sessions for authenticating login sessions. 
+Claire Lodermeier, Audrey Hall, Joyce Dam
+The purpose of this file is to set up a server for an online application similar to discord or 
+twitter, with channels for users to communicate via posts and events. Uses mongodb to store 
+information about users, channels, posts, and events. Handles a variety of GET and POST requests 
+for interacting with these data. Tracks cookies for authenticating login sessions. 
 */
 
 // server setup
@@ -111,9 +111,8 @@ function addSession(username) {
     return sid;
 }
 
-// This function is removes expired sessions from the sessions object. 
+// This function removes expired sessions from the sessions object. 
 function removeSessions() {
-
     let now = Date.now();
     let usernames = Object.keys(sessions);
     for (let i = 0; i < usernames.length; i++) {
@@ -154,6 +153,7 @@ function authenticate(req, res, next) {
     }
 }
 
+// authenticate before server requests
 app.use('/get/*', authenticate);
 app.use('/set/*', authenticate);
 app.use('/delete/*', authenticate);
@@ -377,7 +377,6 @@ app.get('/set/mode/:mode', async (req, res) => {
         userDoc.mode = "dark";
     }
     userDoc.save();
-
     res.end("SUCCESS");
 });
 
@@ -409,7 +408,7 @@ app.get('/get/color/', (req, res) => {
 /*-------------------- post and channel requests --------------------- */
 
 // GET request, get all channel names
-app.get('/get/channels/', async (req, res) => {
+app.get('/channels/', async (req, res) => {
 
     // get all channels
     var channels = await Channel.find({}).exec();
@@ -473,7 +472,6 @@ app.post('/add/event/', (req, res) => {
 app.get('/get/events/', (req,res) =>{
     var events = Event.find({}).exec();
     res.end(JSON.stringify(events));
-    
 });
 
 

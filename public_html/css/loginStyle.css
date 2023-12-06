@@ -1,5 +1,5 @@
 /*
-    Claire Lodermeier
+    Claire Lodermeier, Audrey Hall, Joyce Dam
     The purpose of this file is to provide styling for login and account creation pages for a 
     social media web application. It formats lists for user input, as well as buttons and headers. 
 */
@@ -111,14 +111,6 @@ button {
     text-align: right;
     font-size: 15px;
 }
-
-/*#icon{*/
-/*    position: fixed;*/
-/*    width: 85px;*/
-/*    height:85px;*/
-/*    top:0;*/
-/*    left:92%;*/
-/*}*/
 
 .buttonA:hover {
     background-color: rgb(153, 0, 62);

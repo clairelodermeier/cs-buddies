@@ -547,7 +547,7 @@ channelList.addEventListener('contextmenu', function (event) {
 function updateLocalChannels() {
     window.localStorage.setItem('channels', []);
 
-    let url = '/get/channels/';
+    let url = '/channels/';
     let p = fetch(url);
     p.then((r) => {
         return r.json();
