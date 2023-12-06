@@ -403,6 +403,7 @@ function saveEvent(event) {
 
 // This function gets channels from local storage and creates buttons to show them on the DOM.
 function loadChannels() {
+    window.localStorage.setItem("currentChannel", null);
     channelList.innerHTML = getDefaultChannelList();
     if(window.localStorage.getItem('channels')==[]){
         return;
@@ -417,8 +418,8 @@ function loadChannels() {
 
 window.onload = function()
 {
-    window.onload = loadChannels();
-    window.onload = updateLocalEvents();
+    loadChannels();
+    updateLocalEvents();
 
 };
 
@@ -604,7 +605,7 @@ function createPostElement(content, author){
 // Returns: an html string
 function getEventContent() {
     return `
-    <div class="events">
+    <div>
         <h3 class='banner'>Upcoming Events</h3>
         <ul id="eventHolder">
         
