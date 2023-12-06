@@ -195,6 +195,7 @@ spanCalendar.onclick = function () {
 
 // create calendar event when confirm button is clicked
 confirmCalendarButton.onclick = function () {
+
     var event = document.getElementById("eventName");
     var date = document.getElementById("date");
     var time = document.getElementById("eventTime");
@@ -205,6 +206,9 @@ confirmCalendarButton.onclick = function () {
         var newEvent = event.value;
         var newDate = date.value;
         var newTime = time.value;
+
+        // create event in the server
+        createEvent(newEvent, newDate, newTime);
 
         event.value = "";
         date.value = "";
@@ -221,6 +225,28 @@ confirmCalendarButton.onclick = function () {
         calendarModal.style.display = "block";
     }
 
+}
+
+function createEvent(eventName, eventDate, eventTime){
+    let url = '/add/event/';
+    let data = { name: eventName, date: eventDate, loc: "LOCATION", time: eventTime };
+    let p = fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
+    });
+    p.then((response)=>{
+        return response.text();
+    }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else if(!(text.startsWith("SUCCESS"))){
+            alert("Unable to add event");
+            return;
+        }
+    });
 }
 
 // close calendar modal when user clicks out
@@ -399,7 +425,7 @@ window.onload = function()
 // ADD A COMMENT HERE
 function showEvents() {
     // TODO: implement this. 
-    window.localStorage.setItem("currentChannel", null);
+    window.localStorage.setItem("currentChannel", 'events');
 
     var postListContainer = document.getElementById('postListContainer');
     postListContainer.style.display = 'block';
@@ -440,6 +466,11 @@ function createChannel(channelName) {
 
 // This function loads posts in a the current channel. 
 function loadPosts() {
+    console.log("current channel is " + window.localStorage.getItem("currentChannel"));
+    if(window.localStorage.getItem("currentChannel")=='events'){
+        showEvents();
+        return;
+    }
     console.log("loading posts ... ");
     if(window.localStorage.getItem("currentChannel")!=null){
         displayChannelContent(window.localStorage.getItem("currentChannel"));

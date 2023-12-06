@@ -79,7 +79,7 @@ const eventSchema = new Schema({
     title: String,
     date: String,
     location: String,
-    time: Number,
+    time: String,
 });
 
 
@@ -463,8 +463,9 @@ app.get('/add/post/:content/:channelName', function (req, res) {
 app.post('/add/event/', (req, res) => {
 
     let info = req.body;
-    let thisEvent = new Event({title: info.title, date: info.date, location: info.loc, time: Date.now()});
+    let thisEvent = new Event({title: info.title, date: info.date, location: info.loc, time: info.time});
     thisEvent.save();
+    res.end("SUCCESS");
 
 });
 
