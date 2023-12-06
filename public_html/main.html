@@ -10,66 +10,65 @@
 
 <head>
     <title>Home page</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css" id ="cssLink">
+    <link rel="stylesheet" type="text/css" href="css/style.css" id="cssLink">
     <meta charset="UTF-8">
 </head>
-
 
 <body>
 
     <div id='mainHeader'>
-        <img id = "logo" src="csBuddiesLogo.png" alt="logo" >
+        <img id="logo" src="csBuddiesLogo.png" alt="logo">
         CS Buddies
     </div>
     <img id="icon">
 
     <div class='leftBar'>
 
-        <ul id = 'channelList'>
+        <ul id='channelList'>
 
             <li>
-                <button class="leftListItem" id="eventButton" onclick="showEvents()">Events</button>
-
+                <button class="leftListItem" id="eventButton" onclick="showEvents()">
+                    Events
+                </button>
             </li>
 
         </ul>
         <div class="rightBar">
-            <div class = "channels">
-                <div id = 'channelTitle'></div>
+            <div class="channels">
+                <div id='channelTitle'></div>
                 <div id="channelContentContainer">
 
                 </div>
             </div>
         </div>
 
-
         <div class="rightBar">
-            <div class = "events">
+            <div class="events">
                 <div id="eventListContainer">
-                    <h3 class = 'banner'>Welcome to Study Buddies!</h3>
-                <ul id = "eventHolder">
+                    <h3 class='banner'>Welcome to Study Buddies!</h3>
+                    <ul id="eventHolder">
 
-                    
-                </ul>
-                
+
+                    </ul>
+
                 </div>
 
-                
+
             </div>
 
         </div>
 
         <div id="bottomButtons">
             <button class='bottomButton' id='addButton'>+</button>
-            <a href = "./settings.html">
-            <button class='bottomButton' id='settingsButton'>&#x2699</button>
+            <a href="./settings.html">
+                <button class='bottomButton' id='settingsButton'>&#x2699</button>
             </a>
             <button class='bottomButton' id='calendar'>&#x1F4C5</button>
-            
+
         </div>
 
         <a href="./help.html">
-        <button id='helpButton'>Need help?</button>
+            <button id='helpButton'>Need help?</button>
         </a>
 
         <!--Adding Channels-->
@@ -95,23 +94,23 @@
                 <span class="closeCalendar">&times;</span>
                 <h4>Add Calendar Event</h4>
                 <li>
-                    <label class = 'eventLabel' for='eventName'>Event Name</label>
-                    <input class = 'eventInput' type='text' id='eventName'>
+                    <label class='eventLabel' for='eventName'>Event Name</label>
+                    <input class='eventInput' type='text' id='eventName'>
                 </li>
                 <li></li>
                 <li>
-                    <label class = 'eventLabel' for='date'>Calendar Date</label>
-                    <input class = 'eventInput' type="date" id="date">
+                    <label class='eventLabel' for='date'>Calendar Date</label>
+                    <input class='eventInput' type="date" id="date">
                 </li>
                 <li></li>
                 <li>
-                    <label class = 'eventLabel' for="eventTime">Time of Event</label>
-                    <input class = 'eventInput' type="time" id="eventTime">
+                    <label class='eventLabel' for="eventTime">Time of Event</label>
+                    <input class='eventInput' type="time" id="eventTime">
                 </li>
                 <li></li>
                 <li>
-                    <label class = 'eventLabel' for="location">Location</label>
-                    <input class = 'eventInput' type="text" id="location">
+                    <label class='eventLabel' for="location">Location</label>
+                    <input class='eventInput' type="text" id="location">
                 </li>
                 <li></li>
 

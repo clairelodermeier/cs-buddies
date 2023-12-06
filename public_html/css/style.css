@@ -21,12 +21,12 @@ h3 {
     margin: 0px;
 }
 
-input{
+input {
     margin: 20px;
 }
 
-h4{
-    color:rgb(0, 0, 0);
+h4 {
+    color: rgb(0, 0, 0);
     font-size: 150%;
 }
 
@@ -41,11 +41,11 @@ button:hover {
     background-color: rgb(150, 150, 150);
 }
 
-.banner{
-    width:90%;
-    margin-left:auto;
-    margin-right:auto;
-    overflow-x:visible;
+.banner {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: visible;
 }
 
 .leftBar {
@@ -60,12 +60,13 @@ button:hover {
 
 .rightBar {
     position: fixed;
+    overflow: auto;
     top: 81px;
     left: 200px;
     height: 75%;
-    width:calc(100% - 200px);
-    background-color:rgb(white);
-    padding:15px;
+    width: calc(100% - 200px);
+    background-color: rgb(white);
+    padding: 15px;
     text-align: center;
 }
 
@@ -79,8 +80,8 @@ button:hover {
     font-family: monospace;
 }
 
-.settings{
-    text-align:center;
+.settings {
+    text-align: center;
     font-family: monospace;
 }
 
@@ -92,97 +93,102 @@ button:hover {
     padding-left: 10px;
 }
 
-.helpHeading{
-    text-align:left;
-    font-size:20px;
-    margin-left:50px;
-
-    
-}
-
-.helpParagraph{
+.helpHeading {
     text-align: left;
-    width:90%;
-    margin-left:5%;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.helpParagraph {
+    text-align: left;
+    width: 90%;
+    margin-left: 5%;
 }
 
 
-.postContent{
-    text-align:left;
+.postContent {
+    text-align: left;
+    position: relative;
+    height: fit-content;
+    overflow-y: scroll;
 }
-.authorContent{
+
+.authorContent {
     margin-left: 5px;
-    color:#aaa;
+    color: #aaa;
 }
 
-.eventInput{
-    margin:0px;
+.eventInput {
+    margin: 0px;
 }
 
-.eventContent{
-    margin-bottom:20px;
-    border:2px;
+.eventContent {
+    margin-bottom: 20px;
+    border: 2px;
     border-color: #aaa;
-    border-style:double;
-    border-width:2px;
-    height:fit-content;
-    width:500px;
-    margin-left:auto;
-    margin-right:auto;
+    border-style: double;
+    border-width: 2px;
+    height: fit-content;
+    width: 500px;
+    margin-left: 20px;
+
 }
 
-.eventTitle{
-    font-size:20px;
+.post {
+    width: 900px;
+
 }
 
+.eventTitle {
+    font-size: 20px;
+}
 
-.modal{
+.modal {
     display: none;
     position: fixed;
-    float:left;
-    left:50%;
-    top:50%;
-    width:500px;
-    transform:translate(-50%, -50%);
+    float: left;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    transform: translate(-50%, -50%);
     background-color: rgb(221, 219, 219);
     -webkit-animation-name: fadeIn;
     -webkit-animation-duration: 0.4s;
-    animation-name:fadeIn;
-    animation-duration:0.4s;
-
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
 
 }
 
-.modal-content{
-    margin:15%;
+.modal-content {
+    margin: 15%;
     padding: 20px;
-    border: 3px solid ;
+    border: 3px solid;
     width: 300px;
 }
 
-.close{
-    color:#aaa;
-    float:right;
+.close {
+    color: #aaa;
+    float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.closeCalendar{
-    color:#aaa;
-    float:right;
+.closeCalendar {
+    color: #aaa;
+    float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .closeCalendar:hover,
-.closeCalendar:focus{
+.closeCalendar:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -191,12 +197,13 @@ button:hover {
 .controlElement {
     position: fixed;
     text-align: left;
-    bottom:15px;
+    bottom: 15px;
     padding: 20px;
     font-size: 15px;
-    left:600px;
-    width:100%;
+    left: 600px;
+    width: 100%;
 }
+
 .content-container {
     display: none;
 }
@@ -205,21 +212,25 @@ button:hover {
     display: block;
 }
 
-.messageBox{
-    position:fixed;
-    bottom:0px;
+.messageBox {
+    position: fixed;
+    bottom: 0px;
     text-align: left;
-    font-size:15px;
-    padding:15px;
-    width:500px;
-    left:200px;
+    font-size: 15px;
+    padding: 15px;
+    width: 500px;
+    left: 200px;
 
 }
 
+.rightBar {
+    overflow-y: scroll;
+}
+
 #helpButton {
-    position:fixed;
-    right:25px;
-    bottom:25px;
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
     padding: 10px;
     color: rgb(193, 19, 62);
     background-color: white;
@@ -229,16 +240,18 @@ button:hover {
     font-family: monospace;
 }
 
-#helpButton:hover{
-    background-color:#aaa;
+#helpButton:hover {
+    background-color: #aaa;
 }
 
-#channelContentContainer{
-    margin-top:20px;
+#message {
+    width: 300px;
 }
 
-#message{
-    width:300px;
+#eventHolder {
+    position: relative;
+    height: fit-content;
+    overflow-y: scroll;
 }
 
 #bottomButtons {
@@ -259,7 +272,7 @@ button:hover {
     margin-right: 75px;
 }
 
-#goBack{
+#goBack {
     text-align: center;
 }
 
@@ -282,46 +295,55 @@ button:hover {
     justify-content: center;
 }
 
-#logo{
+#logo {
     position: fixed;
     width: 85px;
-    height:85px;
+    height: 85px;
     top: 0;
     left: 0;
 }
 
-#icon{
+#icon {
     position: fixed;
     width: 81px;
-    height:81px;
-    top:0;
-    right:0;
+    height: 81px;
+    top: 0;
+    right: 0;
 }
 
-#deleteButton{
+#deleteButton {
     margin-top: 25px;
 }
 
 #contributors {
     margin: 5%;
-    text-align:left;
+    text-align: left;
 }
 
 #help {
-    position:static;
-    padding-top:100px;
+    position: static;
+    padding-top: 100px;
     width: 100%;
-    overflow:scroll;
+    overflow: scroll;
 }
 
 /*Animations*/
-@-webkit-keyframes fadeIn{
-    from{opacity:0}
-    to{opacity:1}
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
 }
 
-@keyframes fadeIn{
-    from{opacity:0}
-    to{opacity: 1}
-}
+@keyframes fadeIn {
+    from {
+        opacity: 0
+    }
 
+    to {
+        opacity: 1
+    }
+}

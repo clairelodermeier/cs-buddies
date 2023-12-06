@@ -56,7 +56,7 @@ button {
     width: 250px;
     border: 0px;
     margin-top: 20px;
-    
+
 }
 
 .buttonB {
@@ -84,10 +84,10 @@ button {
     justify-content: center;
 }
 
-#logo{
+#logo {
     position: fixed;
     width: 85px;
-    height:85px;
+    height: 85px;
     top: 0;
     left: 0;
 }
@@ -113,9 +113,9 @@ button {
 }
 
 #helpButton {
-    position:fixed;
-    right:25px;
-    bottom:25px;
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
     padding: 10px;
     color: rgb(193, 19, 62);
     background-color: white;
@@ -125,8 +125,8 @@ button {
     font-family: monospace;
 }
 
-#helpButton:hover{
-    background-color:#aaa;
+#helpButton:hover {
+    background-color: #aaa;
 }
 
 
@@ -139,5 +139,3 @@ button {
     background-color: rgb(193, 19, 62);
     color: white;
 }
-
-

@@ -158,7 +158,6 @@ confirmButton.onclick = function () {
         alert("Please enter a channel name")
         modal.style.display = "block";
     }
-
 }
 
 // close the modal when user clicks out
@@ -205,15 +204,11 @@ confirmCalendarButton.onclick = function () {
     var time = document.getElementById("eventTime");
     var loc = document.getElementById("location");
 
-
-    console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " +
-        time.value);
     if ((event && event.value) && (date && date.value) && (time && time.value) && (loc && loc.value)) {
         var newEvent = event.value;
         var newDate = date.value;
         var newTime = time.value;
         var newLocation = loc.value;
-
 
         // create event in the server
         createEvent(newEvent, newDate, newLocation, newTime);
@@ -233,7 +228,6 @@ confirmCalendarButton.onclick = function () {
         alert("Please fill out all entries.");
         calendarModal.style.display = "block";
     }
-
 }
 
 // This function creates a new event object. 
@@ -270,12 +264,6 @@ window.onclick = function (event) {
         calendarModal.style.display = "none";
     }
 }
-
-/* function isEventAlreadyExists(event)
-{
-    var storedEvents = JSON.parse(localStorage.getItem('events')) || [];
-    return storedEvents.some(existingEvent => existingEvent.event === event);
-} */
 
 // This function creates an element in the DOM for an event to be displayed. 
 // It creates and nests divs to represent the event details
@@ -477,7 +465,6 @@ function loadPosts() {
 // load posts every 15 seconds
 setInterval(loadPosts, 15000);
 
-
 // This function displays the posts in a channel in the dom via server request. 
 // Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
@@ -493,7 +480,6 @@ function displayChannelContent(channelName) {
     channelContainers.style.display = 'block';
 
     eventListContainer.innerHTML = '';
-    channelContentContainer.innerHTML = getDefaultChannelList();
     var titleElement = document.getElementById("channelTitle");
     titleElement.innerHTML = '';
 
@@ -565,6 +551,7 @@ function createPostElement(content, author) {
     postElement.appendChild(contentElement);
     postElement.appendChild(authorElement);
     var listItem = document.createElement("li");
+    listItem.className = 'post';
     listItem.appendChild(postElement);
     channelContentContainer.appendChild(listItem);
 
@@ -575,7 +562,7 @@ function createPostElement(content, author) {
 function getEventContent() {
     return `
     <div>
-        <h3 class='banner'>Upcoming Events</h3>
+        <h3 class='banner'>Events</h3>
         <ul id="eventHolder">
         
         </ul>
@@ -605,15 +592,7 @@ function updateLocalEvents() {
     p.then((r) => {
         return r.json();
     }).then((j) => {
-        //var sortedEvents = j.sort((a, b) => a.date - b.date);
         window.localStorage.setItem('events', JSON.stringify(j));
-        console.log("Locally stored events : " + window.localStorage.getItem('events'));
-        //}).then(() => {
-        // channelList.innerHTML = "";
-        // var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
-        // for (var i = 0; i < channels.length; i++) {
-        //     createChannelButton(channels[i].name);
-        // }
     });
 }
 

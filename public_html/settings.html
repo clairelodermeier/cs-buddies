@@ -11,25 +11,24 @@
 
 <head>
     <title>Home page</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css" id ="cssLink">
+    <link rel="stylesheet" type="text/css" href="css/style.css" id="cssLink">
     <meta charset="UTF-8">
 </head>
-
 
 <body>
 
     <div id='mainHeader'>
-        <img id = "logo" src="csBuddiesLogo.png" alt="logo" >
+        <img id="logo" src="csBuddiesLogo.png" alt="logo">
         CS Buddies
     </div>
     <img id="icon">
 
     <div class='leftBar'>
-        <h3 class = 'narrowHeading'>Settings</h3>
-        <ul id ='settings'>
+        <h3 class='narrowHeading'>Settings</h3>
+
+        <ul id='settings'>
             <li>
-                <button class="leftListItem" id="profileButton" 
-                onclick="showContent('editProfile')">
+                <button class="leftListItem" id="profileButton" onclick="showContent('editProfile')">
                     Edit profile
                 </button>
             </li>
@@ -38,45 +37,39 @@
                     Display
                 </button>
             </li>
-
             <li>
                 <button class="leftListItem" id="privacyButton" onclick="showContent('privacy')">
                     Privacy and Account info
                 </button>
             </li>
-      
-
-            <!-- Keep log out button on the bottom -->
             <li>
-      
-                <button class="leftListItem" id="logOutButton"
-                onclick="showContent('logOut')">Log Out</button>
+
+                <button class="leftListItem" id="logOutButton" onclick="showContent('logOut')">
+                    Log Out
+                </button>
                 </a>
             </li>
-            <!--Add more settings options-->
-
         </ul>
 
     </div>
     <div class="rightBar">
         <div id="content">
-     
-    </div>
 
-    <div id="bottomButtons">
-        <a href="./main.html">
-        <button class='bottomButton' id='goBack'>&#x2190</button>
+        </div>
 
+        <div id="bottomButtons">
+            <a href="./main.html">
+                <button class='bottomButton' id='goBack'>&#x2190</button>
+
+            </a>
+        </div>
+
+        <a href="help.html">
+            <button id='helpButton'>Need help?</button>
         </a>
-    </div>
 
-    <a href="help.html">
-        <button id='helpButton'>Need help?</button>
-    </a>
-
-    <script src="settings.js">
-    </script>
+        <script src="settings.js">
+        </script>
 </body>
 
-    
 </html>
