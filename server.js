@@ -456,11 +456,10 @@ app.get('/add/post/:content/:channelName', function (req, res) {
     thisPost.save();
 
     console.log("looking for channel " + req.params.channelName);
-    let thisChannel = Channel.find({"name": req.params.channelName}).exec();
+    let thisChannel = Channel.findOne({name: req.params.channelName}).exec();
     thisChannel.then((channelDoc)=>{
         console.log("adding post to " + channelDoc.name);
         channelDoc.posts.push(thisPost.id);
-    }).then((channelDoc)=>{
         channelDoc.save();
     }).then(()=>{
         res.end("SUCCESS");

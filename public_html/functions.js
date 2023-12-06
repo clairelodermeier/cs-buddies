@@ -525,7 +525,7 @@ function deleteChannel(channelName) {
 // Creates a server request to create the post and add to channel.
 // Param: channelId, string for the current channel's id to add the post to. 
 function createPost() {
-    const channelName = document.getElementById(window.localStorage.getItem('currentChannel'));
+    const channelName = (window.localStorage.getItem('currentChannel'));
     const messageInput = document.getElementById('message');
     const message = messageInput.value;
     if (message.trim() !== '') {
