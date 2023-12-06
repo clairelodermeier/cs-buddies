@@ -143,6 +143,7 @@ confirmButton.onclick = function () {
         text.value = ""
         modal.style.display = "none";
         createChannelButton(newText);
+        createChannel(newText);
 
     }
     else {
@@ -379,6 +380,18 @@ function createChannel(channelName){
         }
     });
 }
+
+// This function is called when a user selects a channel from the left bar. 
+// It calls functions to load the chats in the channel and allow users to
+// add posts. 
+function displayChannel(channelName){
+
+    showChannelContent(channelName);
+    let postButton = document.getElementById("sendPostButton");
+    postButton.onclick = createPost(channelName);
+
+}
+
 
 function displayChannelContent(channelName){
     let p = fetch('/get/posts/'+channelName);
