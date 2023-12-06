@@ -413,6 +413,11 @@ setInterval(loadPosts, 15000);
 // Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
+
+    if(channelName=='null'){
+        channelContentContainer.innerHTML = '';
+        return;
+    }
     var postListContainer = document.getElementById('postListContainer');
     var titleElement = document.getElementById("channelTitle");
     titleElement.innerHTML = '';
