@@ -5,19 +5,19 @@ social media application. It creates server requests for fetching user informati
 channels, and display settings. Also uses local storage to load display settings faster.
 */
 
-window.onloadstart = mode();
-window.onloadstart = updateColor();
-window.onloadstart = displayIcon();
-window.onloadstart = setLocalDisplay();
+window.onloadstart = updateDisplay();
 
-window.onload = updateLocalChannels();
-
-
-// This function updates display settings including mode and color from locally stored items. 
-function setLocalDisplay() {
+// This function calls several other functions to fetch display and channel info from the server, 
+// update locally stored preferences, and display them in the dom. 
+function updateDisplay(){
+    mode();
+    updateColor();
+    displayIcon();
     setLocalMode();
     setLocalColor();
+    updateLocalChannels();
 }
+
 // This function sets the mode (dark/light) using the mode item stored locally. 
 // Switches to the correct css file by updating the href of the link tag in the DOM
 function setLocalMode() {
@@ -91,7 +91,7 @@ function mode() {
 // This function updates the color of the html elements based on the saved color for the user. 
 // It also sets the locally stored color. 
 async function updateColor() {
-    let colorStr = await getColor();
+    let colorStr = getColor();
     let helpButton = document.getElementById("helpButton");
     let bottomButton = document.getElementsByClassName("bottomButton");
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
@@ -101,7 +101,6 @@ async function updateColor() {
         bottomButton[i].style.color = window.localStorage.getItem("color");
     }
     window.localStorage.setItem("color", colorStr);
-
 }
 
 // This function creates a server request to get the saved color for the user. 
@@ -115,19 +114,21 @@ async function getColor() {
     }
     window.localStorage.setItem("color", '#' + colorStr);
     return "#" + colorStr;
-
 }
-//Add Channel
+
+// DOM elements for adding a channel
 var modal = document.getElementById("channelModal");
-var button = document.getElementById("addButton");
+var addButton = document.getElementById("addButton");
 var span = document.getElementsByClassName("close")[0];
-var confirmButton = document.getElementById("confirm"); // Allows confirm button to work
+var confirmButton = document.getElementById("confirm"); 
 var channelList = document.getElementById("channelList");
 
-button.onclick = function () {
+// display channel modal when add button is clicked
+addButton.onclick = function () {
     modal.style.display = "block";
 }
 
+// close the channel modal when the close button is clicked
 span.onclick = function () {
     var text = document.getElementById("channelName");
     if (text && text.value) {
@@ -136,6 +137,7 @@ span.onclick = function () {
     modal.style.display = "none";
 }
 
+// create channel and button when confirm button is clicked
 confirmButton.onclick = function () {
     var text = document.getElementById("channelName");
     if (text && text.value) {
@@ -146,6 +148,7 @@ confirmButton.onclick = function () {
         createChannel(newText);
 
     }
+    // handle invalid input
     else {
         alert("Please enter a channel name")
         modal.style.display = "block";
@@ -153,23 +156,26 @@ confirmButton.onclick = function () {
 
 }
 
+// close the modal when user clicks out
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
 
-//Calendar
+// calendar DOM elements
 var calendarModal = document.getElementById("calendarModal");
 var buttonCalendar = document.getElementById("calendar");
 var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
 var eventList = document.getElementById("eventList")
 
+// display calendar modal when calendar button is clicked
 buttonCalendar.onclick = function () {
     calendarModal.style.display = "block";
 }
 
+// close calendar modal
 spanCalendar.onclick = function () {
     var event = document.getElementById("eventName");
     var date = document.getElementById("calendar");
@@ -180,9 +186,9 @@ spanCalendar.onclick = function () {
         time.value = "";
     }
     calendarModal.style.display = "none";
-
 }
 
+// create calendar event when confirm button is clicked
 confirmCalendarButton.onclick = function () {
     var event = document.getElementById("eventName");
     var date = document.getElementById("date");
@@ -200,20 +206,20 @@ confirmCalendarButton.onclick = function () {
         calendarModal.style.display = "none";
         createDate(newEvent, newDate, newTime);
     }
+    // handle invalid input
     else {
         alert("Please fill out all entries.");
         calendarModal.style.display = "block";
     }
 
-
 }
 
+// close calendar modal when user clicks out
 window.onclick = function (event) {
     if (event.target == modal) {
         calendarModal.style.display = "none";
     }
 }
-
 
 function createDate(event, date, time) {
 
@@ -246,53 +252,62 @@ function createDate(event, date, time) {
 
 }
 
-
-function createChannelButton(channelName) {
+// This function handles duplicate channel names by asking user to choose a new name.
+// Param: channelName, a string for the initial name chosen.
+// Returns channelName, a new string for the validated name, or null
+function validateChannelName(channelName){
+    if(channelName==null){
+        return null;
+    }
     while (document.getElementById(channelName)) {
-        var userResponse = confirm("Channel name already taken. Do you want to choose a different name?");
-
+        var userResponse = confirm("Channel name already taken. Choose a different name?");
         if (userResponse) {
             // If the user wants to choose a different name, prompt again
             channelName = prompt("Enter a different channel name:");
         } else {
             // If the user doesn't want to choose a different name, exit the loop
-            return;
+            return null;
         }
     }
+    return channelName;
+}
 
-    if(channelName == null){
+// This function creates a button in the DOM on the left bar when a new channel is added.
+// Param: channelName, a string for the name of the channel
+function createChannelButton(channelName) {
+    channelName = validateChannelName(channelName);
+    // Does not create a channel if no name is entered
+    if (channelName == null) {
         return;
     }
-
+    // create DOM elements for channel button to be displayed
     var newChannelButton = document.createElement("button");
     newChannelButton.textContent = channelName;
     newChannelButton.className = "leftListItem";
     newChannelButton.id = channelName;
-
     var listItem = document.createElement("li");
     listItem.appendChild(newChannelButton);
 
-
+    // when a user clicks the new button, content is displayed
     newChannelButton.onclick = function () {
         window.localStorage.setItem("currentChannel", channelName);
-
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
         console.log("Channel length: ", channels.length);
         displayChannelContent(channelName);
-
     };
 
+    // display in the dom and save channel locally
     channelList.appendChild(listItem);
     saveChannel(channelName);
-
 }
 
+// This function saves a channel to local storage. 
+// Param: channelName, a string for the name of the channel
 function saveChannel(channelName) {
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
     if (!channels.includes(channelName)) {
         channels.push(channelName);
-
         window.localStorage.setItem('channels', JSON.stringify(channels));
     }
 }
@@ -305,16 +320,15 @@ function saveDate(date) {
     }
 }
 
-
+// This function gets channels from local storage and creates buttons to show them on the DOM.
 function loadChannels() {
     channelList.innerHTML = getDefaultChannelList();
     var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
 
-    for(var i=0;i<channels.length;i++){
+    for (var i = 0; i < channels.length; i++) {
         createChannelButton(channels[i]);
     };
 }
-
 
 function loadDates() {
     eventList.innerHTML = "";
@@ -326,21 +340,9 @@ function loadDates() {
 
 }
 
-
 window.onload = loadChannels();
 //window.onload = loadDates(); This also breaks right clicking
 
-//To show different chats depending on the channel --WORK IN PROGRESS--
-function showChannelContent(channelName) {
-    var postListContainer = document.getElementById('postListContainer');
-    var channelContentContainer = document.getElementById('channelContentContainer');
-
-    // Hide the post list and show the channel content
-    postListContainer.style.display = 'none';
-    channelContentContainer.innerHTML = getChannelContent(channelName);
-    channelContentContainer.style.display = 'block';
-
-}
 
 function showEvents() {
     // TODO: implement this. 
@@ -360,8 +362,9 @@ function showEvents() {
 
 // This function creates a channel. 
 // It sends a request to the server to create a new channel object with one member and no posts. 
+// Param: channelName, a string for the name of the channel. 
 function createChannel(channelName) {
-    console.log("creating channel "+ channelName);
+    console.log("creating channel " + channelName);
     let p = fetch('/add/channel/' + channelName);
     p.then((r) => {
         return r.text();
@@ -376,7 +379,8 @@ function createChannel(channelName) {
     });
 }
 
-
+// This function displays the posts in a channel in the dom. 
+// Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
     var postListContainer = document.getElementById('postListContainer');
@@ -399,6 +403,8 @@ function displayChannelContent(channelName) {
     });
 }
 
+// This function gets the html for the post message elements at the bottom of a channel.
+// Returns: an html string with 2 divs
 function getPostingDiv() {
     return `    
     <div class="messageBox">
@@ -410,7 +416,7 @@ function getPostingDiv() {
     </div>`;
 }
 
-// This function displays the posts in a channel. 
+// This function displays the posts in a channel by creating dom elements.
 // Param: posts, a list of Post objects. 
 function displayPosts(posts) {
     channelContentContainer.innerHTML = '';
@@ -424,12 +430,10 @@ function displayPosts(posts) {
         channelContentContainer.appendChild(listItem);
     }
 
-
-
 }
 
-
-
+// This function gets the html for the default content of the events channel.
+// Returns: an html string
 function getEventContent() {
     return `
     <div class="events">
@@ -441,10 +445,11 @@ function getEventContent() {
 
 
     </div>
-
     `;
 }
 
+// This function gets the html for the default channel list html.
+// Returns: an html string with a button element inside a list item tag
 function getDefaultChannelList() {
     return `    
     <li>
@@ -454,8 +459,6 @@ function getDefaultChannelList() {
     `;
 
 }
-
-
 
 //To potentially delete Channels ----Still In Progress ------
 // Attach the event listener after the DOM is fully loaded
@@ -553,6 +556,8 @@ function createPost() {
     }
 }
 
+// This function adds a new post to the list of posts in the dom. 
+// Param: message, a string with the text content of the post
 function addPostToList(message) {
     // Create a new list item for the post
     const postItem = document.createElement('li');
