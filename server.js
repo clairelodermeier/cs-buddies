@@ -440,7 +440,7 @@ app.get('/get/posts/:channelName', async (req, res) => {
         let currentPost = await Post.findById(channelDoc.posts[i]).exec();
         channelPosts.push(currentPost);
     }
-    console.log(JSON.stringify(channelPosts))
+    console.log(JSON.stringify(channelPosts));
     res.end(JSON.stringify(channelPosts));
 });
 

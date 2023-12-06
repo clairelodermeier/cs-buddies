@@ -14,7 +14,7 @@ window.onload = updateLocalChannels();
 
 
 // This function updates display settings including mode and color from locally stored items. 
-function setLocalDisplay(){
+function setLocalDisplay() {
     setLocalMode();
     setLocalColor();
 }
@@ -25,7 +25,7 @@ function setLocalMode() {
     if (currentMode == 'light') {
         window.localStorage.setItem("mode", "light");
         document.getElementById("cssLink").href = "css/style.css";
-    } else if (currentMode == 'dark'){
+    } else if (currentMode == 'dark') {
         window.localStorage.setItem("mode", "dark");
         document.getElementById("cssLink").href = "css/darkStyle.css";
     }
@@ -37,13 +37,13 @@ function setLocalColor() {
     let headerElement = document.getElementById("mainHeader");
     let helpButton = document.getElementById("helpButton");
     let bottomButton = document.getElementsByClassName("bottomButton");
-    if (window.localStorage.getItem("color")!=null){
+    if (window.localStorage.getItem("color") != null) {
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
         helpButton.style.borderColor = window.localStorage.getItem("color");
-        for (var i = 0; i < bottomButton.length; i++){
-		    bottomButton[i].style.color = window.localStorage.getItem("color");
-	    }
+        for (var i = 0; i < bottomButton.length; i++) {
+            bottomButton[i].style.color = window.localStorage.getItem("color");
+        }
     }
 }
 
@@ -55,11 +55,11 @@ function displayIcon() {
     p.then((response) => {
         return response.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
-        else{
+        else {
             iconHolder.src = "/get/profilePic/" + text;
         }
     });
@@ -73,7 +73,7 @@ function mode() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
@@ -97,9 +97,9 @@ async function updateColor() {
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
-    for(var i = 0; i < bottomButton.length; i++){
-		bottomButton[i].style.color = window.localStorage.getItem("color");
-	}
+    for (var i = 0; i < bottomButton.length; i++) {
+        bottomButton[i].style.color = window.localStorage.getItem("color");
+    }
     window.localStorage.setItem("color", colorStr);
 
 }
@@ -109,11 +109,11 @@ async function updateColor() {
 async function getColor() {
     let response = await fetch('/get/color/');
     let colorStr = await response.text();
-    if(colorStr.startsWith("INVALID")){
+    if (colorStr.startsWith("INVALID")) {
         window.location.href = '/account/login.html';
         return;
     }
-    window.localStorage.setItem("color", '#'+colorStr);
+    window.localStorage.setItem("color", '#' + colorStr);
     return "#" + colorStr;
 
 }
@@ -166,13 +166,11 @@ var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
 var eventList = document.getElementById("eventList")
 
-buttonCalendar.onclick = function()
-{
+buttonCalendar.onclick = function () {
     calendarModal.style.display = "block";
 }
 
-spanCalendar.onclick = function()
-{
+spanCalendar.onclick = function () {
     var event = document.getElementById("eventName");
     var date = document.getElementById("calendar");
     var time = document.getElementById("time");
@@ -191,8 +189,7 @@ confirmCalendarButton.onclick = function () {
     var time = document.getElementById("eventTime");
 
     console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + time.value);
-    if((event && event.value) && (date && date.value) && (time && time.value))
-    {
+    if ((event && event.value) && (date && date.value) && (time && time.value)) {
         var newEvent = event.value;
         var newDate = date.value;
         var newTime = time.value;
@@ -203,8 +200,7 @@ confirmCalendarButton.onclick = function () {
         calendarModal.style.display = "none";
         createDate(newEvent, newDate, newTime);
     }
-    else
-    {
+    else {
         alert("Please fill out all entries.");
         calendarModal.style.display = "block";
     }
@@ -219,9 +215,8 @@ window.onclick = function (event) {
 }
 
 
-function createDate(event, date, time)
-{
-    
+function createDate(event, date, time) {
+
     while (document.getElementById(event)) {
         var userResponse = confirm("Event name is already taken. Would you like to change the name?");
         if (userResponse) {
@@ -275,7 +270,6 @@ function createChannelButton(channelName) {
 
 
     newChannelButton.onclick = function () {
-        alert("Button: " + channelName + " got clicked!");
         window.localStorage.setItem("currentChannel", channelName);
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
@@ -284,7 +278,6 @@ function createChannelButton(channelName) {
         displayChannelContent(channelName);
 
     };
-
 
     channelList.appendChild(listItem);
     saveChannel(channelName);
@@ -300,11 +293,9 @@ function saveChannel(channelName) {
     }
 }
 
-function saveDate(date)
-{
+function saveDate(date) {
     var events = JSON.parse(localStorage.getItem('events')) || [];
-    if(!events.includes(date))
-    {
+    if (!events.includes(date)) {
         events.push(date);
         localStorage.setItem('events', JSON.stringify(events));
     }
@@ -321,13 +312,11 @@ function loadChannels() {
 }
 
 
-function loadDates()
-{
+function loadDates() {
     eventList.innerHTML = "";
     var dates = JSON.parse(localStorage.getItem('events')) || [];
 
-    dates.forEach(function (event, date, time)
-    {
+    dates.forEach(function (event, date, time) {
         createDate(event, date, time);
     });
 
@@ -349,10 +338,10 @@ function showChannelContent(channelName) {
 
 }
 
-function showEvents(){
+function showEvents() {
     // TODO: implement this. 
     alert("events button clicked!");
-    
+
     var postListContainer = document.getElementById('postListContainer');
     var channelContentContainer = document.getElementById('channelContentContainer');
 
@@ -367,70 +356,76 @@ function showEvents(){
 
 // This function creates a channel. 
 // It sends a request to the server to create a new channel object with one member and no posts. 
-function createChannel(channelName){
-    let p = fetch('/add/channel/'+channelName);
-    p.then((r)=>{
+function createChannel(channelName) {
+    let p = fetch('/add/channel/' + channelName);
+    p.then((r) => {
         return r.text();
-    }).then((text)=>{
-        if(text.startsWith("INVALID")){
+    }).then((text) => {
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
-        else if(!(text.startsWith("SUCCESS"))){
+        else if (!(text.startsWith("SUCCESS"))) {
             alert("Failed to create channel");
         }
     });
 }
 
-// This function is called when a user selects a channel from the left bar. 
-// It calls functions to load the chats in the channel and allow users to
-// add posts. 
-function displayChannel(channelName){
 
-    showChannelContent(channelName);
-    let postButton = document.getElementById("sendPostButton");
-    postButton.onclick = createPost();
-
-}
-
-
-function displayChannelContent(channelName){
+function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
     var postListContainer = document.getElementById('postListContainer');
 
     // Hide the post list and show the channel content
     postListContainer.style.display = 'none';
     channelContentContainer.style.display = 'block';
+    rightBar = document.getElementById("rightBar");
 
-    let p = fetch('/get/posts/'+channelName);
-    p.then((r)=>{
+    let p = fetch('/get/posts/' + channelName);
+    p.then((r) => {
         return r.json();
-    }).then((posts)=>{
+    }).then((posts) => {
         displayPosts(posts);
+        let postingDiv = document.createElement('div');
+        postingDiv.innerHTML = getPostingDiv();
+
+        rightBar.appendChild(postingDiv);
     });
+}
+
+function getPostingDiv() {
+    return `    
+    <div class="messageBox">
+        <label for="message">Post</label>
+        <input type="text" id="message">
+    </div>
+    <div class="controlElement">
+        <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
+    </div>`;
 }
 
 // This function displays the posts in a channel. 
 // Param: posts, a list of Post objects. 
-function displayPosts(posts){
+function displayPosts(posts) {
     channelContentContainer.innerHTML = '';
-    for (var i=0;i<posts.length;i++){
+    for (var i = 0; i < posts.length; i++) {
         var newPostElement = document.createElement("div");
         newPostElement.textContent = posts[i].content;
         newPostElement.className = "displayContent";
-    
+
         var listItem = document.createElement("li");
         listItem.appendChild(newPostElement);
         channelContentContainer.appendChild(listItem);
-
     }
+
+    let postButton = document.getElementById("sendPostButton");
+    postButton.onclick = createPost();
 
 }
 
 
 
-function getEventContent()
-{
+function getEventContent() {
     return `
     <div class="events">
         <h3>Upcoming Events</h3>
@@ -445,7 +440,7 @@ function getEventContent()
     `;
 }
 
-function getDefaultChannelList(){
+function getDefaultChannelList() {
     return `    
     <li>
     <button class="leftListItem" id="eventList" onclick="showEvents()">Events</button>
@@ -454,8 +449,7 @@ function getDefaultChannelList(){
     `;
 
 }
-function getChannelContent(channelName)
-{
+function getChannelContent(channelName) {
     return `
     <div class="channelContent">
         <h2>${channelName}</h2>
@@ -473,17 +467,17 @@ function getChannelContent(channelName)
     `;
 }
 
-    
+
 
 //To potentially delete Channels ----Still In Progress ------
-    // Attach the event listener after the DOM is fully loaded
+// Attach the event listener after the DOM is fully loaded
 channelList.addEventListener('contextmenu', function (event) {
     event.preventDefault();
 
     var clickedChannelButton = event.target;
 
     if (clickedChannelButton.tagName === 'BUTTON') {
-        
+
 
         var confirmDelete = window.confirm("Are you sure you want to leave this channel?");
 
@@ -502,21 +496,21 @@ function updateLocalChannels() {
 
     let url = '/get/channels/';
     let p = fetch(url);
-    p.then((r)=>{
+    p.then((r) => {
         return r.json();
-    }).then((j)=>{
+    }).then((j) => {
         console.log(j);
         window.localStorage.setItem('channels', JSON.stringify(j));
-    }).then(()=>{
+    }).then(() => {
         channelList.innerHTML = "";
         var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
-        for(var i=0;i<channels.length;i++){
+        for (var i = 0; i < channels.length; i++) {
             createChannelButton(channels[i].name);
         }
         // channels.forEach(function (channel) {
         //     createChannelButton(channel);
         // });
-    }).then(()=>{
+    }).then(() => {
         loadChannels();
     })
 }
@@ -547,19 +541,19 @@ function createPost() {
     if (message.trim() !== '') {
         // Add the new post to the list
         addPostToList(message);
-        console.log('adding post ' + message );
+        console.log('adding post ' + message);
         // Additional logic to send the post to the server if needed
         // ...
-        let url = '/add/post/'+message+'/' + channelName;
+        let url = '/add/post/' + message + '/' + channelName;
         let p = fetch(url);
-        p.then((r)=>{
+        p.then((r) => {
             return r.text();
-        }).then((text)=>{
-            if(text.startsWith("INVALID")){
+        }).then((text) => {
+            if (text.startsWith("INVALID")) {
                 window.location.href = "/account/login.html";
                 return;
             }
-            else if(!(text.startsWith("SUCCESS"))){
+            else if (!(text.startsWith("SUCCESS"))) {
                 alert("Failed to create post.");
             }
         });
