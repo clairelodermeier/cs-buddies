@@ -42,9 +42,9 @@ function setLocalColor() {
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
         helpButton.style.borderColor = window.localStorage.getItem("color");
-        for (var i = 0; i < bottomButton.length; i++) {
-            bottomButton[i].style.color = window.localStorage.getItem("color");
-        }
+        for (var i = 0; i < bottomButton.length; i++){
+		    bottomButton[i].style.color = window.localStorage.getItem("color");
+	    }
     }
 }
 
@@ -91,30 +91,36 @@ function mode() {
 
 // This function updates the color of the html elements based on the saved color for the user. 
 // It also sets the locally stored color. 
-async function updateColor() {
+function updateColor() {
     let colorStr = getColor();
-    let helpButton = document.getElementById("helpButton");
     let bottomButton = document.getElementsByClassName("bottomButton");
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
+    let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
-    for (var i = 0; i < bottomButton.length; i++) {
+    for (var i = 0; i < bottomButton.length; i++){
         bottomButton[i].style.color = window.localStorage.getItem("color");
     }
     window.localStorage.setItem("color", colorStr);
 }
 
+
 // This function creates a server request to get the saved color for the user. 
 // Returns: a string in the format of a hex color "#XXXXXX" 
-async function getColor() {
-    let response = await fetch('/get/color/');
-    let colorStr = await response.text();
-    if (colorStr.startsWith("INVALID")) {
-        window.location.href = '/account/login.html';
-        return;
-    }
-    window.localStorage.setItem("color", '#' + colorStr);
-    return "#" + colorStr;
+// This function creates a server request to get the saved color for the user. 
+// Returns: a string in the format of a hex color "#XXXXXX" 
+function getColor() {
+    let p = fetch('/get/color/');
+    p.then((r) => {
+        return r.text();
+    }).then((text) => {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        window.localStorage.setItem("color", "#" + text);
+    });
+    return window.localStorage.getItem("color");
 }
 
 // DOM elements for adding a channel
@@ -302,8 +308,6 @@ function createChannelButton(channelName) {
         titleElement.innerHTML = '';
         window.localStorage.setItem("currentChannel", channelName);
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
-        console.log("List of channels:", channels);
-        console.log("Channel length: ", channels.length);
         displayChannelContent(channelName);
     };
 
@@ -333,7 +337,10 @@ function saveDate(date) {
 // This function gets channels from local storage and creates buttons to show them on the DOM.
 function loadChannels() {
     channelList.innerHTML = getDefaultChannelList();
-    var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
+    if(window.localStorage.getItem('channels')==[]){
+        return;
+    }
+    var channels = JSON.parse(window.localStorage.getItem('channels'))|| [];
 
     for (var i = 0; i < channels.length; i++) {
         createChannelButton(channels[i]);
@@ -369,7 +376,6 @@ function showEvents() {
 
 
 }
-
 
 // This function creates a channel. 
 // It sends a request to the server to create a new channel object with one member and no posts. 

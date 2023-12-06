@@ -116,6 +116,10 @@ function setMode(mode) {
     p.then((r) => {
         return r.text();
     }).then((t) => {
+        if(t.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
         if ((!t.startsWith("SUCCESS"))) {
             alert("Failed to set mode");
         }
@@ -182,6 +186,10 @@ function setColor() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
         if (!(text.startsWith("SUCCESS"))) {
             alert("Couldn't change color");
         }
@@ -196,6 +204,10 @@ function deleteAccount() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
         if (text.startsWith('SUCCESS')) {
             alert("Account deleted.");
             window.location.href = '/account/login.html';
@@ -289,6 +301,10 @@ function changePic(imgFile) {
         p2.then((r) => {
             return r.text();
         }).then((text) => {
+            if(text.startsWith("INVALID")){
+                window.location.href = '/account/login.html';
+                return;
+            }
             if (!(text.startsWith("SUCCESS"))) {
                 alert("Failed to update profile pic.")
             }
@@ -342,6 +358,10 @@ function logout(){
     p.then((r)=>{
         return r.text();
     }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
         if(text.startsWith("SUCCESS")){
             window.location.href = '../account/login.html';
         }
