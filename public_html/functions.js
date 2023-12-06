@@ -621,7 +621,7 @@ function getEventContent() {
 function getDefaultChannelList() {
     return `    
     <li>
-    <button class="leftListItem" id="eventHolder" onclick="showEvents()">Events</button>
+    <button class="leftListItem" id="eventButton" onclick="showEvents()">Events</button>
 
     </li>
     `;
