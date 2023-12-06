@@ -349,6 +349,7 @@ window.onload = loadChannels();
 
 function showEvents() {
     // TODO: implement this. 
+    window.localStorage.setItem("currentChannel", null);
     alert("events button clicked!");
 
     var postListContainer = document.getElementById('postListContainer');
@@ -382,6 +383,20 @@ function createChannel(channelName) {
     });
 }
 
+
+
+// This function loads posts in a the current channel. 
+function loadPosts() {
+    console.log("loading posts ... ");
+    if(window.localStorage.getItem("currentChannel")!=null){
+        displayChannelContent(window.localStorage.getItem("currentChannel"));
+    }
+}
+
+// load posts every 15 seconds
+setInterval(loadPosts, 15000);
+
+
 // This function displays the posts in a channel in the dom. 
 // Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
@@ -394,7 +409,7 @@ function displayChannelContent(channelName) {
     postListContainer.style.display = 'none';
     channelContentContainer.style.display = 'block';
 
-    let p = fetch('/get/posts/' + channelName);
+    let p = fetch('/posts/' + channelName);
     p.then((r) => {
         return r.json();
     }).then((posts) => {
@@ -593,17 +608,34 @@ function createPost() {
 }
 
 // This function adds a new post to the list of posts in the dom. 
-// Param: message, a string with the text content of the post
-function addPostToList(message) {
+// Param: content, a string with the text content of the post
+function addPostToList(content) {
     // Create a new list item for the post
-    const postItem = document.createElement('li');
-    postItem.textContent = message;
 
+    var postElement = document.createElement("div");
+    postElement.className = "postContent";
+
+    // create spans for text and author with classes
+    var contentElement = document.createElement("span");
+    contentElement.innerText = content;
+    //var authorElement = document.createElement("span");
+    //authorElement.innerText = author;
+    contentElement.className = "postContent";
+    //authorElement.className = "authorContent";
+
+    // create a list item element and append the post
+    postElement.appendChild(contentElement);
+    //postElement.appendChild(authorElement);
+    var listItem = document.createElement("li");
+    listItem.appendChild(postElement);
+    channelContentContainer.appendChild(listItem);
     // Get the post list element
-    const postList = document.getElementById('channelContentContainer');
+    //const postList = document.getElementById('channelContentContainer');
 
     // Add the new post item to the list
-    postList.appendChild(postItem);
+    //postList.appendChild(postElement);
+
+
 }
 
 /*----------------------------------- */

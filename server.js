@@ -96,7 +96,6 @@ let sessions = {};
 // regularly remove sessions 
 setInterval(removeSessions, 2000);
 
-
 // This function adds a user's session with session id and time to a list of sessions. 
 // Param: username, a string denoting the user's username
 // Returns: sid, number which is the user's session id
@@ -427,7 +426,7 @@ app.get('/get/channels/', async (req, res) => {
 });
 
 // GET request, posts  for a given channel
-app.get('/get/posts/:channelName', async (req, res) => {
+app.get('/posts/:channelName', async (req, res) => {
 
     // find user document
     var channelDoc = await Channel.findOne({name: req.params.channelName}).exec();

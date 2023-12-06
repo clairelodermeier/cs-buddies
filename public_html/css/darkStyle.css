@@ -91,6 +91,7 @@ button:hover {
     text-align:left;
 }
 .authorContent{
+    margin-left: 5px;
     color:#aaa;
 }
 .bottomButton {
@@ -149,6 +150,10 @@ button:hover {
 #addButton {
     left: 0px;
     margin-right: 75px;
+}
+
+#channelContentContainer{
+    margin-top:20px;
 }
 
 #goBack{
