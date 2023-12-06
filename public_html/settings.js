@@ -450,7 +450,7 @@ function getLogOutContent() {
     return `
   <div class="settings>
       <div id="logOutContent">
-          <h2> Are you sure?</h2>
+          <h2> Are you sure you want to log out?</h2>
           <li>
               <button class="decisions" onclick = "logout()" id="yes">Yes</button>
               <a href="./settings.html">

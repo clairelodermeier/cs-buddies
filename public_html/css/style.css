@@ -95,7 +95,7 @@ button:hover {
 .helpHeading{
     text-align:left;
     font-size:20px;
-    margin-left:20px;
+    margin-left:50px;
 
     
 }
@@ -308,7 +308,10 @@ button:hover {
 }
 
 #help {
+    position:static;
+    padding-top:100px;
     width: 100%;
+    overflow:scroll;
 }
 
 /*Animations*/
