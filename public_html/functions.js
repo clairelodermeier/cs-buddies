@@ -10,6 +10,7 @@ window.onloadstart = updateDisplay();
 // This function calls several other functions to fetch display and channel info from the server, 
 // update locally stored preferences, and display them in the dom. 
 function updateDisplay(){
+    setLocalColor();
     mode();
     updateColor();
     displayIcon();
@@ -569,6 +570,5 @@ function addPostToList(message) {
     // Add the new post item to the list
     postList.appendChild(postItem);
 }
-
 
 /*----------------------------------- */

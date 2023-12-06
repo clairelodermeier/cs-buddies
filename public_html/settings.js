@@ -351,6 +351,8 @@ function logout(){
     });
 }
 
+// This function gets the html for the privacy settings content 
+// Returns: an html string with 2 input fields and 2 buttons
 function getPrivacyContent() {
 
     return `
@@ -372,6 +374,8 @@ function getPrivacyContent() {
       `;
 }
 
+// This function gets the html for the edit profile settings content 
+// Returns: an html string with 2 input fields and a button
 function getEditProfileContent() {
 
     return `
@@ -394,7 +398,8 @@ function getEditProfileContent() {
       </div>
       `;
 }
-
+// This function gets the html for the display settings content 
+// Returns: an html string with 2 input fields
 function getDisplayContent() {
 
     return `
@@ -420,6 +425,8 @@ function getDisplayContent() {
 
 }
 
+// This function gets the html for when a user wants to log out. 
+// Returns: an html string which displays a message and 2 buttons. 
 function getLogOutContent() {
 
     return `
