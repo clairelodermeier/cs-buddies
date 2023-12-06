@@ -276,6 +276,7 @@ function createChannelButton(channelName) {
 
     newChannelButton.onclick = function () {
         alert("Button: " + channelName + " got clicked!");
+        window.localStorage.setItem("currentChannel", channelName);
 
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
@@ -388,7 +389,7 @@ function displayChannel(channelName){
 
     showChannelContent(channelName);
     let postButton = document.getElementById("sendPostButton");
-    postButton.onclick = createPost(channelName);
+    postButton.onclick = createPost();
 
 }
 
@@ -523,13 +524,14 @@ function deleteChannel(channelName) {
 // This function posts a text content message to a channel. 
 // Creates a server request to create the post and add to channel.
 // Param: channelId, string for the current channel's id to add the post to. 
-function createPost(channelName) {
+function createPost() {
+    const channelName = document.getElementById(window.localStorage.getItem('currentChannel'));
     const messageInput = document.getElementById('message');
     const message = messageInput.value;
     if (message.trim() !== '') {
         // Add the new post to the list
         addPostToList(message);
-
+        console.log('adding post ' + message );
         // Additional logic to send the post to the server if needed
         // ...
         let url = '/add/post/'+message+'/' + channelName;

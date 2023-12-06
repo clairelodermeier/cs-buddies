@@ -455,16 +455,17 @@ app.get('/add/post/:content/:channelName', function (req, res) {
     const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
     thisPost.save();
 
+    console.log("looking for channel " + req.params.channelName);
     let thisChannel = Channel.find({"name": req.params.channelName}).exec();
     thisChannel.then((channelDoc)=>{
-        channelDoc.addPost(thisPost);
+        console.log("adding post to " + channelDoc.name);
+        channelDoc.posts.push(thisPost.id);
     }).then((channelDoc)=>{
         channelDoc.save();
     }).then(()=>{
         res.end("SUCCESS");
     })
 });
-
 
 /*-------------------- calendar event requests --------------------- */
 
