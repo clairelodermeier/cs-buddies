@@ -43,6 +43,10 @@ button:hover {
     color: rgb(150, 150, 150);
 }
 
+.banner{
+    width:80%;
+}
+
 .leftBar {
     position: fixed;
     top: 81px;

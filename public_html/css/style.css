@@ -41,6 +41,11 @@ button:hover {
     background-color: rgb(150, 150, 150);
 }
 
+.banner{
+    width:80%;
+    overflow-x: visible;
+}
+
 .leftBar {
     position: fixed;
     top: 81px;
