@@ -224,9 +224,9 @@ confirmCalendarButton.onclick = function () {
         loc.value = "";
 
         calendarModal.style.display = "none";
-        console.log("New Event details: ", newEvent, newDate, newTime)
-        //createDate(newEvent, newDate, newLocation, newTime);
-        //loadDates();
+        console.log("New Event details: ", newEvent, newDate, newTime);
+        showEvents();
+
     }
     // handle invalid input
     else {
@@ -287,18 +287,36 @@ window.onclick = function (event) {
 } */
 
 // ADD A COMMENT HERE
-function createEventElement(title, date, time) {
+function createEventElement(title, date, location, time) {
     console.log('creating event element for ' + title);
 
-    var newEvent = document.createElement("div");
-    newEvent.textContent = "Event Title: " + title + " Date: " + date + " Time: " + time;
+    // create divs for parts of the event display
+    var eventTitleElement = document.createElement("div");
+    eventTitleElement.innerText = title;
+    eventTitleElement.className = "eventTitle";
 
+    var eventTimeElement = document.createElement("div");
+    eventTimeElement.innerText = time;
+    eventTimeElement.className = "eventTime";
+
+    var eventDateElement = document.createElement("div");
+    eventDateElement.innerText = date;
+    eventDateElement.className = "eventDate";
+
+    var eventLocationElement = document.createElement("div");
+    eventLocationElement.innerText = location;
+    eventLocationElement.className = "eventLocation";
+
+    // add all fields to a main event content div, nest it under a list item
+    var newEvent = document.createElement("li");
     newEvent.className = "eventContent";
-    
-    var listItem = document.createElement("li");
-    listItem.appendChild(newEvent);
+    newEvent.appendChild(eventTitleElement);
+    newEvent.appendChild(eventDateElement);
+    newEvent.appendChild(eventTimeElement);
+    newEvent.appendChild(eventLocationElement);
 
-    document.getElementById("eventHolder").appendChild(listItem);
+
+    document.getElementById("eventHolder").appendChild(newEvent);
     saveEvent({title, date, time});
 
 }
@@ -395,34 +413,13 @@ function loadChannels() {
         createChannelButton(channels[i]);
     };
 }
-/* 
-// ADD A COMMENT HERE
-function loadDates() {
-    eventList.innerHTML = "";
-    var storedEvents = window.localStorage.getItem("events");
-    console.log("Stored events:", storedEvents);
 
-    if(storedEvents == null)
-    {
-        storedEvents = "[]"
-    }
-    var dates = JSON.parse(storedEvents)|| [];
-
-    for(var i = 0; i < dates.length; i++)
-    {
-        createDate(dates[i].event, dates[i].date, dates[i].time);
-
-    }
-
-
-}
- */
 
 window.onload = function()
 {
     window.onload = loadChannels();
+    window.onload = updateLocalEvents();
 
-    //window.onload = loadDates(); 
 };
 
 
