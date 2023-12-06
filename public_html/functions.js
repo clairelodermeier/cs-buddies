@@ -6,11 +6,11 @@ channels, and display settings. Also uses local storage to load display settings
 */
 
 window.onloadstart = updateDisplay();
+setInterval(setLocalColor, 100);
 
 // This function calls several other functions to fetch display and channel info from the server, 
 // update locally stored preferences, and display them in the dom. 
 function updateDisplay(){
-    setLocalColor();
     mode();
     updateColor();
     displayIcon();
@@ -96,10 +96,10 @@ function updateColor() {
     let bottomButton = document.getElementsByClassName("bottomButton");
     document.getElementById("mainHeader").style.backgroundColor = colorStr;
     let helpButton = document.getElementById("helpButton");
-    helpButton.style.color = window.localStorage.getItem("color");
-    helpButton.style.borderColor = window.localStorage.getItem("color");
+    helpButton.style.color = window.localStorage.getItem(colorStr);
+    helpButton.style.borderColor = window.localStorage.getItem(colorStr);
     for (var i = 0; i < bottomButton.length; i++){
-        bottomButton[i].style.color = window.localStorage.getItem("color");
+        bottomButton[i].style.color = window.localStorage.getItem(colorStr);
     }
     window.localStorage.setItem("color", colorStr);
 }
@@ -524,7 +524,7 @@ function getDefaultChannelList() {
 
 }
 
-//To potentially delete Channels ----Still In Progress ------
+/* //To potentially delete Channels ----Still In Progress ------
 // Attach the event listener after the DOM is fully loaded
 channelList.addEventListener('contextmenu', function (event) {
     event.preventDefault();
@@ -542,7 +542,7 @@ channelList.addEventListener('contextmenu', function (event) {
         }
     }
 
-});
+}); */
 
 // This function updates the local storage for channel names by requesting the list of channels 
 // from the server. 
@@ -568,7 +568,7 @@ function updateLocalChannels() {
     })
 }
 
-function deleteChannel(channelName) {
+/* function deleteChannel(channelName) {
     var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
 
     // Remove the channel from the array
@@ -581,7 +581,7 @@ function deleteChannel(channelName) {
 
     // Reload channels to reflect the changes
     loadChannels();
-}
+} */
 
 
 // This function posts a text content message to a channel. 

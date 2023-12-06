@@ -123,7 +123,6 @@ function removeSessions() {
             delete sessions[usernames[i]];
         }
     }
-    console.log(sessions);
 }
 
 
@@ -138,7 +137,7 @@ function authenticate(req, res, next) {
         if (sessions[c.login.username] != undefined &&
             sessions[c.login.username].id == c.login.sessionID) {
             // renew session
-            console.log("valid session found. renewing due to activity");
+            console.log("valid session found. Renewing due to activity");
             sessions[c.login.username].time = Date.now();
             // continue to next server request
             next();
@@ -294,9 +293,7 @@ app.get('/set/pic/:newPic', (req, res) => {
     // find current user
     let p = User.findOne({ "username": req.cookies.login.username }).exec();
     p.then((userDoc) => {
-        console.log(userDoc.pic);
         userDoc.pic = (req.params.newPic).substring(1, req.params.newPic.length - 1);
-        console.log(userDoc.pic);
         userDoc.save();
         res.end("SUCCESS");
     });
@@ -367,7 +364,7 @@ app.get('/get/mode/', async (req, res) => {
 
 // GET request, set mode for a user
 app.get('/set/mode/:mode', async (req, res) => {
-    console.log('setting mode');
+    console.log('Setting mode to ' + req.params.mode);
 
     // find user document
     var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
@@ -437,7 +434,6 @@ app.get('/posts/:channelName', async (req, res) => {
         let currentPost = await Post.findById(channelDoc.posts[i]).exec();
         channelPosts.push(currentPost);
     }
-    console.log(JSON.stringify(channelPosts));
     res.end(JSON.stringify(channelPosts));
 });
 
@@ -450,14 +446,11 @@ app.get('/add/channel/:channelName', function(req,res){
 
 // GET request, creates a post doc and adds it to the channel's list
 app.get('/add/post/:content/:channelName', function (req, res) {
-    console.log('received a message');
     const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
     thisPost.save();
 
-    console.log("looking for channel " + req.params.channelName);
     let thisChannel = Channel.findOne({name: req.params.channelName}).exec();
     thisChannel.then((channelDoc)=>{
-        console.log("adding post to " + channelDoc.name);
         channelDoc.posts.push(thisPost.id);
         channelDoc.save();
     }).then(()=>{
