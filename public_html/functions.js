@@ -10,6 +10,9 @@ window.onloadstart = updateColor();
 window.onloadstart = displayIcon();
 window.onloadstart = setLocalDisplay();
 
+window.onload = updateLocalChannels();
+
+
 // This function updates display settings including mode and color from locally stored items. 
 function setLocalDisplay(){
     setLocalMode();
@@ -434,11 +437,35 @@ channelList.addEventListener('contextmenu', function (event) {
             deleteChannel(clickedChannelButton.textContent);
         }
     }
+
 });
 
+// This function updates the local storage for channel names by requesting the list of channels 
+// from the server. 
+function updateLocalChannels() {
+    window.localStorage.setItem('channels', []);
+
+    let url = '/get/channels/';
+    let p = fetch(url);
+    p.then((r)=>{
+        return r.json();
+    }).then((j)=>{
+        console.log(j);
+        window.localStorage.setItem('channels',JSON.stringify(j));
+    }).then(()=>{
+        channelList.innerHTML = "";
+        var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
+    
+        channels.forEach(function (channel) {
+            createChannelButton(channel);
+        });
+    }).then(()=>{
+        loadChannels();
+    })
+}
 
 function deleteChannel(channelName) {
-    var channels = JSON.parse(localStorage.getItem('channels')) || [];
+    var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
 
     // Remove the channel from the array
     var updatedChannels = channels.filter(function (channel) {
@@ -446,7 +473,7 @@ function deleteChannel(channelName) {
     });
 
     // Update localStorage with the modified array
-    localStorage.setItem('channels', JSON.stringify(updatedChannels));
+    window.localStorage.setItem('channels', JSON.stringify(updatedChannels));
 
     // Reload channels to reflect the changes
     loadChannels();
