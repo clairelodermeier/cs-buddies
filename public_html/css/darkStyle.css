@@ -98,12 +98,15 @@ button:hover {
 .helpHeading{
     text-align:left;
     font-size:20px;
+    margin-left:20px;
+
     
 }
 
 .helpParagraph{
-    text-align: center;
-    padding-right:220px;
+    text-align: left;
+    width:90%;
+    margin-left:5%;
 }
 
 #helpButton {
@@ -184,14 +187,12 @@ button:hover {
 }
 
 #contributors {
-    width: 50%;
-    margin-left: 42%;
-    margin-top: 20px;
+    margin:5%;
+    text-align:left;
 }
 
 #help {
-    width: 85%;
-    margin-right: 220px;
+    width: 100%;
 }
 
 .modal{
