@@ -291,6 +291,8 @@ function createChannelButton(channelName) {
 
     // when a user clicks the new button, content is displayed
     newChannelButton.onclick = function () {
+        var titleElement = document.getElementById("channelTitle");
+        titleElement.innerHTML = '';
         window.localStorage.setItem("currentChannel", channelName);
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
@@ -386,7 +388,7 @@ function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
     var postListContainer = document.getElementById('postListContainer');
     var titleElement = document.getElementById("channelTitle");
-    titleElement.setInnerHTML = '';
+    titleElement.innerHTML = '';
 
     // Hide the post list and show the channel content
     postListContainer.style.display = 'none';
@@ -410,7 +412,7 @@ function displayChannelContent(channelName) {
 // This function displays a banner with the title of the channel. 
 function displayChannelTitle(){
     var titleElement = document.getElementById("channelTitle");
-    titleElement.setInnerHTML = '';
+    titleElement.innerHTML = '';
 
     var titleBanner = document.createElement('h3');
     titleBanner.className = 'banner';
@@ -436,19 +438,34 @@ function getPostingDiv() {
 // This function displays the posts in a channel by creating dom elements.
 // Param: posts, a list of Post objects. 
 function displayPosts(posts) {
-    var titleElement = document.getElementById("channelTitle");
-    titleElement.setInnerHTML = '';
 
     channelContentContainer.innerHTML = '';
     for (var i = 0; i < posts.length; i++) {
         var newPostElement = document.createElement("div");
-        newPostElement.textContent = posts[i].content;
-        newPostElement.className = "displayContent";
-
-        var listItem = document.createElement("li");
-        listItem.appendChild(newPostElement);
-        channelContentContainer.appendChild(listItem);
+        createPostElement(posts[i].content, posts[i].author);
     }
+
+}
+
+// This function creates a post in the dom which displays the content and the author. 
+// Param: content, string for text in the post, author, string for name of posting user. 
+function createPostElement(content, author){
+    // create a post div
+    var postElement = document.createElement("div");
+    postElement.className = "postContent";
+
+    // create spans for text and author with classes
+    var contentElement = document.createElement("span");
+    contentElement.textContent = content;
+    var authorElement = document.createElement("span");
+    authorElement.textContent = author;
+    contentElement.className = "postContent";
+    authorElement.className = "authorContent";
+
+    // create a list item element and append the post
+    var listItem = document.createElement("li");
+    listItem.appendChild(postElement);
+    channelContentContainer.appendChild(listItem);
 
 }
 
