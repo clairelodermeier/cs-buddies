@@ -43,9 +43,9 @@ function setLocalColor() {
         headerElement.style.backgroundColor = window.localStorage.getItem("color");
         helpButton.style.color = window.localStorage.getItem("color");
         helpButton.style.borderColor = window.localStorage.getItem("color");
-        for (var i = 0; i < bottomButton.length; i++){
-		    bottomButton[i].style.color = window.localStorage.getItem("color");
-	    }
+        for (var i = 0; i < bottomButton.length; i++) {
+            bottomButton[i].style.color = window.localStorage.getItem("color");
+        }
     }
 }
 
@@ -57,11 +57,11 @@ function displayIcon() {
     p.then((response) => {
         return response.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
-        else{
+        else {
             iconHolder.src = "/get/profilePic/" + text;
         }
     });
@@ -87,7 +87,7 @@ function getMode() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
@@ -116,7 +116,7 @@ function setMode(mode) {
     p.then((r) => {
         return r.text();
     }).then((t) => {
-        if(t.startsWith("INVALID")){
+        if (t.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
@@ -143,7 +143,7 @@ function updateColor() {
     let helpButton = document.getElementById("helpButton");
     helpButton.style.color = window.localStorage.getItem("color");
     helpButton.style.borderColor = window.localStorage.getItem("color");
-    for (var i = 0; i < bottomButton.length; i++){
+    for (var i = 0; i < bottomButton.length; i++) {
         bottomButton[i].style.color = window.localStorage.getItem("color");
     }
     window.localStorage.setItem("color", colorStr);
@@ -172,7 +172,7 @@ function setColor() {
     let bottomButton = document.getElementsByClassName("bottomButton");
     helpButton.style.color = color;
     helpButton.style.borderColor = color;
-    for (var i = 0; i < bottomButton.length; i++){
+    for (var i = 0; i < bottomButton.length; i++) {
         bottomButton[i].style.color = color;
     }
 
@@ -185,7 +185,7 @@ function setColor() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
@@ -203,7 +203,7 @@ function deleteAccount() {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
@@ -269,14 +269,14 @@ function changeEmail(newEmail) {
     p.then((r) => {
         return r.text();
     }).then((text) => {
-        if(text.startsWith("INVALID")){
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
         else if (!(text.startsWith("SUCCESS"))) {
             alert("Failed to change email.");
         }
-        else{
+        else {
             alert("Email updated.");
         }
     });
@@ -297,16 +297,16 @@ function changePic(imgFile) {
     imgP.then((r) => {
         return r.text();
     }).then((text) => {
-        let p2 = fetch('/set/pic/'+text);
+        let p2 = fetch('/set/pic/' + text);
         p2.then((r) => {
             return r.text();
         }).then((text) => {
-            if(text.startsWith("INVALID")){
+            if (text.startsWith("INVALID")) {
                 window.location.href = '/account/login.html';
                 return;
-            }if (!(text.startsWith("SUCCESS"))) {
+            } if (!(text.startsWith("SUCCESS"))) {
                 alert("Failed to update profile pic.")
-            }else{
+            } else {
                 alert("Picture updated.");
                 displayIcon();
             }
@@ -318,29 +318,29 @@ function changePic(imgFile) {
 function changePassword() {
     var pass = document.getElementById("changePassword");
     var confirm = document.getElementById("confirmPassword");
-    if(pass.value!=confirm.value){
+    if (pass.value != confirm.value) {
         alert("Passwords do not match.");
     }
-    else{
-        let pObj = {'p': pass.value}
+    else {
+        let pObj = { 'p': pass.value }
         let p = fetch('/set/password/', {
             method: 'POST',
             body: JSON.stringify(pObj),
             headers: { 'Content-Type': 'application/json' },
         });
-        p.then((r)=>{
+        p.then((r) => {
             return r.text();
-        }).then((text)=>{
-            if(text.startsWith("INVALID")){
+        }).then((text) => {
+            if (text.startsWith("INVALID")) {
                 window.location.href = '/account/login.html';
                 return;
-            }else if(text.startsWith("SUCCESS")){
+            } else if (text.startsWith("SUCCESS")) {
                 alert("Password successfully changed.");
-            }else{
+            } else {
                 alert("Unable to change password.");
             }
-        // clear input fields
-        }).finally(()=>{
+            // clear input fields
+        }).finally(() => {
             pass.value = '';
             confirm.value = '';
         });
@@ -349,19 +349,19 @@ function changePassword() {
 
 // This function logs a user out by deleting their session and redirecting to login.
 // Creates a request to the server to logout the current user
-function logout(){
+function logout() {
     let p = fetch('/logout/');
-    p.then((r)=>{
+    p.then((r) => {
         return r.text();
-    }).then((text)=>{
-        if(text.startsWith("INVALID")){
+    }).then((text) => {
+        if (text.startsWith("INVALID")) {
             window.location.href = '/account/login.html';
             return;
         }
-        if(text.startsWith("SUCCESS")){
+        if (text.startsWith("SUCCESS")) {
             window.location.href = '../account/login.html';
         }
-        else{
+        else {
             alert("Couldn't log you out.");
         }
     });

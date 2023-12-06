@@ -12,7 +12,6 @@ const app = express();
 const port = 3000;
 
 const cookieParser = require('cookie-parser');
-
 const crypto = require('node:crypto');
 
 // for profile pictures
@@ -22,15 +21,12 @@ const upload = multer({ storage: storage });
 
 app.use(express.static('public_html'));
 app.use(express.json({ limit: '10mb' }));
-
 app.use(cookieParser());
 
 // database setup
 const mongoose = require('mongoose');
-const { stringify } = require('node:querystring');
 const mongoDBURL = 'mongodb+srv://claire:Tqnwquj0JCOxzNr6@cluster0.1nzpiqt.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(mongoDBURL);
-//, { useNewUrlParser: true } delete due to deprecated option (can added back in if necessary)
 mongoose.connection.on('error', () => {
     console.log('MongoDB connection error');
 });
@@ -118,12 +114,11 @@ function removeSessions() {
     for (let i = 0; i < usernames.length; i++) {
         let last = sessions[usernames[i]].time;
         // 15 minutes
-        if (last + ( 60 * 1000 * 15) < now) {
+        if (last + (60 * 1000 * 15) < now) {
             delete sessions[usernames[i]];
         }
     }
 }
-
 
 // This function authenticates a user's credentials using cookies. 
 // Param: req, res (request and response objects), next (next server request to follow)
@@ -425,7 +420,7 @@ app.get('/channels/', async (req, res) => {
 app.get('/posts/:channelName', async (req, res) => {
 
     // find user document
-    var channelDoc = await Channel.findOne({name: req.params.channelName}).exec();
+    var channelDoc = await Channel.findOne({ name: req.params.channelName }).exec();
 
     var channelPosts = [];
     // create an array of posts docs that correspond to post ids
@@ -438,8 +433,8 @@ app.get('/posts/:channelName', async (req, res) => {
 
 
 //GET request, creates a channel doc
-app.get('/add/channel/:channelName', function(req,res){
-    const thisChannel = new Channel({name: req.params.channelName, posts: []});
+app.get('/add/channel/:channelName', function (req, res) {
+    const thisChannel = new Channel({ name: req.params.channelName, posts: [] });
     thisChannel.save();
 });
 
@@ -448,11 +443,11 @@ app.get('/add/post/:content/:channelName', function (req, res) {
     const thisPost = new Post({ content: req.params.content, author: req.cookies.login.username, time: Date.now() });
     thisPost.save();
 
-    let thisChannel = Channel.findOne({name: req.params.channelName}).exec();
-    thisChannel.then((channelDoc)=>{
+    let thisChannel = Channel.findOne({ name: req.params.channelName }).exec();
+    thisChannel.then((channelDoc) => {
         channelDoc.posts.push(thisPost.id);
         channelDoc.save();
-    }).then(()=>{
+    }).then(() => {
         res.end("SUCCESS");
     })
 });
@@ -463,16 +458,16 @@ app.get('/add/post/:content/:channelName', function (req, res) {
 app.post('/add/event/', (req, res) => {
 
     let info = req.body;
-    let thisEvent = new Event({title: info.title, date: info.date, location: info.loc, time: info.time});
+    let thisEvent = new Event({ title: info.title, date: info.date, location: info.loc, time: info.time });
     thisEvent.save();
     res.end("SUCCESS");
 
 });
 
 //GET requests, sends a list of all event objects
-app.get('/events/', (req,res) =>{
+app.get('/events/', (req, res) => {
     let p = Event.find({}).exec();
-    p.then((events)=>{
+    p.then((events) => {
         res.end(JSON.stringify(events));
     });
 });

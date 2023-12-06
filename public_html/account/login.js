@@ -8,7 +8,7 @@ DOM and creates server requests for login. Redirects to main page after successf
 const lb = document.getElementById('loginButton');
 // when the button is clicked, attempt login
 lb.onclick = () => {
- login();
+  login();
 }
 
 // This function creates a server request to log the user into their account. 
@@ -16,7 +16,7 @@ function login() {
   // DOM elements for username and password
   let us = document.getElementById('username').value;
   let pw = document.getElementById('password').value;
-  
+
   // Create server request with username and password sent in the body
   let data = { username: us, password: pw };
   let p = fetch('/login/', {
