@@ -313,8 +313,6 @@ function createEventElement(title, date, location, time) {
     saveEvent({title, date, time});
 }
 
-
-
 // This function handles duplicate channel names by asking user to choose a new name.
 // Param: channelName, a string for the initial name chosen.
 // Returns channelName, a new string for the validated name, or null
@@ -617,26 +615,6 @@ function getDefaultChannelList() {
     `;
 
 }
-/* 
- //To potentially delete Channels ----Still In Progress ------
-// Attach the event listener after the DOM is fully loaded
-channelList.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
-
-    var clickedChannelButton = event.target;
-
-    if (clickedChannelButton.tagName === 'BUTTON') {
-
-
-        var confirmDelete = window.confirm("Are you sure you want to leave this channel?");
-
-        if (confirmDelete) {
-            console.log("Deleting channel:", clickedChannelButton.textContent);
-            deleteChannel(clickedChannelButton.textContent);
-        }
-    }
-
-});  */
 
 // This function updates the local storage for events by requesting the list of events 
 // from the server. 
@@ -683,23 +661,6 @@ function updateLocalChannels() {
         loadChannels();
     });
 }
-
- function deleteChannel(channelName) {
-    var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
-
-    // Remove the channel from the array
-    var updatedChannels = channels.filter(function (channel) {
-        return channel !== channelName;
-    });
-
-    // Update localStorage with the modified array
-    window.localStorage.setItem('channels', JSON.stringify(updatedChannels));
-
-    // Reload channels to reflect the changes
-    loadChannels();
-
-    
-} 
 
 
 // This function posts a text content message to a channel. 
