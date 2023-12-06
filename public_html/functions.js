@@ -199,7 +199,8 @@ confirmCalendarButton.onclick = function () {
     var date = document.getElementById("date");
     var time = document.getElementById("eventTime");
 
-    console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + time.value);
+    console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + 
+    time.value);
     if ((event && event.value) && (date && date.value) && (time && time.value)) {
         var newEvent = event.value;
         var newDate = date.value;
@@ -229,7 +230,7 @@ window.onclick = function (event) {
 // ADD A COMMENT HERE
 function createDate(event, date, time) {
     while (document.getElementById(event)) {
-        var userResponse = confirm("Event name is already taken. Would you like to change the name?");
+        var userResponse = confirm("Event name already taken. Change the name?");
         if (userResponse) {
             // If the user wants to choose a different name, prompt again
             event = prompt("Enter a different event name:");

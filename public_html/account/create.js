@@ -1,5 +1,5 @@
 /*
-Claire Lodermeier
+Claire Lodermeier, Audrey Hall, Joyce Dam
 The purpose of this file is to handle the client side of user account creations. Gets account info
 via the DOM, checks that passwords match. Creates server request to create a user. 
 */
@@ -17,7 +17,8 @@ const cb = document.getElementById('createAccountButton');
 // when the button is clicked, check fields, then create user if they are valid
 cb.onclick = () => {
   // ensure all fields are filled out
-  if (username.value == ('') || pass.value == ('') || confirmPassword.value == ('') || bday.value == ('') || email.value == ('') || imgHolder.files.length == 0) {
+  if (username.value == ('') || pass.value == ('') || confirmPassword.value == ('') ||
+    bday.value == ('') || email.value == ('') || imgHolder.files.length == 0) {
     alert('One or more fields is incomplete.');
   }
   // ensure passwords match
@@ -32,7 +33,7 @@ cb.onclick = () => {
 }
 // This function creates a formData variable using the uploaded image file. 
 // Returns formData, a FormData object with image info
-function getImgData(){
+function getImgData() {
   // get image data
   var formData = new FormData();
   formData.append('photo', imgHolder.files[0], imgHolder.files[0].name);
@@ -92,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       passwordMatchMessage.style.color = 'red';
     }
   }
-  
+
   // Add event listeners
   confirmPasswordInput.addEventListener('input', checkPasswordMatch);
 

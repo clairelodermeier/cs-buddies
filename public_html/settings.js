@@ -1,5 +1,5 @@
 /*
-Claire Lodermeier
+Claire Lodermeier, Audrey Hall, Joyce Dam
 The purpose of this file is to implement client side functions for the settings page of an online 
 social media application. It creates server requests for fetching user information, 
 channels, and display settings. Also uses local storage to load display settings faster.
@@ -67,7 +67,7 @@ function displayIcon() {
     });
 }
 
-// This function chages the mode (light/dark) both in local storage and by changing the css in the DOM. 
+// This function chages the mode (light/dark) in local storage and by changing the css in the DOM.
 function changeMode() {
     if (document.getElementById("darkMode").checked == true) {
         document.getElementById("cssLink").href = "css/darkStyle.css";
@@ -179,7 +179,6 @@ function setColor() {
     // update in local storage
     window.localStorage.setItem("color", color);
 
-
     // change saved color on the server
     let url = '/set/color/' + color.substring(1);
     let p = fetch(url);
@@ -282,6 +281,7 @@ function changeEmail(newEmail) {
         }
     });
 }
+
 // This function creates a request to the server to change a user's profile picture. 
 // Param: imgFile, the new uploaded file
 function changePic(imgFile) {
@@ -304,11 +304,9 @@ function changePic(imgFile) {
             if(text.startsWith("INVALID")){
                 window.location.href = '/account/login.html';
                 return;
-            }
-            if (!(text.startsWith("SUCCESS"))) {
+            }if (!(text.startsWith("SUCCESS"))) {
                 alert("Failed to update profile pic.")
-            }
-            else{
+            }else{
                 alert("Picture updated.");
                 displayIcon();
             }
@@ -336,11 +334,9 @@ function changePassword() {
             if(text.startsWith("INVALID")){
                 window.location.href = '/account/login.html';
                 return;
-            }
-            else if(text.startsWith("SUCCESS")){
+            }else if(text.startsWith("SUCCESS")){
                 alert("Password successfully changed.");
-            }
-            else{
+            }else{
                 alert("Unable to change password.");
             }
         // clear input fields
@@ -374,7 +370,6 @@ function logout(){
 // This function gets the html for the privacy settings content 
 // Returns: an html string with 2 input fields and 2 buttons
 function getPrivacyContent() {
-
     return `
       <div class="settings>
           <div id="privacyContent">
@@ -387,8 +382,10 @@ function getPrivacyContent() {
                   <label for="confirmPassword">Confirm Password:</label>
                   <input type="password" id="confirmPassword" name="confirmPassword"><br>
               
-                  <div><button id = "confirmChange" onclick = "changePassword()" >Change</button></div>
-                  <div><button id = "deleteButton" onclick = "deleteAccount()" >Delete Account?</button></div>
+                  <div><button id = "confirmChange" onclick = "changePassword()" >
+                  Change</button></div>
+                  <div><button id = "deleteButton" onclick = "deleteAccount()" >
+                  Delete Account?</button></div>
           </div>
       </div>
       `;
@@ -418,6 +415,7 @@ function getEditProfileContent() {
       </div>
       `;
 }
+
 // This function gets the html for the display settings content 
 // Returns: an html string with 2 input fields
 function getDisplayContent() {
@@ -431,7 +429,8 @@ function getDisplayContent() {
                 </label><br>
 
                 <label for="color">Color Scheme: </label>
-                <input type="color" id="color" onchange = "setColor()" value = ${getColor()} name="color"><br>
+                <input type="color" id="color" onchange = "setColor()" value = ${getColor()} 
+                name="color"><br>
   
                 <script>
   
@@ -442,7 +441,6 @@ function getDisplayContent() {
             </div>
         </div>
         `;
-
 }
 
 // This function gets the html for when a user wants to log out. 
@@ -463,7 +461,6 @@ function getLogOutContent() {
   </div>
   `;
 }
-
 
 
 
