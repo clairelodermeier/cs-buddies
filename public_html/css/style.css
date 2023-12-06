@@ -1,5 +1,5 @@
 /*
-    Claire Lodermeier
+    Claire Lodermeier, Audrey Hall, Joyce Dam
     The purpose of this file is to provide styling for the main and settings pages of an online
     social media application in light mode (default). Styles buttons, profile pic icons, 
     navigation, and content. Heading on top, channel bar on left, content on right, buttons at 
@@ -104,9 +104,97 @@ button:hover {
     text-align: left;
     width:90%;
     margin-left:5%;
+}
+
+
+.postContent{
+    text-align:left;
+}
+.authorContent{
+    margin-left: 5px;
+    color:#aaa;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    float:left;
+    left:50%;
+    top:50%;
+    width:500px;
+    transform:translate(-50%, -50%);
+    background-color: rgb(221, 219, 219);
+    -webkit-animation-name: fadeIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name:fadeIn;
+    animation-duration:0.4s;
+
+
 
 }
 
+.modal-content{
+    margin:15%;
+    padding: 20px;
+    border: 3px solid ;
+    width: 300px;
+}
+
+.close{
+    color:#aaa;
+    float:right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeCalendar{
+    color:#aaa;
+    float:right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.closeCalendar:hover,
+.closeCalendar:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.controlElement {
+    position: fixed;
+    text-align: left;
+    bottom:15px;
+    padding: 20px;
+    font-size: 15px;
+    left:600px;
+    width:100%;
+}
+.content-container {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.messageBox{
+    position:fixed;
+    bottom:0px;
+    text-align: left;
+    font-size:15px;
+    padding:15px;
+    width:500px;
+    left:200px;
+
+}
 
 #helpButton {
     position:fixed;
@@ -119,13 +207,19 @@ button:hover {
     border-color: rgb(193, 19, 62);
     border-style: solid;
     font-family: monospace;
-
 }
 
 #helpButton:hover{
     background-color:#aaa;
 }
 
+#channelContentContainer{
+    margin-top:20px;
+}
+
+#message{
+    width:300px;
+}
 
 #bottomButtons {
     position: fixed;
@@ -133,10 +227,6 @@ button:hover {
     bottom: 20px;
     width: 200px;
     text-align: center;
-}
-
-#deleteButton{
-    margin-top: 25px;
 }
 
 #settingsButton {
@@ -201,69 +291,6 @@ button:hover {
     width: 100%;
 }
 
-.postContent{
-    text-align:left;
-}
-.authorContent{
-    margin-left: 5px;
-    color:#aaa;
-}
-
-.modal{
-    display: none;
-    position: fixed;
-    float:left;
-    left:50%;
-    top:50%;
-    width:500px;
-    transform:translate(-50%, -50%);
-    background-color: rgb(221, 219, 219);
-    -webkit-animation-name: fadeIn;
-    -webkit-animation-duration: 0.4s;
-    animation-name:fadeIn;
-    animation-duration:0.4s;
-
-
-
-}
-
-.modal-content{
-    margin:15%;
-    padding: 20px;
-    border: 3px solid ;
-    width: 300px;
-}
-
-
-
-.close{
-    color:#aaa;
-    float:right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.closeCalendar{
-    color:#aaa;
-    float:right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.closeCalendar:hover,
-.closeCalendar:focus{
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
 /*Animations*/
 @-webkit-keyframes fadeIn{
     from{opacity:0}
@@ -275,39 +302,3 @@ button:hover {
     to{opacity: 1}
 }
 
-.content-container {
-    display: none;
-}
-
-.active {
-    display: block;
-}
-
-.messageBox{
-    position:fixed;
-    bottom:0px;
-    text-align: left;
-    font-size:15px;
-    padding:15px;
-    width:500px;
-    left:200px;
-
-}
-
-#channelContentContainer{
-    margin-top:20px;
-}
-
-#message{
-    width:300px;
-}
-
-.controlElement {
-    position: fixed;
-    text-align: left;
-    bottom:15px;
-    padding: 20px;
-    font-size: 15px;
-    left:600px;
-    width:100%;
-}

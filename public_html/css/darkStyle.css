@@ -1,5 +1,5 @@
 /*
-    Claire Lodermeier
+    Claire Lodermeier, Audrey Hall, Joyce Dam
     The purpose of this file is to provide styling for the main and settings pages of an online
     social media application in dark mode. Styles buttons, profile pic icons, navigation, and
     content. Heading on top, channel bar on left, content on right, buttons at the bottom.
@@ -90,10 +90,12 @@ button:hover {
 .postContent{
     text-align:left;
 }
+
 .authorContent{
     margin-left: 5px;
     color:#aaa;
 }
+
 .bottomButton {
     color: rgb(193, 19, 62);
     border-radius: 50px;
@@ -106,14 +108,40 @@ button:hover {
     text-align:left;
     font-size:20px;
     margin-left:20px;
-
-    
 }
 
 .helpParagraph{
     text-align: left;
     width:90%;
     margin-left:5%;
+}
+
+.controlElement {
+    position: fixed;
+    text-align: left;
+    bottom:15px;
+    padding: 20px;
+    font-size: 15px;
+    left:600px;
+    width:100%;
+}
+
+.content-container {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.messageBox{
+    position:fixed;
+    bottom:0px;
+    text-align: left;
+    font-size:15px;
+    padding:15px;
+    width:500px;
+    left:200px;
 }
 
 #helpButton {
@@ -127,7 +155,6 @@ button:hover {
     border-color: rgb(193, 19, 62);
     border-style: solid;
     font-family: monospace;
-
 }
 
 #helpButton:hover{
@@ -159,6 +186,7 @@ button:hover {
 #goBack{
     text-align: center;
 }
+
 #displayContent {
     background-color: white;
     font-family: monospace;
@@ -193,6 +221,7 @@ button:hover {
     top:0;
     left:92%;
 }
+
 #deleteButton{
     margin-top: 25px;
 }
@@ -204,6 +233,10 @@ button:hover {
 
 #help {
     width: 100%;
+}
+
+#message{
+    width:300px;
 }
 
 .modal{
@@ -261,35 +294,6 @@ button:hover {
     to{opacity: 1}
 }
 
-.content-container {
-    display: none;
-}
 
-.active {
-    display: block;
-}
 
-.messageBox{
-    position:fixed;
-    bottom:0px;
-    text-align: left;
-    font-size:15px;
-    padding:15px;
-    width:500px;
-    left:200px;
 
-}
-
-#message{
-    width:300px;
-}
-
-.controlElement {
-    position: fixed;
-    text-align: left;
-    bottom:15px;
-    padding: 20px;
-    font-size: 15px;
-    left:600px;
-    width:100%;
-}

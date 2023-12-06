@@ -107,8 +107,6 @@ function updateColor() {
 
 // This function creates a server request to get the saved color for the user. 
 // Returns: a string in the format of a hex color "#XXXXXX" 
-// This function creates a server request to get the saved color for the user. 
-// Returns: a string in the format of a hex color "#XXXXXX" 
 function getColor() {
     let p = fetch('/get/color/');
     p.then((r) => {
