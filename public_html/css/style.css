@@ -115,6 +115,10 @@ button:hover {
     color:#aaa;
 }
 
+.eventInput{
+    margin:0px;;
+}
+
 .modal{
     display: none;
     position: fixed;

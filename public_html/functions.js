@@ -185,10 +185,14 @@ spanCalendar.onclick = function () {
     var event = document.getElementById("eventName");
     var date = document.getElementById("calendar");
     var time = document.getElementById("time");
+    var loc = document.getElementById("location");
+
     if ((event && event.value) && (date && date.vaue) && (time && time.value)) {
         event.value = "";
         date.value = "";
         time.value = "";
+        loc.value = "";
+
     }
     calendarModal.style.display = "none";
 }
@@ -199,24 +203,30 @@ confirmCalendarButton.onclick = function () {
     var event = document.getElementById("eventName");
     var date = document.getElementById("date");
     var time = document.getElementById("eventTime");
+    var loc = document.getElementById("location");
+
 
     console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + 
     time.value);
-    if ((event && event.value) && (date && date.value) && (time && time.value)) {
+    if ((event && event.value) && (date && date.value) && (time && time.value)&& (loc && loc.value)) {
         var newEvent = event.value;
         var newDate = date.value;
         var newTime = time.value;
+        var newLocation = loc.value;
+
 
         // create event in the server
-        createEvent(newEvent, newDate, newTime);
+        createEvent(newEvent, newDate, newLocation, newTime);
 
         event.value = "";
         date.value = "";
         time.value = "";
+        loc.value = "";
+
         calendarModal.style.display = "none";
 
         console.log("New Event details: ", newEvent, newDate, newTime)
-        createDate(newEvent, newDate, newTime);
+        createDate(newEvent, newDate, newLocation, newTime);
         loadDates();
     }
     // handle invalid input
@@ -227,9 +237,9 @@ confirmCalendarButton.onclick = function () {
 
 }
 
-function createEvent(eventName, eventDate, eventTime){
+function createEvent(eventName, eventDate, eventLoc, eventTime){
     let url = '/add/event/';
-    let data = { name: eventName, date: eventDate, loc: "LOCATION", time: eventTime };
+    let data = { name: eventName, date: eventDate, loc: eventLoc, time: eventTime };
     let p = fetch(url, {
       method: 'POST',
       body: JSON.stringify(data),
