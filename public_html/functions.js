@@ -398,7 +398,6 @@ function getEventContent()
     `;
 }
 
-
 function getChannelContent(channelName)
 {
     return `
@@ -407,11 +406,10 @@ function getChannelContent(channelName)
         <!-- Your specific content for ${channelName} goes here -->
         <p> Test </p>
     </div>
-
     <div class="messageBox">
         <label for="message">Post</label>
         <input type="text" id="message">
-    </div>
+     </div>
     <div class="controlElement">
         <button id = 'sendPostButton' onclick = "createPost()">Send post</button>
     </div>
