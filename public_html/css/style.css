@@ -116,7 +116,11 @@ button:hover {
 }
 
 .eventInput{
-    margin:0px;;
+    margin:0px;
+}
+
+.eventContent{
+    text-align:center;
 }
 
 .modal{

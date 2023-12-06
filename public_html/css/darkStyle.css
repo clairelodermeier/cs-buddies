@@ -91,6 +91,15 @@ button:hover {
     text-align:left;
 }
 
+
+.eventInput{
+    margin:0px;
+}
+
+.eventContent{
+    text-align:center;
+}
+
 .authorContent{
     margin-left: 5px;
     color:#aaa;

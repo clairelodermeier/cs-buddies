@@ -7,8 +7,6 @@ channels, and display settings. Also uses local storage to load display settings
 
 window.onloadstart = updateDisplay();
 setInterval(setLocalColor, 100);
-const postListContainer = document.getElementById('postListContainer');
-
 
 // This function calls several other functions to fetch display and channel info from the server, 
 // update locally stored preferences, and display them in the dom. 
@@ -175,7 +173,7 @@ var calendarModal = document.getElementById("calendarModal");
 var buttonCalendar = document.getElementById("calendar");
 var spanCalendar = document.getElementsByClassName("closeCalendar")[0];
 var confirmCalendarButton = document.getElementById("confirmCalendar");
-var eventList = document.getElementById("eventList")
+var eventHolder = document.getElementById("eventHolder")
 
 // display calendar modal when calendar button is clicked
 buttonCalendar.onclick = function () {
@@ -289,19 +287,19 @@ window.onclick = function (event) {
 } */
 
 // ADD A COMMENT HERE
-function createEventElement(name, date, time) {
-    console.log('creating event element for ' + name);
+function createEventElement(title, date, time) {
+    console.log('creating event element for ' + title);
 
-    var newEvent = document.createElement("p");
-    newEvent.textContent = "Event Name: " + name + " Date: " + date + " Time: " + time;
+    var newEvent = document.createElement("div");
+    newEvent.textContent = "Event Title: " + title + " Date: " + date + " Time: " + time;
 
-    newEvent.className = "events";
+    newEvent.className = "eventContent";
     
     var listItem = document.createElement("li");
     listItem.appendChild(newEvent);
 
-    postListContainer.appendChild(listItem);
-    saveEvent({name, date, time});
+    document.getElementById("eventHolder").appendChild(listItem);
+    saveEvent({title, date, time});
 
 }
 
@@ -379,7 +377,7 @@ function saveEvent(event) {
 
     var events = JSON.parse(localStorage.getItem('events')) || [];
 
-    if (event && event.name && event.time && event.location && event.date) {
+    if (event && event.title && event.time && event.location && event.date) {
         events.push(event);
         window.localStorage.setItem('events', JSON.stringify(events));
     }
@@ -431,13 +429,14 @@ window.onload = function()
 
 // ADD A COMMENT HERE
 function showEvents() {
+    console.log("showing events...");
     // update the locally stored list of events
     updateLocalEvents();
     // TODO: implement this. 
     window.localStorage.setItem("currentChannel", 'events');
 
-    var postListContainer = document.getElementById('postListContainer');
-    postListContainer.style.display = 'block';
+    var eventListContainer = document.getElementById('eventListContainer');
+    eventListContainer.style.display = 'block';
 
     var channelContentContainer = document.getElementById('channelContentContainer');
     channelContentContainer.style.display = 'none';
@@ -447,14 +446,17 @@ function showEvents() {
 
     // Show the post list and hide the channel content
     channelContentContainer.innerHTML = '';
-    postListContainer.innerHTML = getEventContent();
+    eventListContainer.innerHTML = getEventContent();
 
     if(window.localStorage.getItem('events')==[]){
+        console.log("no events to show");
         return;
     }
     var events = JSON.parse(localStorage.getItem('events')) || [];
     for (let i=0;i<events.length;i++){
-        createEventElement(events[i].name, events[i].date, events[i].location, events[i].time);
+        console.log("showing event " + i + '...');
+
+        createEventElement(events[i].title, events[i].date, events[i].location, events[i].time);
     }
 
 
@@ -506,9 +508,8 @@ function displayChannelContent(channelName) {
         return;
     }
 
-    var postListContainer = document.getElementById('postListContainer');
-    postListContainer.style.display = 'none';
-
+    var eventListContainer = document.getElementById('eventListContainer');
+    eventListContainer.style.display = 'none';
 
     channelContentContainer.style.display = 'block';
 
@@ -516,17 +517,16 @@ function displayChannelContent(channelName) {
     channelContainers.style.display = 'block';
 
     // Show the post list and hide the channel content
-    postListContainer.innerHTML = '';
+    eventListContainer.innerHTML = '';
     channelContentContainer.innerHTML = getDefaultChannelList();
 
 
-
-    var postListContainer = document.getElementById('postListContainer');
+    var eventListContainer = document.getElementById('eventListContainer');
     var titleElement = document.getElementById("channelTitle");
     titleElement.innerHTML = '';
 
     // Hide the post list and show the channel content
-    postListContainer.style.display = 'none';
+    eventListContainer.style.display = 'none';
     channelContentContainer.style.display = 'block';
 
     let p = fetch('/posts/' + channelName);
@@ -609,7 +609,7 @@ function getEventContent() {
     return `
     <div class="events">
         <h3 class='banner'>Upcoming Events</h3>
-        <ul id="eventList">
+        <ul id="eventHolder">
         
         </ul>
     </div>
@@ -621,13 +621,13 @@ function getEventContent() {
 function getDefaultChannelList() {
     return `    
     <li>
-    <button class="leftListItem" id="eventList" onclick="showEvents()">Events</button>
+    <button class="leftListItem" id="eventHolder" onclick="showEvents()">Events</button>
 
     </li>
     `;
 
 }
-
+/* 
  //To potentially delete Channels ----Still In Progress ------
 // Attach the event listener after the DOM is fully loaded
 channelList.addEventListener('contextmenu', function (event) {
@@ -646,13 +646,12 @@ channelList.addEventListener('contextmenu', function (event) {
         }
     }
 
-}); 
+});  */
 
 // This function updates the local storage for events by requesting the list of events 
 // from the server. 
 function updateLocalEvents() {
     console.log("Updating local events from the server...");
-    window.localStorage.setItem('events', []);
 
     let url = '/events/';
     let p = fetch(url);
