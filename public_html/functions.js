@@ -145,7 +145,7 @@ confirmButton.onclick = function () {
         var newText = text.value;
         text.value = ""
         modal.style.display = "none";
-        createChannelButton(newText);
+        createNewChannelButton(newText);
         createChannel(newText);
 
     }
@@ -275,8 +275,15 @@ function validateChannelName(channelName){
 
 // This function creates a button in the DOM on the left bar when a new channel is added.
 // Param: channelName, a string for the name of the channel
-function createChannelButton(channelName) {
+function createNewChannelButton(channelName){
     channelName = validateChannelName(channelName);
+    // Does not create a channel if no name is entered
+    createChannelButton(channelName);
+}
+
+// This function creates a button in the DOM on the left bar.
+// Param: channelName, a string for the name of the channel
+function createChannelButton(channelName) {
     // Does not create a channel if no name is entered
     if (channelName == null) {
         return;
@@ -382,8 +389,6 @@ function createChannel(channelName) {
         }
     });
 }
-
-
 
 // This function loads posts in a the current channel. 
 function loadPosts() {
