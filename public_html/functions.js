@@ -2,7 +2,7 @@
 Claire Lodermeier, Audrey Hall, Joyce Dam
 The purpose of this file is to implement client side functions for the main page of an online 
 social media application. It creates server requests for fetching user information, 
-channels, and display settings. Also uses local storage to load display settings faster.
+channels, events, and settings. Also uses local storage to load display elements faster.
 */
 
 window.onloadstart = updateDisplay();
@@ -208,7 +208,7 @@ confirmCalendarButton.onclick = function () {
 
     console.log("Event Name:" + event.value + " Date: " + date.value + " Event Time: " + 
     time.value);
-    if ((event && event.value) && (date && date.value) && (time && time.value)&& (loc && loc.value)) {
+    if ((event &&event.value) && (date&&date.value) && (time&&time.value)&& (loc&&loc.value)) {
         var newEvent = event.value;
         var newDate = date.value;
         var newTime = time.value;
@@ -380,7 +380,8 @@ function saveChannel(channelName) {
     }
 }
 
-// ADD A COMMENT HERE
+// This function saves an event locally. 
+// Param: event, an event object
 function saveEvent(event) {
 
     var events = JSON.parse(localStorage.getItem('events')) || [];
@@ -399,36 +400,30 @@ function loadChannels() {
         return;
     }
     var channels = JSON.parse(window.localStorage.getItem('channels'))|| [];
-
     for (var i = 0; i < channels.length; i++) {
         createChannelButton(channels[i]);
     };
 }
 
-
+// when the window loads, load the channels and the events
 window.onload = function()
 {
     loadChannels();
     updateLocalEvents();
-
 };
 
-
-
-// ADD A COMMENT HERE
+// This function displays locally stored events in the dom. It first calls functions to 
+// update the local storage, then calls a function to create the dom elements. 
 function showEvents() {
-    console.log("showing events...");
     // update the locally stored list of events
     updateLocalEvents();
-    // TODO: implement this. 
     window.localStorage.setItem("currentChannel", 'events');
 
+    // dom elements
     var eventListContainer = document.getElementById('eventListContainer');
     eventListContainer.style.display = 'block';
-
     var channelContentContainer = document.getElementById('channelContentContainer');
     channelContentContainer.style.display = 'none';
-
     var channelContainers = document.getElementById('channelTitle');
     channelContainers.style.display = 'none';
 
@@ -436,6 +431,7 @@ function showEvents() {
     channelContentContainer.innerHTML = '';
     eventListContainer.innerHTML = getEventContent();
 
+    // iterate through locally stored events and create dom elements
     if(window.localStorage.getItem('events')==[]){
         console.log("no events to show");
         return;
@@ -443,11 +439,8 @@ function showEvents() {
     var events = JSON.parse(localStorage.getItem('events')) || [];
     for (let i=0;i<events.length;i++){
         console.log("showing event " + i + '...');
-
         createEventElement(events[i].title, events[i].date, events[i].location, events[i].time);
     }
-
-
 }
 
 // This function creates a channel. 
@@ -486,48 +479,35 @@ function loadPosts() {
 setInterval(loadPosts, 15000);
 
 
-// This function displays the posts in a channel in the dom. 
+// This function displays the posts in a channel in the dom via server request. 
 // Param: channelName, a string for the name of the channel.
 function displayChannelContent(channelName) {
     const channelContentContainer = document.getElementById('channelContentContainer');
-
     if(channelName=='null'){
         channelContentContainer.innerHTML = '';
         return;
     }
-
     var eventListContainer = document.getElementById('eventListContainer');
     eventListContainer.style.display = 'none';
-
     channelContentContainer.style.display = 'block';
-
     var channelContainers = document.getElementById('channelTitle');
     channelContainers.style.display = 'block';
 
-    // Show the post list and hide the channel content
     eventListContainer.innerHTML = '';
     channelContentContainer.innerHTML = getDefaultChannelList();
-
-
-    var eventListContainer = document.getElementById('eventListContainer');
     var titleElement = document.getElementById("channelTitle");
     titleElement.innerHTML = '';
-
-    // Hide the post list and show the channel content
-    eventListContainer.style.display = 'none';
-    channelContentContainer.style.display = 'block';
 
     let p = fetch('/posts/' + channelName);
     p.then((r) => {
         return r.json();
     }).then((posts) => {
+        // sort posts chronologically and display in the dom
         posts.sort((a, b) => a.time - b.time);
-
         displayChannelTitle();
         displayPosts(posts);
         let postingDiv = document.createElement('div');
         postingDiv.innerHTML = getPostingDiv();
-
         channelContentContainer.appendChild(postingDiv);
     });
 }
@@ -718,5 +698,3 @@ function addPostToList(content) {
     listItem.appendChild(postElement);
     channelContentContainer.appendChild(listItem);
 }
-
-/*----------------------------------- */
