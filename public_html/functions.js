@@ -362,6 +362,24 @@ function showEvents(){
 
 }
 
+
+// This function creates a channel. 
+// It sends a request to the server to create a new channel object with one member and no posts. 
+function createChannel(channelName){
+    let p = fetch('/add/channel/'+channelName);
+    p.then((r)=>{
+        return r.text();
+    }).then((text)=>{
+        if(text.startsWith("INVALID")){
+            window.location.href = '/account/login.html';
+            return;
+        }
+        else if(!(text.startsWith("SUCCESS"))){
+            alert("Failed to create channel");
+        }
+    });
+}
+
 function displayChannelContent(channelName){
     let p = fetch('/get/posts/'+channelName);
     p.then((r)=>{
@@ -462,10 +480,12 @@ function updateLocalChannels() {
     }).then(()=>{
         channelList.innerHTML = "";
         var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
-    
-        channels.forEach(function (channel) {
-            createChannelButton(channel);
-        });
+        for(var i=0;i<channels.length;i++){
+            createChannelButton(channels[i].name);
+        }
+        // channels.forEach(function (channel) {
+        //     createChannelButton(channel);
+        // });
     }).then(()=>{
         loadChannels();
     })
