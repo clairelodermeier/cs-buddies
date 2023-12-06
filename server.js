@@ -429,10 +429,10 @@ app.get('/get/channels/', async (req, res) => {
 });
 
 // GET request, posts  for a given channel
-app.get('/get/posts/:channelID', async (req, res) => {
+app.get('/get/posts/:channelName', async (req, res) => {
 
     // find user document
-    var channelDoc = await Channel.findById(req.params.channelID).exec();
+    var channelDoc = await Channel.find({name: req.params.channelName}).exec();
 
     // create an array of posts docs that correspond to post ids
     for (let i = 0; i < channelDoc.posts.length; i++) {

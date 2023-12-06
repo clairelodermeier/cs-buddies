@@ -281,9 +281,9 @@ function createChannelButton(channelName) {
         var channels = JSON.parse(localStorage.getItem('channels')) || [];
         console.log("List of channels:", channels);
         console.log("Channel length: ", channels.length);
-        showChannelContent(channelName)
+        displayChannelContent(channelName);
 
-    }
+    };
 
 
     channelList.appendChild(listItem);
@@ -395,6 +395,13 @@ function displayChannel(channelName){
 
 
 function displayChannelContent(channelName){
+    const channelContentContainer = document.getElementById('channelContentContainer');
+    var postListContainer = document.getElementById('postListContainer');
+
+    // Hide the post list and show the channel content
+    postListContainer.style.display = 'none';
+    channelContentContainer.style.display = 'block';
+
     let p = fetch('/get/posts/'+channelName);
     p.then((r)=>{
         return r.json();
@@ -406,11 +413,18 @@ function displayChannelContent(channelName){
 // This function displays the posts in a channel. 
 // Param: posts, a list of Post objects. 
 function displayPosts(posts){
-    let content = '';
-    // TODO: implement this
-    // Sort the posts by time stamp
-    // Display them so that you can see the content and author and time stamp
-    // List format in the dom?
+    channelContentContainer.innerHTML = '';
+    for (var i=0;i<posts.length;i++){
+        var newPostElement = document.createElement("div");
+        newPostElement.textContent = posts[i].content;
+        newPostElement.className = "displayContent";
+    
+        var listItem = document.createElement("li");
+        listItem.appendChild(newPostElement);
+        channelContentContainer.appendChild(listItem);
+
+    }
+
 }
 
 
@@ -446,6 +460,7 @@ function getChannelContent(channelName)
     <div class="channelContent">
         <h2>${channelName}</h2>
         <!-- Your specific content for ${channelName} goes here -->
+
         <p> Test </p>
     </div>
     <div class="messageBox">
@@ -458,6 +473,7 @@ function getChannelContent(channelName)
     `;
 }
 
+    
 
 //To potentially delete Channels ----Still In Progress ------
     // Attach the event listener after the DOM is fully loaded
