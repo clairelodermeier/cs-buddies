@@ -210,7 +210,10 @@ confirmCalendarButton.onclick = function () {
         date.value = "";
         time.value = "";
         calendarModal.style.display = "none";
+
+        console.log("New Event details: ", newEvent, newDate, newTime)
         createDate(newEvent, newDate, newTime);
+        loadDates();
     }
     // handle invalid input
     else {
@@ -227,8 +230,19 @@ window.onclick = function (event) {
     }
 }
 
+function isEventAlreadyExists(event)
+{
+    var storedEvents = JSON.parse(localStorage.getItem('events')) || [];
+    return storedEvents.some(existingEvent => existingEvent.event === event);
+}
+
 // ADD A COMMENT HERE
 function createDate(event, date, time) {
+    if(isEventAlreadyExists(event))
+    {
+        return;
+    }
+
     while (document.getElementById(event)) {
         var userResponse = confirm("Event name already taken. Change the name?");
         if (userResponse) {
@@ -247,13 +261,14 @@ function createDate(event, date, time) {
 
     newEvent.className = "rightBar";
     newEvent.id = event;
-
-
+    
     var listItem = document.createElement("li");
     listItem.appendChild(newEvent);
 
+
+
     eventList.appendChild(listItem);
-    saveDate(event);
+    saveDate({event, date, time});
 
 
 }
@@ -328,7 +343,8 @@ function saveChannel(channelName) {
 // ADD A COMMENT HERE
 function saveDate(date) {
     var events = JSON.parse(localStorage.getItem('events')) || [];
-    if (!events.includes(date)) {
+
+    if (date && date.event && date.date && date.time) {
         events.push(date);
         window.localStorage.setItem('events', JSON.stringify(events));
     }
@@ -350,31 +366,48 @@ function loadChannels() {
 // ADD A COMMENT HERE
 function loadDates() {
     eventList.innerHTML = "";
-    var dates = JSON.parse(localStorage.getItem('events')) || [];
+    var storedEvents = window.localStorage.getItem("events");
+    console.log("Stored events:", storedEvents);
 
-    dates.forEach(function (event, date, time) {
-        createDate(event, date, time);
-    });
+    if(storedEvents == null)
+    {
+        storedEvents = "[]"
+    }
+    var dates = JSON.parse(storedEvents)|| [];
+
+    for(var i = 0; i < dates.length; i++)
+    {
+        createDate(dates[i].event, dates[i].date, dates[i].time);
+
+    }
+
 
 }
 
 window.onload = loadChannels();
-//window.onload = loadDates(); This also breaks right clicking
+
+window.onload = loadDates(); 
 
 
 // ADD A COMMENT HERE
 function showEvents() {
     // TODO: implement this. 
     window.localStorage.setItem("currentChannel", null);
-    alert("events button clicked!");
 
     var postListContainer = document.getElementById('postListContainer');
+    postListContainer.style.display = 'block';
+
+
     var channelContentContainer = document.getElementById('channelContentContainer');
+    channelContentContainer.style.display = 'none';
+
+    var channelContainers = document.getElementById('channelTitle');
+    channelContainers.style.display = 'none';
 
     // Show the post list and hide the channel content
-    channelContentContainer.style.display = 'none';
+    channelContentContainer.innerHTML = '';
     postListContainer.innerHTML = getEventContent();
-    postListContainer.style.display = 'block';
+   
 
 
 }
@@ -418,6 +451,22 @@ function displayChannelContent(channelName) {
         channelContentContainer.innerHTML = '';
         return;
     }
+
+    var postListContainer = document.getElementById('postListContainer');
+    postListContainer.style.display = 'none';
+
+
+    channelContentContainer.style.display = 'block';
+
+    var channelContainers = document.getElementById('channelTitle');
+    channelContainers.style.display = 'block';
+
+    // Show the post list and hide the channel content
+    postListContainer.innerHTML = '';
+    channelContentContainer.innerHTML = getDefaultChannelList();
+
+
+
     var postListContainer = document.getElementById('postListContainer');
     var titleElement = document.getElementById("channelTitle");
     titleElement.innerHTML = '';
@@ -505,13 +554,10 @@ function createPostElement(content, author){
 function getEventContent() {
     return `
     <div class="events">
-        <h3 class = 'banner' >Upcoming Events</h3>
-        <div class="eventList>
-
-            <p>Event Holder</p>
-        </div>
-
-
+        <h3 class='banner'>Upcoming Events</h3>
+        <ul id="eventList">
+        
+        </ul>
     </div>
     `;
 }
@@ -528,7 +574,7 @@ function getDefaultChannelList() {
 
 }
 
-/* //To potentially delete Channels ----Still In Progress ------
+ //To potentially delete Channels ----Still In Progress ------
 // Attach the event listener after the DOM is fully loaded
 channelList.addEventListener('contextmenu', function (event) {
     event.preventDefault();
@@ -546,7 +592,7 @@ channelList.addEventListener('contextmenu', function (event) {
         }
     }
 
-}); */
+}); 
 
 // This function updates the local storage for channel names by requesting the list of channels 
 // from the server. 
@@ -572,7 +618,7 @@ function updateLocalChannels() {
     })
 }
 
-/* function deleteChannel(channelName) {
+ function deleteChannel(channelName) {
     var channels = JSON.parse(window.localStorage.getItem('channels')) || [];
 
     // Remove the channel from the array
@@ -585,7 +631,7 @@ function updateLocalChannels() {
 
     // Reload channels to reflect the changes
     loadChannels();
-} */
+} 
 
 
 // This function posts a text content message to a channel. 
