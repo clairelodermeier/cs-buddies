@@ -414,22 +414,18 @@ app.get('/get/color/', (req, res) => {
 
 /*-------------------- post and channel requests --------------------- */
 
-// GET request, posts  for a given channel
+// GET request, get all channel names
 app.get('/get/channels/', async (req, res) => {
 
     // get all channels
-    var userDoc = await User.findOne({ "username": req.cookies.login.username }).exec();
+    var channels = await Channel.find({}).exec();
+    var channelNames = [];
 
-    // get channel ids for user
-    const channels = userDoc.channels;
-
-    // create an array of channels that correspond to channel ids
-    const userChannels = [];
+    // create an array of channel Names
     for (let i = 0; i < channels.length; i++) {
-        const currentChannel = await Channel.findById(channels[i]).exec();
-        userChannels.push(currentChannel);
+        channelNames.push(channels[i].name);
     }
-    res.end(JSON.stringify(userChannels));
+    res.end(JSON.stringify(channelNames));
 });
 
 // GET request, posts  for a given channel
