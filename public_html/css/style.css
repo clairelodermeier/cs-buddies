@@ -10,6 +10,14 @@ body {
     font-family: monospace;
 }
 
+ul{
+    list-style:none;
+}
+
+a{
+    text-decoration: none;
+}
+
 h3 {
     color: rgb(86, 86, 86);
     text-align: center;
@@ -60,7 +68,6 @@ button:hover {
 
 .rightBar {
     position: fixed;
-    overflow: auto;
     top: 81px;
     left: 200px;
     height: 75%;
@@ -106,13 +113,6 @@ button:hover {
 }
 
 
-.postContent {
-    text-align: left;
-    position: relative;
-    height: fit-content;
-    overflow-y: scroll;
-}
-
 .authorContent {
     margin-left: 5px;
     color: #aaa;
@@ -132,11 +132,7 @@ button:hover {
     width: 500px;
     margin-left: 20px;
 
-}
-
-.post {
-    width: 900px;
-
+ 
 }
 
 .eventTitle {
@@ -223,8 +219,8 @@ button:hover {
 
 }
 
-.rightBar {
-    overflow-y: scroll;
+.rightBar{
+    overflow-y:scroll;
 }
 
 #helpButton {
@@ -244,14 +240,19 @@ button:hover {
     background-color: #aaa;
 }
 
+#channelContentContainer {
+    margin-top: 20px;
+
+}
+
 #message {
     width: 300px;
 }
 
-#eventHolder {
-    position: relative;
-    height: fit-content;
-    overflow-y: scroll;
+#eventHolder{
+    position:relative;
+    height:fit-content;
+    overflow-y:scroll;
 }
 
 #bottomButtons {
@@ -318,6 +319,12 @@ button:hover {
 #contributors {
     margin: 5%;
     text-align: left;
+}
+
+.events{
+    height:fit-content;
+    overflow-y:scroll;
+    
 }
 
 #help {

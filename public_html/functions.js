@@ -278,15 +278,15 @@ function createEventElement(title, date, location, time) {
     eventTitleElement.className = "eventTitle";
 
     var eventTimeElement = document.createElement("div");
-    eventTimeElement.innerText = time;
+    eventTimeElement.innerText = "Time: " + time;
     eventTimeElement.className = "eventTime";
 
     var eventDateElement = document.createElement("div");
-    eventDateElement.innerText = date;
+    eventDateElement.innerText = "Date: " + date;
     eventDateElement.className = "eventDate";
 
     var eventLocationElement = document.createElement("div");
-    eventLocationElement.innerText = location;
+    eventLocationElement.innerText = "Location: " + location;
     eventLocationElement.className = "eventLocation";
 
     // add all fields to a main event content div, nest it under a list item
